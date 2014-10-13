@@ -576,8 +576,8 @@ public class ConsultaDAO {
 	public boolean ordenarOperacion(OperacionValue op, String codIntermediario) throws SQLException{
 		PreparedStatement state = null;
 		String fechi = new SimpleDateFormat("dd-MM-YYYY").format(op.getFecha());
-		String consulta = "INSERT INTO OPERACION VALUES ("+ op.getCantidad() + ", TO_DATE('"+ fechi + "', 'DD-MM-YYYY') , '" + op.getTipoCompraVenta() + "', "
-				+ op.getId() + ", " + op.getIdValor() + ", '" + op.getCorSolicitante() + "', 'No Registrada'";
+		String consulta = "INSERT INTO OPERACION VALUES (TO_DATE('"+ fechi + "', 'DD-MM-YYYY') , '" + op.getTipoCompraVenta() + "', "
+				+ ", " + op.getIdValor() + ", '" + op.getCorSolicitante() + "', 'No Registrada', " + op.getId() + ", " + op.getCantidad() + ")";
 		String consulta2 = "INSERT INTO OPERACIONES_INT VALUES ("+ op.getId() + ", '" +  codIntermediario + "')";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
@@ -690,15 +690,15 @@ public class ConsultaDAO {
 				rta = "Ya no se encuentra disponible la cantidad deseada a comprar del valor, la operacion de compra sera cancelada"
 						+ ", si lo desea puede ordenar una nueva orden de compra por una cantidad menor.";
 			}
-			if(!rta.isEmpty()){
+			if(rta.isEmpty()){
 				
-				if(tieneValor(op.getCorIntermediario(), op.getIdValor())){
+				if(tieneValor(op.getCorSolicitante(), op.getIdValor())){
 					consultaUpValorPropietarios = "UPDATE VALOR_PROPIETARIOS SET cantiad_valor = (cantiad_valor + "+ op.getCantidad()  +  ")  WHERE correo_propietario = '"+op.getCorSolicitante()
 							+ "' AND valor_id = " + op.getIdValor();
 				}
 				else{
 					consultaUpValorPropietarios = "INSERT INTO VALOR_PROPIETARIOS VALUES ('"+ op.getCorSolicitante() + "', " +  op.getIdValor() + ", "+
-							op.getCantidad() + ", 1, 'F')";
+							op.getCantidad() + ", 0, 'F')";
 				}
 			}
 		}

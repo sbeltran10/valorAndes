@@ -82,6 +82,8 @@ public class ServletOperacionCancelar extends ServletTemplate{
 		out.println("		</div>");
 		out.println("	</div>");
 		out.println("");
+		out.println("<style> h4 {color:red} h5 {color:blue} </style> ");
+
 	}
 
 	/**

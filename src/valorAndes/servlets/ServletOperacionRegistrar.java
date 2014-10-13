@@ -52,12 +52,15 @@ public class ServletOperacionRegistrar extends ServletTemplate{
 
 		if(iop!=null){
 			try {
-				ValorAndes.getInstance().registrarOperacion(ops.get(Integer.parseInt(iop)));
+				String rta = ValorAndes.getInstance().registrarOperacion(ops.get(Integer.parseInt(iop)));
 
-				out.println("				La operacion fue registrada exitosamente.<br>");
+				if(rta.isEmpty())
+					out.println("				<br><h5>La operacion fue registrada exitosamente.<br></h5>");
 
+				else
+					out.println("				<br><h4>" + rta +"<br></h4>");
 			}catch (Exception e) {
-				out.println("				Ocurrio un error registrando la operacion.<br>");
+				out.println("				<br><h4>Ocurrio un error registrando la operacion.<br></h4>");
 				e.printStackTrace();
 			}
 		}
@@ -75,6 +78,8 @@ public class ServletOperacionRegistrar extends ServletTemplate{
 		out.println("		</div>");
 		out.println("	</div>");
 		out.println("");
+		out.println("<style> h4 {color:red} h5 {color:blue} </style> ");
+
 	}
 
 	/**

@@ -48,6 +48,8 @@ public class ServletOperacionOrdenCompra extends ServletTemplate{
 		PrintWriter out = response.getWriter();
 		out.println("	<div class=\"well well-lg\">");
 		out.println("		<div class=\"container\">");
+		out.println("			<div class=\"row\"><br><br>");
+
 
 		String cant = request.getParameter("cantidad");
 
@@ -95,18 +97,17 @@ public class ServletOperacionOrdenCompra extends ServletTemplate{
 
 				try {
 					ValorAndes.getInstance().ordenarOperacion(op, inter);
-					out.println("			<h3><b>Ha ordenado exitosamente la compra de " + cant + " " + vals[1] + " de " + vals[2] + ","
-							+ " si lo desea puede ordenar una nueva orden de compra.</b></h3>");
+					out.println("			<h5><b>Ha ordenado exitosamente la compra de " + cant + " " + vals[1] + " de " + vals[2] + ", "
+							+ " si lo desea puede realizar una nueva orden de compra.</b></h5>");
 
 				} catch (Exception e) {
 					e.printStackTrace();
-					out.println("			<h3><b>Ocurrio un error al realizar la orden de compra.</b></h3>");
+					out.println("			<h4><b>Ocurrio un error al realizar la orden de compra.</b></h4>");
 				}
 			}
 		}
 
 
-		out.println("			<div class=\"row\"><br><br>");
 		out.println("				<h2>Operacion de Compra</h2> ");
 		out.println("				Escoja el valor que desea comprar (Si tiene dudas sobre cual escoger puede recurrir al <a href = \"consultaVal.htm\">servicio de consulta de valores).</a> <br>");
 		out.println("				Debe escoger la cantidad a comprar y tambien debe indicar cual de sus intermediario desea que registre esta operacion bursatil.<hr>");
@@ -174,6 +175,7 @@ public class ServletOperacionOrdenCompra extends ServletTemplate{
 		out.println("	</div> ");
 		out.println("  ");
 		out.println("");
+		out.println("<style> h4 {color:red} h5 {color:blue} </style> ");
 
 	}
 

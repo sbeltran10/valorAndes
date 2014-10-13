@@ -169,8 +169,8 @@ public class ValorAndes {
 	/**
 	 * Registrar Operacon Bursatil
 	 */
-	public void registrarOperacion(OperacionValue idOperacion) throws Exception{
-		dao.registrarOperacionBursatil(idOperacion);
+	public String registrarOperacion(OperacionValue idOperacion) throws Exception{
+		return dao.registrarOperacionBursatil(idOperacion);
 	}
 	/**
 	 * Cancelar Operacion Bursatil
