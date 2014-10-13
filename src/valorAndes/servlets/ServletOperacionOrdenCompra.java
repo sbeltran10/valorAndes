@@ -136,7 +136,7 @@ public class ServletOperacionOrdenCompra extends ServletTemplate{
 		out.println("						</div>");
 		out.println("						<div class=\"col-lg-6\">");
 		out.println("							<div class=\"form-group\">");
-		out.println("								<label>Cantidad Deseada</label>");
+		out.println("								<label>Cantidad a Comprar</label>");
 		out.println("								<div class=\"input-group\">");
 		out.println("									<input type=\"number\" class=\"form-control\" id=\"cantidad\" name=\"cantidad\" required>");
 		out.println("									<span class=\"input-group-addon\"></span>");
@@ -185,7 +185,7 @@ public class ServletOperacionOrdenCompra extends ServletTemplate{
 	public void escribirOpcionesValor(PrintWriter out, ArrayList<String> vaList){
 		for(int i =0; i< vaList.size(); i++){
 			String[] opcion = vaList.get(i).split("-");
-			String op = opcion[0] + "(" + opcion[3] + ") - Precio: " + opcion[2] + " - Cantidad Disponible: " + opcion[4];	
+			String op = opcion[0] + " (" + opcion[3] + ") - Precio: $" + opcion[2] + " - Cantidad Disponible: " + opcion[4];	
 
 			out.println("					  <option value = \"" + opcion[1] + "-" + opcion[0] + "-" + opcion[3] + "-" + opcion[4] + "\">" +  op + "</option>");
 		}
@@ -199,7 +199,7 @@ public class ServletOperacionOrdenCompra extends ServletTemplate{
 	public void escribirOpcionesIntermediario(PrintWriter out, ArrayList<String> usList){
 		for(int i =0; i< usList.size(); i++){
 			String[] opcion = usList.get(i).split("-");
-			out.println("					  <option value = \"" + opcion[1]+ "\"> " +  opcion[0] + "(" + opcion[1] + ")</option>");
+			out.println("					  <option value = \"" + opcion[1]+ "\"> " +  opcion[0] + " (" + opcion[1] + ")</option>");
 		}
 	}
 
