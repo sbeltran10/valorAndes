@@ -159,7 +159,18 @@ public class ValorAndes {
 	public ArrayList<OperacionValue> darOperaciones(String tipoUsuario, String tipoOperacion, String fechaMenor, String fechaMayor, int precio, String valor, String tipoRentabilidad) throws Exception{
 		return dao.consultarOperaciones(tipoUsuario, tipoOperacion, fechaMenor, fechaMayor, precio, valor, tipoRentabilidad);
 	}
+	
+	/**
+	 * Retorna los usuarios del sistema dados unos parametros
+	 * @throws SQLException 
+	 */
+	public ArrayList<String[]> darUsuarios(String tipoUs, String correo, String nombre, String telefono, String pais, String ciudad, String idRepresentante) throws SQLException{
+		return dao.consultaUsuarios(tipoUs, correo, nombre, telefono, pais, ciudad, idRepresentante);
+	}
 
+	//--------------------------------------------------
+	//Metodos Asociados a Operaciones.
+	//-------------------------------------------------
 	/**
 	 * Ordenar Operacion Bursatil
 	 */
@@ -178,6 +189,11 @@ public class ValorAndes {
 	public boolean cancelarOperacion(String idUser, int idOperacion) throws Exception{
 		return dao.cancelarOperacionBursatil(idUser, idOperacion);
 	}
+	
+
+	//--------------------------------------------------
+	//Metodos Asociados a Relleno de formularios y/o tablas.
+	//-------------------------------------------------
 	/**
 	 * Da los tipos de rentabilidad existentes en la base de datos
 	 * @throws SQLException 

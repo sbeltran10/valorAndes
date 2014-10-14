@@ -220,6 +220,70 @@ public class ConsultaDAO {
 	}
 
 	/**
+	 * Consulta de Usuarios
+	 */
+	public ArrayList<String[]>consultaUsuarios(String tipoUs, String correo, String nombre, String telefono, String pais, String ciudad, String idRepresentante)throws SQLException{
+		ArrayList<String[]> rta = new ArrayList<String[]>();
+		PreparedStatement state = null;
+		ArrayList<String>select = new ArrayList<String>();
+		ArrayList<String>where = new ArrayList<String>();
+		ArrayList<String>order = new ArrayList<String>();
+		select.add("*");
+
+		if(!correo.equals("---"))where.add("USUARIO.correo = " + "'" + correo + "'");
+		if(!nombre.equals("---"))where.add("USUARIO.nombre = "+ "'" + nombre + "'");
+		if(!telefono.equals("---"))where.add("USUARIO.nombre = "+ "'" + telefono + "'");
+		if(!pais.equals("---"))where.add("USUARIO.nacionalidad = "+ "'" + pais + "'");
+		if(!ciudad.equals("---"))where.add("USUARIO.ciudad = "+ "'" + ciudad + "'");		
+		if(!idRepresentante.equals("---"))where.add("USUARIO.idrepresentante = " + "'" +idRepresentante + "'");
+		String consulta="";
+		if(tipoUs.equals("Oferente")){
+			consulta = creadorDeSentencias(select, "USUARIO JOIN OFERENTE ON USUARIO.correo = OFERENTE.cod_usuario", where, order);
+		}
+		else if(tipoUs.equals("Inversionista")){
+			consulta = creadorDeSentencias(select, "USUARIO JOIN INVERSIONISTA ON USUARIO.correo = INVERSIONISTA.cod_usuario", where, order);
+		}
+		else{
+			consulta = creadorDeSentencias(select, "USUARIO JOIN INTERMEDIARIO ON USUARIO.correo = INTERMEDIARIO.cod_usuario", where, order);
+		}
+
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			String[] value = null;
+			
+			while(rs.next()){
+				
+				value = new String[6];
+				value[0] = rs.getString("correo");
+				value[1] = rs.getString("nombre");
+				value[2] = rs.getString("telefono");
+				value[3] = rs.getString("nacionalidad");
+				value[4] = rs.getString("ciudad");
+				value[5] = rs.getString("idrepresentante");
+				
+				rta.add(value);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
+
+	/**
 	 * GENERADOR DE SENTENCIAS
 	 * @param select, Atributos a seleccionar de la tabla
 	 * @param tabla, tabla a buscar
@@ -577,7 +641,7 @@ public class ConsultaDAO {
 		PreparedStatement state = null;
 		String fechi = new SimpleDateFormat("dd-MM-YYYY").format(op.getFecha());
 		String consulta = "INSERT INTO OPERACION VALUES (TO_DATE('"+ fechi + "', 'DD-MM-YYYY') , '" + op.getTipoCompraVenta() + "', "
-				+ ", " + op.getIdValor() + ", '" + op.getCorSolicitante() + "', 'No Registrada', " + op.getId() + ", " + op.getCantidad() + ")";
+				+  op.getIdValor() + ", '" + op.getCorSolicitante() + "', 'No Registrada', " + op.getId() + ", " + op.getCantidad() + ")";
 		String consulta2 = "INSERT INTO OPERACIONES_INT VALUES ("+ op.getId() + ", '" +  codIntermediario + "')";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
@@ -641,7 +705,7 @@ public class ConsultaDAO {
 		PreparedStatement state = null;
 		String consulta="";
 		String rta = "";
-		
+
 		//Se crean diferentes sentencias para todos los posibles casos que se puedan dar
 		String consultaUpValor="";
 		String consultaUpOperacion="";
@@ -691,7 +755,7 @@ public class ConsultaDAO {
 						+ ", si lo desea puede ordenar una nueva orden de compra por una cantidad menor.";
 			}
 			if(rta.isEmpty()){
-				
+
 				if(tieneValor(op.getCorSolicitante(), op.getIdValor())){
 					consultaUpValorPropietarios = "UPDATE VALOR_PROPIETARIOS SET cantiad_valor = (cantiad_valor + "+ op.getCantidad()  +  ")  WHERE correo_propietario = '"+op.getCorSolicitante()
 							+ "' AND valor_id = " + op.getIdValor();
@@ -704,7 +768,7 @@ public class ConsultaDAO {
 		}
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
-			
+
 			// Se ejecutan las sentencias de actualizacion si fueron definidas anteriormente
 			if(!consultaUpOperaciones_int.isEmpty()){state = conexion.prepareStatement(consultaUpOperaciones_int);state.execute(consultaUpOperaciones_int);consulta=consultaUpOperaciones_int;}
 			if(!consultaUpOperacion.isEmpty()){state = conexion.prepareStatement(consultaUpOperacion);state.execute(consultaUpOperacion);consulta=consultaUpOperacion;}
@@ -712,7 +776,7 @@ public class ConsultaDAO {
 			if(!consultaUpValor.isEmpty()){state = conexion.prepareStatement(consultaUpValor);state.execute(consultaUpValor);consulta=consultaUpValor;}
 			if(!consultaUpOperaciones_int2.isEmpty()){state = conexion.prepareStatement(consultaUpOperaciones_int2);state.execute(consultaUpOperaciones_int2);consulta=consultaUpOperaciones_int2;}
 			if(!consultaUpOperacion2.isEmpty()){state = conexion.prepareStatement(consultaUpOperacion2);state.execute(consultaUpOperacion2);consulta=consultaUpOperacion2;}
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			System.out.println(consulta);

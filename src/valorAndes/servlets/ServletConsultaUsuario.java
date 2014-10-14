@@ -2,6 +2,8 @@ package valorAndes.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,7 +77,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		out.println("							<div class=\"form-group\">");
 		out.println("								<label for=\"InputEmail\">Ciudad</label>");
 		out.println("								<div class=\"input-group\">");
-		out.println("									<input type=\"email\" class=\"form-control\" id=\"depto\" name=\"depto\" >");
+		out.println("									<input type=\"email\" class=\"form-control\" id=\"ciudad\" name=\"ciudad\" >");
 		out.println("									<span class=\"input-group-addon\"></span>");
 		out.println("								</div>");
 		out.println("							</div>");
@@ -92,7 +94,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		out.println("							<div class=\"form-group\">");
 		out.println("								<label for=\"InputEmail\">Id Representante</label>");
 		out.println("								<div class=\"input-group\">");
-		out.println("									<input type=\"email\" class=\"form-control\" id=\"ciudad\" name=\"ciudad\" >");
+		out.println("									<input type=\"email\" class=\"form-control\" id=\"idRe\" name=\"idRe\" >");
 		out.println("									<span class=\"input-group-addon\"></span>");
 		out.println("								</div>");
 		out.println("							</div>");
@@ -103,95 +105,94 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		out.println("					<hr>");
 		out.println("				</div>");
 		out.println("			</div><hr>");
-		out.println("			");
-		out.println("			<div class=\"container\">");
-		out.println("			");
-		out.println("				<div class=\"panel panel-info\">");
-		out.println("					<div class=\"panel-heading\">Resultados</div>");
-		out.println("");
+		
+		String tipoUs = request.getParameter("tipoUs");
+		if(tipoUs!=null){
+
+			String correo = request.getParameter("correo");
+			if(correo == "")
+				correo="---";
+
+			String pais = request.getParameter("pais");
+			if(pais == "")
+				pais="---";
+
+			String nombre = request.getParameter("nombre");
+			if(nombre == "")
+				nombre="---";
+
+			String ciudad = request.getParameter("ciudad");
+			if(ciudad == "")
+				ciudad="---";
+
+			String telefono = request.getParameter("tel");
+			if(telefono == "")
+				telefono="---";
+
+			String idRepresentante = request.getParameter("idRe");
+			if(idRepresentante == "")
+				idRepresentante="---";
+
+			try {
+				escribirResultados(out, ValorAndes.getInstance().darUsuarios(tipoUs, correo, nombre, telefono, pais, ciudad, idRepresentante), tipoUs);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		//Se escriben los resultados de las tablas dependiendo del tipo de usuario
-		out.println("				");
-		out.println("			</div>");
-		out.println("		</div> ");
 		out.println("	</div> ");
 	}
-	
+
 	/**
 	 * Se muestran estos resultados si el tipo de usuario a consultar es Oferente
 	 */
-	public void escribirResultadoOfer(PrintWriter out){
-		out.println("					<table class=\"table table-striped\">");
-		out.println("						<thead>");
-		out.println("							<tr>");
-		out.println("								<th>Valor</th>");
-		out.println("								<th>Tipo del Valor</th>");
-		out.println("								<th>Tipo de Rentabilidad</th>");
-		out.println("								<th>Estado</th>");
-		out.println("								<th>Fecha de Expiracion</th>	");
-		out.println("							</tr>");
-		out.println("						</thead>");
-		out.println("						<tbody>");
-		out.println("							<tr>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("							</tr>");
-		out.println("						</tbody>");
-		out.println("					</table>");
-	}
-	
-	/**
-	 * Se muestran estos resultados si el tipo de usuario a consultar es Inversionista
-	 */
-	public void escribirResultadoInver(PrintWriter out){
-		out.println("					<table class=\"table table-striped\">");
-		out.println("						<thead>");
-		out.println("							<tr>");
-		out.println("								<th>Valor</th>");
-		out.println("								<th>Tipo del Valor</th>");
-		out.println("								<th>Tipo de Rentabilidad</th>");
-		out.println("								<th>Estado</th>");
-		out.println("								<th>Fecha de Expiracion</th>	");
-		out.println("							</tr>");
-		out.println("						</thead>");
-		out.println("						<tbody>");
-		out.println("							<tr>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("							</tr>");
-		out.println("						</tbody>");
-		out.println("					</table>");
-	}
-	
-	/**
-	 * Se muestran estos resultados si el tipo de usuario a consultar es Intermediario
-	 */
-	public void escribirResultadoInter(PrintWriter out){
-		out.println("					<table class=\"table table-striped\">");
-		out.println("						<thead>");
-		out.println("							<tr>");
-		out.println("								<th>Valor</th>");
-		out.println("								<th>Tipo del Valor</th>");
-		out.println("								<th>Tipo de Rentabilidad</th>");
-		out.println("								<th>Estado</th>");
-		out.println("								<th>Fecha de Expiracion</th>	");
-		out.println("							</tr>");
-		out.println("						</thead>");
-		out.println("						<tbody>");
-		out.println("							<tr>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("								<td>---</td>");
-		out.println("							</tr>");
-		out.println("						</tbody>");
-		out.println("					</table>");
+	public void escribirResultados(PrintWriter out, ArrayList<String[]> usus, String tipoUs){
+
+		if(usus.isEmpty()){
+			out.println("			<div class=\"container\">");
+			out.println("				<div class=\"panel panel-info\">");
+			out.println("					<div class=\"panel-heading\">No se encontraron Usuarios</div>");
+		}
+
+		else{
+			out.println("			<div class=\"container\">");
+			out.println("				<div class=\"panel panel-info\">");
+			out.println("					<div class=\"panel-heading\">Resultados</div>");
+			out.println("					<table class=\"table table-striped\">");
+			out.println("						<thead>");
+			out.println("							<tr>");
+			out.println("								<th>Correo</th>");
+			out.println("								<th>Nombre</th>");
+			out.println("								<th>Telefono</th>");
+			out.println("								<th>Pais</th>");
+			out.println("								<th>Ciudad</th>	");
+			out.println("								<th>Id Representante</th>	");
+			out.println("								<th>Ver informacion</th>	");
+			out.println("							</tr>");
+			out.println("						</thead>");
+			out.println("						<tbody>");
+
+			for(int i=0; i<usus.size();i++){
+				String[] us = usus.get(i);
+				
+				out.println("							<tr><form>");
+				out.println("								<td>" + us[0] + "</td>");
+				out.println("								<td>" + us[1] + "</td>");
+				out.println("								<td>" + us[2] + "</td>");
+				out.println("								<td>" + us[3] + "</td>");
+				out.println("								<td>" + us[4] + "</td>");
+				out.println("								<td>" + us[5] + "</td>");
+				out.println("								<input type=\"hidden\" name=\"opid\" value=\"" + us[0] + "-" + tipoUs + "\"/>");
+				out.println("								<td><button type=\"submit2\"  class=\"btn btn-default\" name=\"us\">Ver informacion</button></td>");
+				out.println("							</tr></form>");
+			}
+			
+			out.println("						</tbody>");
+			out.println("					</table>");
+		}
+
+		out.println("			</div>");
+		out.println("		</div> ");
 	}
 
 }
