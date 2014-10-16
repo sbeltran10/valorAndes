@@ -114,9 +114,6 @@ public class ConsultaDAO {
 	/**
 	 * Consulta para la existencia de valores.
 	 */
-	/**
-	 * Consulta para la existencia de valores.
-	 */
 	public ArrayList<ValorValue>existenciaValores(String valor, String tipoValor, String tipoRentabilidad, String negociado, String fechaExpiracion, String corOferenteDuenio, String corIntermediario, String corInversionista, String orden)throws SQLException{
 		ArrayList<ValorValue> rta = new ArrayList<ValorValue>();
 		PreparedStatement state = null;
