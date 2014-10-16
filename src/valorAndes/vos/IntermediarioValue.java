@@ -1,5 +1,7 @@
 package valorAndes.vos;
 
+import java.util.ArrayList;
+
 public class IntermediarioValue {
 
 	//-------------------------------------
@@ -15,6 +17,15 @@ public class IntermediarioValue {
 	 */
 	private String tipoEntidad;
 
+	/**
+	 * Inversionistas asociados al intermediario
+	 */
+	private ArrayList<String> socios;
+	
+	/**
+	 * Valores que el intermediario esta negociando
+	 */
+	private ArrayList<ValorValue> valoresneg;
 	//----------------------------------------
 	//Atributos de la super-clase Usuario
 	//----------------------------------------
@@ -259,5 +270,21 @@ public class IntermediarioValue {
 	 */
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+
+	public ArrayList<String> getSocios() {
+		return socios;
+	}
+
+	public void setSocios(ArrayList<String> socios) {
+		this.socios = socios;
+	}
+
+	public ArrayList<ValorValue> getValoresneg() {
+		return valoresneg;
+	}
+
+	public void setValoresneg(ArrayList<ValorValue> valoresneg) {
+		this.valoresneg = valoresneg;
 	}
 }

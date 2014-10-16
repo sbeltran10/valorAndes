@@ -250,5 +250,32 @@ public class ValorAndes {
 		return dao.darTotalOperaciones();
 	}
 
+	//---------------------------------
+	// Visualizacion Usuarios
+	//---------------------------------
+	
+	/**
+	 * Da la informacion de un oferente
+	 * @throws SQLException 
+	 */
+	public OferenteValue darInfoOferente(String correo) throws SQLException{
+		return dao.darInfoOferente(correo);
+	}
+	
+	/**
+	 * Da la informacion de un inversionista
+	 * @throws SQLException 
+	 */
+	public InversionistaValue darInfoInversionista(String correo) throws SQLException{
+		return dao.darInfoInversionista(correo);
+	}
+	
+	/**
+	 * Da la informacion de un intermediario
+	 * @throws SQLException 
+	 */
+	public IntermediarioValue darInfoIntermediario(String correo) throws SQLException{
+		return dao.darInfoIntermediario(correo);
+	}
 
 }

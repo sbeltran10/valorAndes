@@ -252,9 +252,9 @@ public class ConsultaDAO {
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
 			String[] value = null;
-			
+
 			while(rs.next()){
-				
+
 				value = new String[6];
 				value[0] = rs.getString("correo");
 				value[1] = rs.getString("nombre");
@@ -262,7 +262,7 @@ public class ConsultaDAO {
 				value[3] = rs.getString("nacionalidad");
 				value[4] = rs.getString("ciudad");
 				value[5] = rs.getString("idrepresentante");
-				
+
 				rta.add(value);
 			}
 		}catch(SQLException e){
@@ -881,6 +881,126 @@ public class ConsultaDAO {
 		return rta;
 	}
 
+	//----------------------------
+	//Visualizar Usuarios
+	//----------------------------
+
+	/**
+	 * Devuelve un oferente dado su correo
+	 * @param correo
+	 * @return
+	 * @throws SQLException 
+	 */
+	public OferenteValue darInfoOferente(String correo) throws SQLException{
+		OferenteValue rta = null;
+		PreparedStatement state = null;
+		ArrayList<String>select = new ArrayList<String>();
+		ArrayList<String>where = new ArrayList<String>();
+		ArrayList<String>order = new ArrayList<String>();
+		select.add("*");
+		where.add("USUARIO.correo = '" + correo + "'");
+		String consulta = creadorDeSentencias(select, "USUARIO JOIN OFERENTE ON USUARIO.correo = OFERENTE.cod_usuario", where, order);
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			if(rs.next()){
+				rta = new OferenteValue();
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
+	/**
+	 * Devuelve un inversionista dado su correo
+	 * @param correo
+	 * @return
+	 * @throws SQLException 
+	 */
+	public InversionistaValue darInfoInversionista(String correo) throws SQLException{
+		InversionistaValue rta = null;
+		PreparedStatement state = null;
+		ArrayList<String>select = new ArrayList<String>();
+		ArrayList<String>where = new ArrayList<String>();
+		ArrayList<String>order = new ArrayList<String>();
+		select.add("*");
+		where.add("USUARIO.correo = '" + correo + "'");
+		String consulta = creadorDeSentencias(select, "USUARIO JOIN INVERSIONISTA ON USUARIO.correo = INVERSIONISTA.cod_usuario", where, order);
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			if(rs.next()){
+				rta = new InversionistaValue();
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
+	/**
+	 * Devuelve un intermediario dado su correo
+	 * @param correo
+	 * @return
+	 * @throws SQLException 
+	 */
+	public IntermediarioValue darInfoIntermediario(String correo) throws SQLException{
+		IntermediarioValue rta = null;
+		PreparedStatement state = null;
+		ArrayList<String>select = new ArrayList<String>();
+		ArrayList<String>where = new ArrayList<String>();
+		ArrayList<String>order = new ArrayList<String>();
+		select.add("*");
+		where.add("USUARIO.correo = '" + correo + "'");
+		String consulta = creadorDeSentencias(select, "USUARIO JOIN INTERMEDIARIO ON USUARIO.correo = INTERMEDIARIO.cod_usuario", where, order);
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			if(rs.next()){
+				rta = new IntermediarioValue();
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
 	//-----------------------------
 	//AUTENTICACION
 	//------------------------------

@@ -1,5 +1,7 @@
 package valorAndes.vos;
 
+import java.util.ArrayList;
+
 public class OferenteValue {
 	//-------------------------------
 	//Atributos
@@ -14,6 +16,11 @@ public class OferenteValue {
 	 */
 	private int idRentabilidad;
 
+	/**
+	 * Los valores que el oferente tiene en la bolsa
+	 */
+	private ArrayList<ValorValue> valores;
+	
 	//----------------------------------------
 	//Atributos de la super-clase Usuario
 	//----------------------------------------
@@ -271,6 +278,14 @@ public class OferenteValue {
 	 */
 	public void setTipoPortafolio(String tipoPortafolio) {
 		this.tipoPortafolio = tipoPortafolio;
+	}
+
+	public ArrayList<ValorValue> getValores() {
+		return valores;
+	}
+
+	public void setValores(ArrayList<ValorValue> valores) {
+		this.valores = valores;
 	}
 
 }
