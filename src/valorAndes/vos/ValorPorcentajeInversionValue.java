@@ -8,7 +8,7 @@ public class ValorPorcentajeInversionValue {
 	/**
 	 * Porcentaje de inversion.
 	 */
-	private int porccentajeInversion;
+	private int porcentajeInversion;
 	
 	/**
 	 * Valor.
@@ -18,21 +18,7 @@ public class ValorPorcentajeInversionValue {
 	//--------------------------------------
 	//Metodos.
 	//--------------------------------------
-
-	/**
-	 * @return the porccentajeInversion
-	 */
-	public int getPorccentajeInversion() {
-		return porccentajeInversion;
-	}
-
-	/**
-	 * @param porccentajeInversion the porccentajeInversion to set
-	 */
-	public void setPorccentajeInversion(int porccentajeInversion) {
-		this.porccentajeInversion = porccentajeInversion;
-	}
-
+	
 	/**
 	 * @return the valor
 	 */
@@ -45,5 +31,19 @@ public class ValorPorcentajeInversionValue {
 	 */
 	public void setValor(ValorValue valor) {
 		this.valor = valor;
+	}
+
+	/**
+	 * @return the porcentajeInversion
+	 */
+	public int getPorcentajeInversion() {
+		return porcentajeInversion;
+	}
+
+	/**
+	 * @param porcentajeInversion the porcentajeInversion to set
+	 */
+	public void setPorcentajeInversion(int porcentajeInversion) {
+		this.porcentajeInversion = porcentajeInversion;
 	}
 }

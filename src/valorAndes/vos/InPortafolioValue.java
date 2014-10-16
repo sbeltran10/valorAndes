@@ -13,6 +13,12 @@ public class InPortafolioValue {
 	private ArrayList<ValorPorcentajeInversionValue> valoresPortafolio;
 	
 	/**
+	 * Cantidad global de valores del protafolio del inversionista.
+	 */
+	
+	private int cantidadGlobal;
+	
+	/**
 	 * Portafolio del que inPortafolio es subconjunto.
 	 */
 	
@@ -49,6 +55,20 @@ public class InPortafolioValue {
 	 */
 	public void setParentPortafolio(PortafolioValue parentPortafolio) {
 		this.parentPortafolio = parentPortafolio;
+	}
+
+	/**
+	 * @return the cantidadGlobal
+	 */
+	public int getCantidadGlobal() {
+		return cantidadGlobal;
+	}
+
+	/**
+	 * @param cantidadGlobal the cantidadGlobal to set
+	 */
+	public void setCantidadGlobal(int cantidadGlobal) {
+		this.cantidadGlobal = cantidadGlobal;
 	}
 	
 }
