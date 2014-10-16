@@ -19,7 +19,7 @@ public class OferenteValue {
 	/**
 	 * Los valores que el oferente tiene en la bolsa
 	 */
-	private ArrayList<ValorValue> valores;
+	private ArrayList<String[]> valores;
 	
 	//----------------------------------------
 	//Atributos de la super-clase Usuario
@@ -280,11 +280,11 @@ public class OferenteValue {
 		this.tipoPortafolio = tipoPortafolio;
 	}
 
-	public ArrayList<ValorValue> getValores() {
+	public ArrayList<String[]> getValores() {
 		return valores;
 	}
 
-	public void setValores(ArrayList<ValorValue> valores) {
+	public void setValores(ArrayList<String[]> valores) {
 		this.valores = valores;
 	}
 

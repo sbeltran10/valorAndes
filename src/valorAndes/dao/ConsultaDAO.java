@@ -903,6 +903,18 @@ public class ConsultaDAO {
 			ResultSet rs = state.executeQuery();
 			if(rs.next()){
 				rta = new OferenteValue();
+				rta.setCiudad(rs.getString("ciudad"));
+				rta.setCodPostal(rs.getInt("codigopostal"));
+				rta.setCorreo(correo);
+				rta.setDepartamento(rs.getString("departamento"));
+				rta.setDireccion(rs.getString("direccion"));
+				rta.setIdRepresentante(rs.getString("idrepresentante"));
+				rta.setNombreRepresentante(rs.getString("nombrerepresentante"));
+				rta.setNacionalidad(rs.getString("nacionalidad"));
+				rta.setNombre(rs.getString("nombre"));
+				rta.setTelefono(rs.getString("telefono"));
+				rta.setTipoEntidad(rs.getString("tipo_entidad"));
+				rta.setValores(darValoresOfer(correo));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -960,6 +972,49 @@ public class ConsultaDAO {
 		return rta;
 	}
 
+	/**
+	 * Devuelve los valores que tiene asociados un oferente
+	 */
+	public ArrayList<String[]> darValoresOfer(String correo)throws SQLException{
+		ArrayList<String[]> rta = new ArrayList<String[]>();
+		String[] val = null;
+		PreparedStatement state = null;
+		ArrayList<String>select = new ArrayList<String>();
+		ArrayList<String>where = new ArrayList<String>();
+		ArrayList<String>order = new ArrayList<String>();
+		select.add("*");
+		where.add("VALOR.cod_oferente_creador = '" + correo + "'");
+		String consulta = creadorDeSentencias(select, "VALOR JOIN VALOR_PROPIETARIOS ON VALOR.valor_id = VALOR_PROPIETARIOS.valor_id" , where, order);
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				val = new String[5];
+				val[0] = rs.getString("nombre");
+				val[1] = rs.getString("correo_propietario");
+				val[2] = rs.getString("cantidad_valor");
+				val[3] = rs.getString("precio");
+				val[4] = rs.getString("mercado");
+				rta.add(val);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+	
 	/**
 	 * Devuelve un intermediario dado su correo
 	 * @param correo
