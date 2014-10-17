@@ -216,7 +216,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			out.println("					<div class=\"col-lg-6\">");
 			out.println("						<h3> <u>Tipo de Entidad:</u> &nbsp" + ofer.getTipoEntidad() +  "</h3>");
 			out.println("					</div>");
-			escribirValoresOfer(out, ofer.getValores());
+			escribirValores(out, ofer.getValores(), "Ofer");
 			
 		}
 		
@@ -231,35 +231,39 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			out.println("	<div class=\"well well-lg\">");
 			out.println("		<div class=\"container\">");
 			out.println("		<div class=\"row\">");
-			out.println("			<br><br><br>");
-			out.println("					<h2> Nombre </h2><br>");
+			out.println("			<br>");
+			out.println("					<h2>" + inver.getNombre() + "</h2><br>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Correo:</u>&nbsp sadasda</h3>");
+			out.println("						<h3> <u>Correo:</u>&nbsp" + inver.getCorreo() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Telefono:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Telefono:</u> &nbsp" + inver.getTelefono() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Nacionalidad:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Nacionalidad:</u> &nbsp" + inver.getNacionalidad() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Departamento:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Departamento:</u> &nbsp" + inver.getDepartamento() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Ciudad:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Ciudad:</u> &nbsp" + inver.getCiudad() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Direccion:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Direccion:</u> &nbsp" + inver.getDireccion() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Id Representante:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Id Representante:</u>" + inver.getIdRepresentante() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Nombre Representante:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Nombre Representante:</u>" + inver.getNombreRepresentante() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Codigo Postal:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Codigo Postal:</u> &nbsp" + inver.getCodPostal() +  "</h3>");
 			out.println("					</div>");
+			out.println("					<div class=\"col-lg-6\">");
+			out.println("						<h3> <u>Documento:</u> &nbsp" + inver.getDocIdentidad() +  "</h3>");
+			out.println("					</div>");
+			escribirValores(out, inver.getValores(),"Inver");
 		}
 		
 		else{
@@ -317,11 +321,15 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 	 * @param out
 	 * @param vals
 	 */
-	public void escribirValoresOfer(PrintWriter out, ArrayList<String[]> vals){
+	public void escribirValores(PrintWriter out, ArrayList<String[]> vals, String tipo){
 		if(vals.isEmpty()){
 			out.println("			<div class=\"container\">");
 			out.println("				<div class=\"panel panel-info\">");
-			out.println("					<div class=\"panel-heading\">El oferente no tiene valores en la bolsa</div>");
+			if(tipo.equals("Ofer"))
+				out.println("					<div class=\"panel-heading\">El oferente no tiene valores en la bolsa</div>");
+			else
+				out.println("					<div class=\"panel-heading\">El inversionista no ha invertido en valores de la bolsa</div>");
+
 		}
 
 		else{

@@ -955,8 +955,21 @@ public class ConsultaDAO {
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
-			if(rs.next()){
+			while(rs.next()){
+				
 				rta = new InversionistaValue();
+				rta.setCiudad(rs.getString("ciudad"));
+				rta.setCodPostal(rs.getInt("codigopostal"));
+				rta.setCorreo(correo);
+				rta.setDepartamento(rs.getString("departamento"));
+				rta.setDireccion(rs.getString("direccion"));
+				rta.setIdRepresentante(rs.getString("idrepresentante"));
+				rta.setNombreRepresentante(rs.getString("nombrerepresentante"));
+				rta.setNacionalidad(rs.getString("nacionalidad"));
+				rta.setNombre(rs.getString("nombre"));
+				rta.setTelefono(rs.getInt("telefono"));
+				rta.setDocIdentidad(rs.getInt("documento_identidad"));
+				rta.setValores(darValoresInfoUs(correo, "Inver"));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
