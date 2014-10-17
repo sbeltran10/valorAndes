@@ -33,7 +33,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		String opid = request.getParameter("opid");
 		if(opid!=null){
 			escribirInformacion(out, opid);
-			
+
 		}
 
 		else{
@@ -157,7 +157,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		}
 	}
 
-	
+
 	//-----------------------------------------------------
 	//Resultados de un usuario especifico
 	//-----------------------------------------------------
@@ -167,12 +167,12 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 	public void escribirInformacion(PrintWriter out, String opid){
 
 		String[] opids = opid.split("-");
-		
+
 		out.println("	<div class=\"well well-lg\">");
 		out.println("		<div class=\"container\">");
 		out.println("		<div class=\"row\">");
 		out.println("			<br><br><br>");
-		
+
 		if(opids[1].equals("Oferente")){
 			OferenteValue ofer = null;
 			try {
@@ -180,7 +180,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 			out.println("	<div class=\"well well-lg\">");
 			out.println("		<div class=\"container\">");
 			out.println("		<div class=\"row\">");
@@ -217,9 +217,9 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			out.println("						<h3> <u>Tipo de Entidad:</u> &nbsp" + ofer.getTipoEntidad() +  "</h3>");
 			out.println("					</div>");
 			escribirValores(out, ofer.getValores(), "Ofer");
-			
+
 		}
-		
+
 		else if(opids[1].equals("Inversionista")){
 			InversionistaValue inver = null;
 			try {
@@ -227,7 +227,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 			out.println("	<div class=\"well well-lg\">");
 			out.println("		<div class=\"container\">");
 			out.println("		<div class=\"row\">");
@@ -265,7 +265,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			out.println("					</div>");
 			escribirValores(out, inver.getValores(),"Inver");
 		}
-		
+
 		else{
 			IntermediarioValue inter = null;
 			try {
@@ -273,7 +273,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 			out.println("	<div class=\"well well-lg\">");
 			out.println("		<div class=\"container\">");
 			out.println("		<div class=\"row\">");
@@ -307,7 +307,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			out.println("						<h3> <u>Codigo Postal:</u> &nbsp sadasda</h3>");
 			out.println("					</div>");
 		}
-		
+
 		out.println("			</div>");
 		out.println("		</div>");
 		out.println("	</div>");
@@ -340,7 +340,11 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			out.println("						<thead>");
 			out.println("							<tr>");
 			out.println("								<th>Nombre</th>");
-			out.println("								<th>Correo Propietario</th>");
+			if(tipo.equals("Ofer"))
+				out.println("								<th>Correo Propietario</th>");
+			else
+				out.println("								<th>Correo Creador</th>");
+
 			out.println("								<th>Cantidad</th>");
 			out.println("								<th>Precio</th>");
 			out.println("								<th>Mercado</th>	");
@@ -353,7 +357,10 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 
 				out.println("							<tr><form>");
 				out.println("								<td>" + val[0] + "</td>");
-				out.println("								<td>" + val[1] + "</td>");
+				if(tipo.equals("Ofer"))
+					out.println("								<td>" + val[1] + "</td>");
+				else
+					out.println("								<td>" + val[5] + "</td>");
 				out.println("								<td>" + val[2] + "</td>");
 				out.println("								<td>" + val[3] + "</td>");
 				out.println("								<td>" + val[4] + "</td>");
@@ -367,7 +374,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		out.println("			</div>");
 		out.println("		</div> ");
 	}
-	
+
 	//-----------------------------------------------------
 	//Resultados iniciales de tabla
 	//-----------------------------------------------------
