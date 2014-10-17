@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 
+import valorAndes.vos.InPortafolioValue;
 import valorAndes.vos.IntermediarioValue;
 import valorAndes.vos.InversionistaValue;
 import valorAndes.vos.OferenteValue;
 import valorAndes.vos.OperacionValue;
+import valorAndes.vos.PortafolioValue;
+import valorAndes.vos.ValorPorcentajeInversionValue;
 import valorAndes.vos.ValorValue;
 
 public class ConsultaDAO {
@@ -1246,4 +1249,180 @@ public class ConsultaDAO {
 		}
 		return rta;
 	}
+
+	//____________________________________________________________
+	//
+	//PORTAFOLIOS
+	//____________________________________________________________
+	//
+	//------------------------------------------------------------
+	//Portafolio Inversionista
+	//------------------------------------------------------------
+	/**
+	 * Cambiar el procentaje de un valor dados el codigo del portafolio, el cod del valor y el nuevo proccentaje. 	
+	 * @throws SQLException 
+	 */
+	public void cambiarPorcentaje(int codPort, int codVal, int nPor) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "UPDATE VALOR_PORCENTAJE SET porcentaje = "+nPor+"WHERE cod_in_portafolio = " + codPort + ", codVal = "+codVal;
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+	}
+
+	/**
+	 * Elimina un valor de un portafolio dados el cod del valor y el id del portafolio. 	
+	 * @throws SQLException 
+	 */
+	public void eliminarValorPortafolio(int codPort, int codVal) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "DELETE FROM VALOR_PROCENTAJE WHERE cod_in_portafolio = "+codPort+", cod_valor = "+codVal;
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+	}
+
+	/**
+	 * Agrega un nuevo valor a un portafolio dados el cod del portafolio el codigo del valor y el porcentaje inicial del valor. 	
+	 * @throws SQLException 
+	 */
+	public void agregarValorPortafolio(int codPort, int codVal, int nPor) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "INSERT INTO TABLA VALUES ( " + codPort + ", " + nPor + ", " +  codVal + ")";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+	}
+
+	/**
+	 * Dar valores del portafolio y sus porccentajes dado el id del portafolio.
+	 * @throws SQLException
+	 */
+	public ArrayList<ValorPorcentajeInversionValue> darValoresPortafolio(int idPort) throws SQLException{
+		ArrayList<ValorPorcentajeInversionValue> rta = new ArrayList<ValorPorcentajeInversionValue>();
+		ArrayList<String> select = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		ArrayList<String> order = new ArrayList<String>();
+		PreparedStatement state = null;
+		select.add("cod_valor");
+		select.add("porcentaje");
+		where.add("cod_portafolio = "+idPort);
+		String consulta = creadorDeSentencias(select, "VALOR_PORCENTAJE JOIN VALOR ON cod_valor = valor_id", where, order);
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				ValorPorcentajeInversionValue val = new ValorPorcentajeInversionValue();
+				val.setPorcentajeInversion(rs.getInt("porcentaje"));
+				ValorValue valor = new ValorValue();
+				valor.setCreador(rs.getString("cod_oferente_creador"));
+				valor.setDisponible((rs.getString("disponible").equals("T"))?true:false);
+				valor.setFechaExpiracion(rs.getDate("fecha_expiracion"));
+				valor.setMercado(rs.getString("mercado"));
+				valor.setNombre(rs.getString("nombre"));
+				valor.setPrecio(rs.getInt("precio"));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
+	/**
+	 * Dar todos los portafolios dado el id del inversionista.
+	 */
+
+	// LO QUE VA DENTRO DE TODOS LOS METODOS DE DAO.
+	//	ArrayList<String> select = new ArrayList<String>();
+	//	ArrayList<String> where = new ArrayList<String>();
+	//	ArrayList<String> order = new ArrayList<String>();
+	//	PreparedStatement state = null;
+	//	String consulta = creadorDeSentencias(select, "Tabla", where, order);	
+	//	try{
+	//		establecerConexion(cadenaConexion, usuario, clave);
+	//		state = conexion.prepareStatement(consulta);
+	//		ResultSet rs = state.executeQuery();
+	//		while(rs.next()){
+	//			
+	//		}
+	//	}catch(SQLException e){
+	//		e.printStackTrace();
+	//		System.out.println(consulta);
+	//		throw e;
+	//	}finally{
+	//		if(state != null){
+	//			try{
+	//				state.close();
+	//			}catch(SQLException e){
+	//				throw e;
+	//			}
+	//		}
+	//		cerrarConexion(conexion);
+	//	}
+
+	//GENERIC INSERT
+	//	"INSERT INTO TABLA VALUES ("" , '" + s1 + "', " +  s2 + ")"
+	//
+	//	GENERIC UPDATE
+	//	"UPDATE TABLA SET column = value WHERE comp = acomp"
+	//	
+	//	GENERIC DELETE
+	//	"DELETE FROM TABLA WHERE comp = acomp"
 }

@@ -26,6 +26,12 @@ public class IntermediarioValue {
 	 * Valores que el intermediario esta negociando
 	 */
 	private ArrayList<ValorValue> valoresneg;
+	
+	/**
+	 * Portafolios de valores del intermediario.
+	 */
+	private ArrayList<PortafolioValue> portafolios;
+	
 	//----------------------------------------
 	//Atributos de la super-clase Usuario
 	//----------------------------------------
@@ -286,5 +292,19 @@ public class IntermediarioValue {
 
 	public void setValoresneg(ArrayList<ValorValue> valoresneg) {
 		this.valoresneg = valoresneg;
+	}
+
+	/**
+	 * @return the portafolios
+	 */
+	public ArrayList<PortafolioValue> getPortafolios() {
+		return portafolios;
+	}
+
+	/**
+	 * @param portafolios the portafolios to set
+	 */
+	public void setPortafolios(ArrayList<PortafolioValue> portafolios) {
+		this.portafolios = portafolios;
 	}
 }
