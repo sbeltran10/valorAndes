@@ -27,7 +27,7 @@ public class InPortafolioValue {
 	//------------------------------
 	//Metodos
 	//------------------------------
-		
+
 	/**
 	 * @return the valoresPortafolio
 	 */

@@ -15,6 +15,11 @@ public class InversionistaValue {
 	 * Valores que tiene en la bolsa
 	 */
 	private ArrayList<String[]> valores;
+	
+	/**
+	 * Portafolios del inversionista
+	 */
+	private ArrayList<InPortafolioValue> inPortafolios;
 	//----------------------------------------
 	//Atributos de la super-clase Usuario
 	//----------------------------------------
@@ -266,5 +271,19 @@ public class InversionistaValue {
 
 	public void setValores(ArrayList<String[]> valores) {
 		this.valores = valores;
+	}
+
+	/**
+	 * @return the inPortafolios
+	 */
+	public ArrayList<InPortafolioValue> getInPortafolios() {
+		return inPortafolios;
+	}
+
+	/**
+	 * @param inPortafolios the inPortafolios to set
+	 */
+	public void setInPortafolios(ArrayList<InPortafolioValue> inPortafolios) {
+		this.inPortafolios = inPortafolios;
 	}
 }

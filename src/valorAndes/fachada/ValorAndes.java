@@ -278,4 +278,7 @@ public class ValorAndes {
 		return dao.darInfoIntermediario(correo);
 	}
 
+	/**
+	 * 
+	 */
 }
