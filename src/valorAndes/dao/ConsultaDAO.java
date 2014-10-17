@@ -914,7 +914,7 @@ public class ConsultaDAO {
 				rta.setNombre(rs.getString("nombre"));
 				rta.setTelefono(rs.getString("telefono"));
 				rta.setTipoEntidad(rs.getString("tipo_entidad"));
-				rta.setValores(darValoresOfer(correo));
+				rta.setValores(darValoresInfoUs(correo, "Ofer"));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -975,28 +975,58 @@ public class ConsultaDAO {
 	/**
 	 * Devuelve los valores que tiene asociados un oferente
 	 */
-	public ArrayList<String[]> darValoresOfer(String correo)throws SQLException{
+	public ArrayList<String[]> darValoresInfoUs(String correo, String tipo)throws SQLException{
 		ArrayList<String[]> rta = new ArrayList<String[]>();
 		String[] val = null;
 		PreparedStatement state = null;
 		ArrayList<String>select = new ArrayList<String>();
 		ArrayList<String>where = new ArrayList<String>();
 		ArrayList<String>order = new ArrayList<String>();
+		String consulta = "";
 		select.add("*");
-		where.add("VALOR.cod_oferente_creador = '" + correo + "'");
-		String consulta = creadorDeSentencias(select, "VALOR JOIN VALOR_PROPIETARIOS ON VALOR.valor_id = VALOR_PROPIETARIOS.valor_id" , where, order);
+		if(tipo.equals("Ofer")){
+			where.add("VALOR.cod_oferente_creador = '" + correo + "'");
+			consulta = creadorDeSentencias(select, "VALOR JOIN VALOR_PROPIETARIOS ON VALOR.valor_id = VALOR_PROPIETARIOS.valor_id" , where, order);
+		}
+
+		else if (tipo.equals("Inver")){
+			where.add("VALOR_PROPIETARIOS.correo_propietario = '" + correo + "'");
+			consulta = creadorDeSentencias(select, "VALOR JOIN VALOR_PROPIETARIOS ON VALOR.valor_id = VALOR_PROPIETARIOS.valor_id" , where, order);
+		}
+
+		else{
+			where.add("OPERACIONES_INT.cod_intermediario = '" + correo + "'");
+			consulta = creadorDeSentencias(select, "(VALOR JOIN OPERACION ON VALOR.valor_id = OPERACION.cod_valor) JOIN OPERACIONES_INT ON OPERACION.operaciod_id = OPERACIONES_INT.cod_operacion" , where, order);
+		}
+
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
-			while(rs.next()){
-				val = new String[5];
-				val[0] = rs.getString("nombre");
-				val[1] = rs.getString("correo_propietario");
-				val[2] = rs.getString("cantidad_valor");
-				val[3] = rs.getString("precio");
-				val[4] = rs.getString("mercado");
-				rta.add(val);
+			if(tipo.equals("Inter")){
+				while(rs.next()){
+					val = new String[6];
+					val[0] = rs.getString("nombre");
+					val[1] = rs.getString("correo_propietario");
+					val[2] = rs.getString("cantidad_valor");
+					val[3] = rs.getString("precio");
+					val[4] = rs.getString("mercado");
+					val[5] = rs.getString("cod_oferente_creador");
+					rta.add(val);
+				}
+			}
+			else{
+				while(rs.next()){
+					val = new String[7];
+					val[0] = rs.getString("nombre");
+					val[1] = rs.getString("cod_solicitante");
+					val[2] = rs.getString("cantidad");
+					val[3] = rs.getString("precio");
+					val[4] = rs.getString("mercado");
+					val[5] = rs.getString("cod_oferente_creador");
+					val[6] = rs.getString("cod_oferente_creador");
+					rta.add(val);
+				}
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -1014,7 +1044,7 @@ public class ConsultaDAO {
 		}
 		return rta;
 	}
-	
+
 	/**
 	 * Devuelve un intermediario dado su correo
 	 * @param correo
