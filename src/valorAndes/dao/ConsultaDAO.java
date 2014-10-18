@@ -1119,8 +1119,7 @@ public class ConsultaDAO {
 				val.setCreador(rs.getString("cod_oferente_creador"));
 				val.setNombre(rs.getString("nombre"));
 				val.setMercado(rs.getString("mercado"));
-				val.setCreador(rs.getString("Disponible"));
-				val.setCreador(rs.getString("precio"));
+				val.setPrecio(rs.getInt("precio"));
 				rta.add(val);
 			}
 		}catch(SQLException e){

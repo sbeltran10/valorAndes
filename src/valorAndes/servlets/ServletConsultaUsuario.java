@@ -12,6 +12,8 @@ import valorAndes.fachada.ValorAndes;
 import valorAndes.vos.IntermediarioValue;
 import valorAndes.vos.InversionistaValue;
 import valorAndes.vos.OferenteValue;
+import valorAndes.vos.PortafolioValue;
+import valorAndes.vos.ValorValue;
 
 public class ServletConsultaUsuario  extends ServletTemplate{
 	private static final long serialVersionUID = 1L;
@@ -277,35 +279,41 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			out.println("	<div class=\"well well-lg\">");
 			out.println("		<div class=\"container\">");
 			out.println("		<div class=\"row\">");
-			out.println("			<br><br><br>");
-			out.println("					<h2> Nombre </h2><br>");
+			out.println("					<h2>" + inter.getNombre() + "</h2><br>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Correo:</u>&nbsp sadasda</h3>");
+			out.println("						<h3> <u>Correo:</u>&nbsp" + inter.getCorreo() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Telefono:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Telefono:</u> &nbsp" + inter.getTelefono() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Nacionalidad:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Nacionalidad:</u> &nbsp" + inter.getNacionalidad() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Departamento:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Departamento:</u> &nbsp" + inter.getDepartamento() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Ciudad:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Ciudad:</u> &nbsp" + inter.getCiudad() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Direccion:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Direccion:</u> &nbsp" + inter.getDireccion() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Id Representante:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Id Representante:</u>" + inter.getIdRepresentante() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Nombre Representante:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Nombre Representante:</u>" + inter.getNombreRepresentante() +  "</h3>");
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
-			out.println("						<h3> <u>Codigo Postal:</u> &nbsp sadasda</h3>");
+			out.println("						<h3> <u>Codigo Postal:</u> &nbsp" + inter.getCodPostal() +  "</h3>");
 			out.println("					</div>");
+			out.println("					<div class=\"col-lg-6\">");
+			out.println("						<h3> <u>Tipo de Entidad:</u> &nbsp" + inter.getTipoEntidad() +  "</h3>");
+			out.println("					</div>");
+			out.println("					<div class=\"col-lg-6\">");
+			out.println("						<h3> <u>Numero de Registro:</u> &nbsp" + inter.getNumRegistro() +  "</h3>");
+			out.println("					</div>");
+			escribirDatosIntermediario(out, inter.getSocios(), inter.getValoresneg(), inter.getPortafolios());
 		}
 
 		out.println("			</div>");
@@ -373,6 +381,133 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 
 		out.println("			</div>");
 		out.println("		</div> ");
+		
+		
+	}
+
+	/**
+	 * Escribe los datos de un intermediario
+	 */
+	public void escribirDatosIntermediario(PrintWriter out, ArrayList<String[]> socis, ArrayList<ValorValue> vals, ArrayList<PortafolioValue> ports){
+
+		if(vals.isEmpty()){
+			out.println("			<div class=\"container\">");
+			out.println("				<div class=\"panel panel-info\">");
+			out.println("					<div class=\"panel-heading\">El intermediario no tiene valores en negociacion</div>");
+
+
+		}
+
+		else{
+			out.println("			<div class=\"container\">");
+			out.println("				<div class=\"panel panel-info\">");
+			out.println("					<div class=\"panel-heading\">Valores en la bolsa</div>");
+			out.println("					<table class=\"table table-striped\">");
+			out.println("						<thead>");
+			out.println("							<tr>");
+			out.println("								<th>Nombre</th>");
+			out.println("								<th>Correo Creador</th>");
+			out.println("								<th>Precio</th>");
+			out.println("								<th>Mercado</th>	");
+			out.println("							</tr>");
+			out.println("						</thead>");
+			out.println("						<tbody>");
+
+			for(int i=0; i<vals.size();i++){
+				ValorValue val = vals.get(i);
+
+				out.println("							<tr><form>");
+				out.println("								<td>" + val.getNombre() + "</td>");
+				out.println("								<td>" + val.getCreador() + "</td>");
+				out.println("								<td>" + val.getPrecio() + "</td>");
+				out.println("								<td>" + val.getMercado() + "</td>");
+				out.println("							</tr></form>");
+			}
+
+			out.println("						</tbody>");
+			out.println("					</table>");
+		}
+
+		out.println("			</div>");
+		out.println("		</div><hr> ");
+		
+		if(ports.isEmpty()){
+			out.println("			<div class=\"container\">");
+			out.println("				<div class=\"panel panel-info\">");
+			out.println("					<div class=\"panel-heading\">El intermediario no tiene ningun portafolio</div>");
+
+
+		}
+
+		else{
+			out.println("			<div class=\"container\">");
+			out.println("				<div class=\"panel panel-info\">");
+			out.println("					<div class=\"panel-heading\">Valores en la bolsa</div>");
+			out.println("					<table class=\"table table-striped\">");
+			out.println("						<thead>");
+			out.println("							<tr>");
+			out.println("								<th>Nombre</th>");
+			out.println("								<th>Nivel de Riesgo</th>");
+			out.println("							</tr>");
+			out.println("						</thead>");
+			out.println("						<tbody>");
+
+			for(int i=0; i<ports.size();i++){
+				PortafolioValue port = ports.get(i);
+
+				out.println("							<tr><form>");
+				out.println("								<td>" + port.getNombre() + "</td>");
+				out.println("								<td>" + port.getTipoRiesgo() + "</td>");
+				out.println("							</tr></form>");
+			}
+
+			out.println("						</tbody>");
+			out.println("					</table>");
+		}
+
+		out.println("			</div>");
+		out.println("		</div> <hr>");
+		
+		if(ports.isEmpty()){
+			out.println("			<div class=\"container\">");
+			out.println("				<div class=\"panel panel-info\">");
+			out.println("					<div class=\"panel-heading\">El intermediario no tiene ningun socio</div>");
+
+
+		}
+
+		else{
+			out.println("			<div class=\"container\">");
+			out.println("				<div class=\"panel panel-info\">");
+			out.println("					<div class=\"panel-heading\">Valores en la bolsa</div>");
+			out.println("					<table class=\"table table-striped\">");
+			out.println("						<thead>");
+			out.println("							<tr>");
+			out.println("								<th>Nombre</th>");
+			out.println("								<th>Nacionalidad</th>");
+			out.println("								<th>Correo</th>");
+			out.println("								<th>Telefono</th>");
+			out.println("							</tr>");
+			out.println("						</thead>");
+			out.println("						<tbody>");
+
+			for(int i=0; i<socis.size();i++){
+				String[] soc = socis.get(i);
+
+				out.println("							<tr><form>");
+				out.println("								<td>" + soc[0] + "</td>");
+				out.println("								<td>" + soc[1] + "</td>");
+				out.println("								<td>" + soc[2] + "</td>");
+				out.println("								<td>" + soc[3] + "</td>");
+				out.println("							</tr></form>");
+			}
+
+			out.println("						</tbody>");
+			out.println("					</table>");
+		}
+
+		out.println("			</div>");
+		out.println("		</div>");
 	}
 
 	//-----------------------------------------------------
