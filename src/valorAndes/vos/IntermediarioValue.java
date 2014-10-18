@@ -20,7 +20,7 @@ public class IntermediarioValue {
 	/**
 	 * Inversionistas asociados al intermediario
 	 */
-	private ArrayList<String> socios;
+	private ArrayList<String[]> socios;
 	
 	/**
 	 * Valores que el intermediario esta negociando
@@ -278,11 +278,11 @@ public class IntermediarioValue {
 		this.telefono = telefono;
 	}
 
-	public ArrayList<String> getSocios() {
+	public ArrayList<String[]> getSocios() {
 		return socios;
 	}
 
-	public void setSocios(ArrayList<String> socios) {
+	public void setSocios(ArrayList<String[]> socios) {
 		this.socios = socios;
 	}
 

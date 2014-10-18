@@ -955,7 +955,7 @@ public class ConsultaDAO {
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
-			while(rs.next()){
+			if(rs.next()){
 
 				rta = new InversionistaValue();
 				rta.setCiudad(rs.getString("ciudad"));
@@ -1005,45 +1005,27 @@ public class ConsultaDAO {
 			consulta = creadorDeSentencias(select, "VALOR JOIN VALOR_PROPIETARIOS ON VALOR.valor_id = VALOR_PROPIETARIOS.valor_id" , where, order);
 		}
 
-		else if (tipo.equals("Inver")){
+		else{
 			where.add("VALOR_PROPIETARIOS.correo_propietario = '" + correo + "'");
 			consulta = creadorDeSentencias(select, "VALOR JOIN VALOR_PROPIETARIOS ON VALOR.valor_id = VALOR_PROPIETARIOS.valor_id" , where, order);
 		}
 
-		else{
-			where.add("OPERACIONES_INT.cod_intermediario = '" + correo + "'");
-			consulta = creadorDeSentencias(select, "(VALOR JOIN OPERACION ON VALOR.valor_id = OPERACION.cod_valor) JOIN OPERACIONES_INT ON OPERACION.operaciod_id = OPERACIONES_INT.cod_operacion" , where, order);
-		}
 
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
-			if(tipo.equals("Inter")){
-				while(rs.next()){
-					val = new String[6];
-					val[0] = rs.getString("nombre");
-					val[1] = rs.getString("correo_propietario");
-					val[2] = rs.getString("cantidad_valor");
-					val[3] = rs.getString("precio");
-					val[4] = rs.getString("mercado");
-					val[5] = rs.getString("cod_oferente_creador");
-					rta.add(val);
-				}
+			while(rs.next()){
+				val = new String[6];
+				val[0] = rs.getString("nombre");
+				val[1] = rs.getString("correo_propietario");
+				val[2] = rs.getString("cantidad_valor");
+				val[3] = rs.getString("precio");
+				val[4] = rs.getString("mercado");
+				val[5] = rs.getString("cod_oferente_creador");
+				rta.add(val);
 			}
-			else{
-				while(rs.next()){
-					val = new String[7];
-					val[0] = rs.getString("nombre");
-					val[1] = rs.getString("cod_solicitante");
-					val[2] = rs.getString("cantidad");
-					val[3] = rs.getString("precio");
-					val[4] = rs.getString("mercado");
-					val[5] = rs.getString("cod_oferente_creador");
-					val[6] = rs.getString("cod_oferente_creador");
-					rta.add(val);
-				}
-			}
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			System.out.println(consulta);
@@ -1082,6 +1064,21 @@ public class ConsultaDAO {
 			ResultSet rs = state.executeQuery();
 			if(rs.next()){
 				rta = new IntermediarioValue();
+				rta.setCiudad(rs.getString("ciudad"));
+				rta.setCodPostal(rs.getInt("codigopostal"));
+				rta.setCorreo(correo);
+				rta.setDepartamento(rs.getString("departamento"));
+				rta.setDireccion(rs.getString("direccion"));
+				rta.setIdRepresentante(rs.getString("idrepresentante"));
+				rta.setNombreRepresentante(rs.getString("nombrerepresentante"));
+				rta.setNacionalidad(rs.getString("nacionalidad"));
+				rta.setNombre(rs.getString("nombre"));
+				rta.setTipoEntidad(rs.getString("tipo_entidad"));
+				rta.setNumRegistro(rs.getString("num_registro"));
+				rta.setValoresneg(darValoresInter(correo));
+				rta.setPortafolios(darPortafoliosIntermediarios(correo));
+				rta.setSocios(darSociosIntermediario(correo));
+
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -1099,7 +1096,113 @@ public class ConsultaDAO {
 		}
 		return rta;
 	}
-	//-----------------------------
+
+	/**
+	 * Da los valores negociados por un intermediario
+	 * @throws SQLException 
+	 */
+	public ArrayList<ValorValue> darValoresInter(String correo) throws SQLException{
+		ArrayList<ValorValue> rta = new ArrayList<ValorValue>() ;
+		ArrayList<String> select = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		ArrayList<String> order = new ArrayList<String>();
+		PreparedStatement state = null;
+		where.add("OPERACIONES_INT.cod_intermediario = '" + correo + "'");
+		String consulta = creadorDeSentencias(select, "(OPERACIONES_INT JOIN OPERACION ON OPERACIONES_INT.cod_operacion = OPERACION.operacion_id) JOIN VALOR ON OPERACION.cod_valor = VALOR.valor_id", where, order);	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
+	/**
+	 * Da los socios de un intermediario
+	 * @return
+	 * @throws SQLException 
+	 */
+	public ArrayList<String[]> darSociosIntermediario(String correo) throws SQLException{
+		ArrayList<String[]> rta = new ArrayList<String[]>();
+		ArrayList<String> select = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		ArrayList<String> order = new ArrayList<String>();
+		PreparedStatement state = null;
+		String consulta = creadorDeSentencias(select, "Tabla", where, order);	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
+	/**
+	 * Da la informacion de los portafolios de un intermediario
+	 * @throws SQLException 
+	 */
+	public ArrayList<PortafolioValue> darPortafoliosIntermediarios(String correo) throws SQLException{
+		ArrayList<PortafolioValue> rta = null;
+		ArrayList<String> select = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		ArrayList<String> order = new ArrayList<String>();
+		PreparedStatement state = null;
+		String consulta = creadorDeSentencias(select, "Tabla", where, order);	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}	//-----------------------------
 	//AUTENTICACION
 	//------------------------------
 
