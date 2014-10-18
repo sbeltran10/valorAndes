@@ -1102,11 +1102,12 @@ public class ConsultaDAO {
 	 * @throws SQLException 
 	 */
 	public ArrayList<ValorValue> darValoresInter(String correo) throws SQLException{
-		ArrayList<ValorValue> rta = new ArrayList<ValorValue>() ;
+		ArrayList<ValorValue> rta = new ArrayList<ValorValue>();
 		ArrayList<String> select = new ArrayList<String>();
 		ArrayList<String> where = new ArrayList<String>();
 		ArrayList<String> order = new ArrayList<String>();
 		PreparedStatement state = null;
+		select.add("*");
 		where.add("OPERACIONES_INT.cod_intermediario = '" + correo + "'");
 		String consulta = creadorDeSentencias(select, "(OPERACIONES_INT JOIN OPERACION ON OPERACIONES_INT.cod_operacion = OPERACION.operacion_id) JOIN VALOR ON OPERACION.cod_valor = VALOR.valor_id", where, order);	
 		try{
@@ -1114,7 +1115,13 @@ public class ConsultaDAO {
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
 			while(rs.next()){
-
+				ValorValue val = new ValorValue();
+				val.setCreador(rs.getString("cod_oferente_creador"));
+				val.setNombre(rs.getString("nombre"));
+				val.setMercado(rs.getString("mercado"));
+				val.setCreador(rs.getString("Disponible"));
+				val.setCreador(rs.getString("precio"));
+				rta.add(val);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -1144,13 +1151,20 @@ public class ConsultaDAO {
 		ArrayList<String> where = new ArrayList<String>();
 		ArrayList<String> order = new ArrayList<String>();
 		PreparedStatement state = null;
-		String consulta = creadorDeSentencias(select, "Tabla", where, order);	
+		select.add("*");
+		where.add("SOCIOS.correo_intermediario = '" + correo + "'");
+		String consulta = creadorDeSentencias(select, "SOCIOS JOIN USUARIO ON SOCIOS.correo_inversionista = USUARIO.correo", where, order);	
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
 			while(rs.next()){
-
+				String[] soc = new String[4];
+				soc[0] = rs.getString("nombre");
+				soc[1] = rs.getString("nacionalidad");
+				soc[2] = rs.getString("correo");
+				soc[3] = rs.getString("telefono");
+				rta.add(soc);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -1173,19 +1187,25 @@ public class ConsultaDAO {
 	 * Da la informacion de los portafolios de un intermediario
 	 * @throws SQLException 
 	 */
+	@SuppressWarnings("null")
 	public ArrayList<PortafolioValue> darPortafoliosIntermediarios(String correo) throws SQLException{
 		ArrayList<PortafolioValue> rta = null;
 		ArrayList<String> select = new ArrayList<String>();
 		ArrayList<String> where = new ArrayList<String>();
 		ArrayList<String> order = new ArrayList<String>();
-		PreparedStatement state = null;
-		String consulta = creadorDeSentencias(select, "Tabla", where, order);	
+		PreparedStatement state = null;		
+		select.add("*");
+		where.add("PORTAFOLIO.cod_intermediario = '" + correo + "'");
+		String consulta = creadorDeSentencias(select, "PORTAFOLIO", where, order);	
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
 			while(rs.next()){
-
+				PortafolioValue port = new PortafolioValue();
+				port.setNombre("nombre");
+				port.setTipoRiesgo("nivelriesgo");
+				rta.add(port);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -1202,7 +1222,9 @@ public class ConsultaDAO {
 			cerrarConexion(conexion);
 		}
 		return rta;
-	}	//-----------------------------
+	}
+	
+	//-----------------------------
 	//AUTENTICACION
 	//------------------------------
 

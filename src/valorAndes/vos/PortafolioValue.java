@@ -17,6 +17,10 @@ public class PortafolioValue {
 	 */
 	private ArrayList<ValorValue> valores;
 
+	/**
+	 * Nombre del portafolio
+	 */
+	private String nombre;
 	//--------------------------------------------
 	//Metodos Value
 	//--------------------------------------------
@@ -47,6 +51,20 @@ public class PortafolioValue {
 	 */
 	public void setValores(ArrayList<ValorValue> valores) {
 		this.valores = valores;
+	}
+
+	/**
+	 * @return the nombre
+	 */
+	public String getNombre() {
+		return nombre;
+	}
+
+	/**
+	 * @param nombre the nombre to set
+	 */
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 			
 }
