@@ -1613,6 +1613,15 @@ public class ConsultaDAO {
 	//RETIRAR INTERMEDIARIO
 	//-----------------------------------------------------------------------
 	/**
+	 * RETIRAR INTERMEDIARIO, retira el intermediario completamente dado su codigo y el de su sucesor.
+	 */
+	public void retirarIntermediario(String intRetirado, String intAsociado) throws SQLException{
+		cambiarPortafolios(intRetirado, intAsociado);
+		cambiarSocios(intRetirado, intAsociado);
+		cambiarOperaciones(intRetirado, intAsociado);
+	}
+	
+	/**
 	 * Cambia los portafolios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
 	 * @throws SQLException 
 	 */
@@ -1638,7 +1647,60 @@ public class ConsultaDAO {
 			cerrarConexion(conexion);
 		}
 	}
+	
+	/**
+	 * Cambia los socios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
+	  * @throws SQLException 
+	 */
+	public void cambiarSocios(String intRetirado, String intAsociado) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "UPDATE SOCIOS SET correo_intermediario = '"+intAsociado+"' WHERE correo_intermediario = '"+intRetirado+"'";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+	}
 
+	/**
+	 * Reasigna las operaciones de un intermediario retirado a su sucesor dados sus dos codigos.
+	  * @throws SQLException 
+	 */
+	public void cambiarOperaciones(String intRetirado, String intAsociado) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "UPDATE OPERACIONES_INT SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+	}
 
 	//------------------------------------------------------------------------
 	//GENERADOR DE IDS.
