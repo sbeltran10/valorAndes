@@ -956,7 +956,7 @@ public class ConsultaDAO {
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
 			while(rs.next()){
-				
+
 				rta = new InversionistaValue();
 				rta.setCiudad(rs.getString("ciudad"));
 				rta.setCodPostal(rs.getInt("codigopostal"));
@@ -1399,7 +1399,83 @@ public class ConsultaDAO {
 		return rta;
 	}
 
-	
+	//------------------------------------------------------------
+	//Portafolio Intermediario
+	//------------------------------------------------------------
+
+	/**
+	 * Crea un portafolio para un intermediario dado su codigo, el nombre del portafolio y el nivel de riesgo.
+	 */
+	public void crearPortafolio(String codIntermediario, String nombrePortafolio, String nivelRiesgo){
+		//TODO
+	}
+
+	/**
+	 * Añade un valor a un portafolio de un intermediario dados el codigo del valor y el codigo del portafolio.
+	 */
+	public void añadirValorAPortafolio(String codIntermediario, String nombrePortafolio, String nivelRiesgo){
+		//TODO
+	}
+
+	/**
+	 * Devuelve los portafolios de un intermediario dado su codigo.
+	 */
+	public ArrayList<PortafolioValue> darPortafoliosIntermediario(String codIntermediario){
+		//TODO
+		return null;
+	}
+
+	//-----------------------------------------------------------------------
+	//RETIRAR INTERMEDIARIO
+	//-----------------------------------------------------------------------
+	/**
+	 * Cambia los portafolios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
+	 */
+	public void cambiarPortafolios(String intRetirado, String intAsociado){
+		//TODO
+	}
+
+
+	//------------------------------------------------------------------------
+	//GENERADOR DE IDS.
+	//------------------------------------------------------------------------
+	/**
+	 * Genera una nueva id dado el nombre de la tabla.
+	 * @param nombreTabla, El nombre de la tabla a generar una id, el nombre de la tabla debe ser una de las siguientes:
+	 * -OPERACION
+	 * -PORTAFOLIO
+	 * -RENTABILIDAD
+	 * -VALOR
+	 * -TIPO_VALOR
+	 */
+	public int generarId(String nombreTabla)throws SQLException{
+		int rta = 0;
+		PreparedStatement state = null;
+		String consulta = "SELECT MAX("+nombreTabla+"_ID) AS "+nombreTabla+"_ID FROM "+nombreTabla;
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				rta = 1 + rs.getInt(nombreTabla+"_ID");
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
 
 	// LO QUE VA DENTRO DE TODOS LOS METODOS DE DAO.
 	//	ArrayList<String> select = new ArrayList<String>();
