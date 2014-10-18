@@ -1275,9 +1275,9 @@ public class ConsultaDAO {
 	 * Cambiar el procentaje de un valor dados el codigo del portafolio, el cod del valor y el nuevo proccentaje. 	
 	 * @throws SQLException 
 	 */
-	public void cambiarPorcentaje(int codPort, int codVal, int nPor) throws SQLException{
+	public void cambiarInPorcentaje(String codInv, int codPortafolio, int codVal, int nPor) throws SQLException{
 		PreparedStatement state = null;
-		String consulta = "UPDATE VALOR_PORCENTAJE SET porcentaje = "+nPor+"WHERE cod_in_portafolio = " + codPort + ", codVal = "+codVal;
+		String consulta = "UPDATE VALOR_PORCENTAJE SET porcentaje = "+nPor+"WHERE cod_inversionista = '" + codInv + "', cod_portafolio = "+codPortafolio+", codVal = "+codVal;
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -1302,9 +1302,9 @@ public class ConsultaDAO {
 	 * Elimina un valor de un portafolio dados el cod del valor y el id del portafolio. 	
 	 * @throws SQLException 
 	 */
-	public void eliminarValorPortafolio(int codPort, int codVal) throws SQLException{
+	public void eliminarValorInPortafolio(String codInv, int codPortafolio, int codVal) throws SQLException{
 		PreparedStatement state = null;
-		String consulta = "DELETE FROM VALOR_PROCENTAJE WHERE cod_in_portafolio = "+codPort+", cod_valor = "+codVal;
+		String consulta = "DELETE FROM VALOR_PROCENTAJE WHERE cod_inversionista = '"+codInv+"', cod_portafolio = "+codPortafolio+", cod_valor = "+codVal;
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -1329,9 +1329,9 @@ public class ConsultaDAO {
 	 * Agrega un nuevo valor a un portafolio dados el cod del portafolio el codigo del valor y el porcentaje inicial del valor. 	
 	 * @throws SQLException 
 	 */
-	public void agregarValorPortafolio(int codPort, int codVal, int nPor) throws SQLException{
+	public void agregarValorInPortafolio(String codInv, int codPortafolio, int codVal, int nPor) throws SQLException{
 		PreparedStatement state = null;
-		String consulta = "INSERT INTO TABLA VALUES ( " + codPort + ", " + nPor + ", " +  codVal + ")";
+		String consulta = "INSERT INTO TABLA VALUES ( '" + codInv + "', " + codPortafolio + ", " + nPor + ", " +  codVal + ")";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -1351,12 +1351,11 @@ public class ConsultaDAO {
 			cerrarConexion(conexion);
 		}
 	}
-
 	/**
-	 * Dar valores del portafolio y sus porccentajes dado el id del portafolio.
+	 * Dar valores del portafolio y sus porcentajes dado el id del portafolio.
 	 * @throws SQLException
 	 */
-	public ArrayList<ValorPorcentajeInversionValue> darValoresPortafolio(int idPort) throws SQLException{
+	public ArrayList<ValorPorcentajeInversionValue> darValoresInPortafolio(String codInv, int codPortafolio) throws SQLException{
 		ArrayList<ValorPorcentajeInversionValue> rta = new ArrayList<ValorPorcentajeInversionValue>();
 		ArrayList<String> select = new ArrayList<String>();
 		ArrayList<String> where = new ArrayList<String>();
@@ -1364,7 +1363,8 @@ public class ConsultaDAO {
 		PreparedStatement state = null;
 		select.add("cod_valor");
 		select.add("porcentaje");
-		where.add("cod_portafolio = "+idPort);
+		where.add("cod_inversionista = '"+codInv+"'");
+		where.add("cod_Portafolio = "+codInv);
 		String consulta = creadorDeSentencias(select, "VALOR_PORCENTAJE JOIN VALOR ON cod_valor = valor_id", where, order);
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
@@ -1380,6 +1380,7 @@ public class ConsultaDAO {
 				valor.setMercado(rs.getString("mercado"));
 				valor.setNombre(rs.getString("nombre"));
 				valor.setPrecio(rs.getInt("precio"));
+				valor.setCodigo(rs.getInt("valor_id"));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -1398,9 +1399,7 @@ public class ConsultaDAO {
 		return rta;
 	}
 
-	/**
-	 * Dar todos los portafolios dado el id del inversionista.
-	 */
+	
 
 	// LO QUE VA DENTRO DE TODOS LOS METODOS DE DAO.
 	//	ArrayList<String> select = new ArrayList<String>();
