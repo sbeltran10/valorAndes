@@ -1277,7 +1277,7 @@ public class ConsultaDAO {
 	 */
 	public void cambiarInPorcentaje(String codInv, int codPortafolio, int codVal, int nPor) throws SQLException{
 		PreparedStatement state = null;
-		String consulta = "UPDATE VALOR_PORCENTAJE SET porcentaje = "+nPor+"WHERE cod_inversionista = '" + codInv + "', cod_portafolio = "+codPortafolio+", codVal = "+codVal;
+		String consulta = "UPDATE VALOR_PORCENTAJE SET porcentaje = "+nPor+" WHERE cod_inversionista = '" + codInv + "' AND cod_portafolio = "+codPortafolio+" AND codVal = "+codVal;
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -1304,7 +1304,7 @@ public class ConsultaDAO {
 	 */
 	public void eliminarValorInPortafolio(String codInv, int codPortafolio, int codVal) throws SQLException{
 		PreparedStatement state = null;
-		String consulta = "DELETE FROM VALOR_PROCENTAJE WHERE cod_inversionista = '"+codInv+"', cod_portafolio = "+codPortafolio+", cod_valor = "+codVal;
+		String consulta = "DELETE FROM VALOR_PROCENTAJE WHERE cod_inversionista = '"+codInv+"' AND cod_portafolio = "+codPortafolio+", cod_valor = "+codVal;
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -1351,6 +1351,7 @@ public class ConsultaDAO {
 			cerrarConexion(conexion);
 		}
 	}
+	
 	/**
 	 * Dar valores del portafolio y sus porcentajes dado el id del portafolio.
 	 * @throws SQLException
@@ -1405,24 +1406,83 @@ public class ConsultaDAO {
 
 	/**
 	 * Crea un portafolio para un intermediario dado su codigo, el nombre del portafolio y el nivel de riesgo.
+	 * @throws SQLException 
 	 */
-	public void crearPortafolio(String codIntermediario, String nombrePortafolio, String nivelRiesgo){
-		//TODO
+	public void crearPortafolio(String codIntermediario, String nombrePortafolio, String nivelRiesgo) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = 	"INSERT INTO PORTAFOLIO VALUES ( '"+codIntermediario+"', " + generarId("PORTAFOLIO") + ", '" +  nombrePortafolio + "', '" +  nivelRiesgo + "')";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
 	}
 
 	/**
 	 * Añade un valor a un portafolio de un intermediario dados el codigo del valor y el codigo del portafolio.
+	 * @throws SQLException 
 	 */
-	public void añadirValorAPortafolio(String codIntermediario, String nombrePortafolio, String nivelRiesgo){
-		//TODO
+	public void añadirValorAPortafolio(int codPortafolio, int codValor) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = 	"INSERT INTO PORTAFOLIO_VALOR VALUES ( "+codPortafolio+", "+codValor+")";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
 	}
 
 	/**
-	 * Devuelve los portafolios de un intermediario dado su codigo.
+	 * Elimina un valor de un portafolio dados el cod del portafolio y el cod del valor.
+	 * @throws SQLException 
 	 */
-	public ArrayList<PortafolioValue> darPortafoliosIntermediario(String codIntermediario){
-		//TODO
-		return null;
+	public void eliminarValorDeProtafolio(int codPortafolio, int codValor) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = 	"DELETE FROM PORTAFOLIO_VALOR WHERE cod_portafolio = "+codPortafolio+" AND cod_valor = "+codValor;	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
 	}
 
 	//-----------------------------------------------------------------------
@@ -1430,9 +1490,29 @@ public class ConsultaDAO {
 	//-----------------------------------------------------------------------
 	/**
 	 * Cambia los portafolios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
+	 * @throws SQLException 
 	 */
-	public void cambiarPortafolios(String intRetirado, String intAsociado){
-		//TODO
+	public void cambiarPortafolios(String intRetirado, String intAsociado) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "UPDATE PORTAFOLIO SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
 	}
 
 
