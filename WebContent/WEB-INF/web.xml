@@ -80,6 +80,17 @@
     <servlet-class>valorAndes.servlets.ServletRetirarIntermediario</servlet-class>
   </servlet>
   
+   <servlet>
+    <servlet-name>ServletPortafolioIntermediario</servlet-name>
+    <servlet-class>valorAndes.servlets.ServletPortafolioIntermediario</servlet-class>
+  </servlet>
+  
+   <servlet>
+    <servlet-name>ServletPortafolioInversionista</servlet-name>
+    <servlet-class>valorAndes.servlets.ServletPortafolioInversionista</servlet-class>
+  </servlet>
+
+  
   <!-- MAPPING -->
   <servlet-mapping>
     <servlet-name>ServletLanding</servlet-name>
@@ -149,6 +160,16 @@
   <servlet-mapping>
     <servlet-name>ServletRetirarIntermediario</servlet-name>
     <url-pattern>/retirarInter.htm</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>ServletPortafolioIntermediario</servlet-name>
+    <url-pattern>/portafolioInter.htm</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>ServletPortafolioInversionista</servlet-name>
+    <url-pattern>/portafolioInver.htm</url-pattern>
   </servlet-mapping>
   
 </web-app>
