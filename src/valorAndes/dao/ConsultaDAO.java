@@ -1669,8 +1669,36 @@ public class ConsultaDAO {
 		cambiarPortafolios(intRetirado, intAsociado);
 		cambiarSocios(intRetirado, intAsociado);
 		cambiarOperaciones(intRetirado, intAsociado);
+		eliminarIntermediario(intRetirado);
 	}
 
+	/**
+	 * Retira el intermediario de la base de datos.
+	 * @throws SQLException 
+	 */
+	public void eliminarIntermediario(String intRetirado) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "DELETE FROM INTERMEDIARIO WHERE cod_intermediario = '"+intRetirado+"'";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+	}
+	
 	/**
 	 * Cambia los portafolios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
 	 * @throws SQLException 
