@@ -21,6 +21,11 @@ public class PortafolioValue {
 	 * Nombre del portafolio
 	 */
 	private String nombre;
+	
+	/**
+	 * Id del portafolio
+	 */
+	private int id;
 	//--------------------------------------------
 	//Metodos Value
 	//--------------------------------------------
@@ -65,6 +70,20 @@ public class PortafolioValue {
 	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 			
 }

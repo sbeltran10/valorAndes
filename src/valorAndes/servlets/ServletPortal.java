@@ -77,7 +77,7 @@ public class ServletPortal extends ServletTemplate{
 		}
 		else{
 			out.println("		<h2>");
-			out.println("		Otros");
+			out.println("		Usuarios");
 			out.println("		</h2>");
 			out.println("");
 			out.println("		<li>");
@@ -85,6 +85,24 @@ public class ServletPortal extends ServletTemplate{
 			out.println("		</li> <br>");
 		}
 		
+		if(vaLog==1){
+			out.println("		<h2>");
+			out.println("		Portafolios");
+			out.println("		</h2>");
+			out.println("");
+			out.println("		<li>");
+			out.println("			<a href=\"portafolioInter.htm\" class=\"btn btn-default btn-lg\"><span class=\"network-name\">Administrar Portafolios</span></a>");
+			out.println("		</li> <br>");
+		}
+		else if(vaLog==2){
+			out.println("		<h2>");
+			out.println("		Portafolios");
+			out.println("		</h2>");
+			out.println("");
+			out.println("		<li>");
+			out.println("			<a href=\"portafolioInver.htm\" class=\"btn btn-default btn-lg\"><span class=\"network-name\">Administrar Portafolios</span></a>");
+			out.println("		</li> <br>");
+		}
 		out.println("");
 		out.println("	</div>");
 		out.println("	</div>");

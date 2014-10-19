@@ -7,6 +7,7 @@ import valorAndes.vos.IntermediarioValue;
 import valorAndes.vos.InversionistaValue;
 import valorAndes.vos.OferenteValue;
 import valorAndes.vos.OperacionValue;
+import valorAndes.vos.PortafolioValue;
 import valorAndes.vos.ValorValue;
 
 /**
@@ -241,13 +242,13 @@ public class ValorAndes {
 	public ArrayList<OperacionValue> darOperacionesMias(String correo) throws SQLException{
 		return dao.darOperacionesMias(correo);
 	}
-
+	
 	/**
-	 * Retorna el numero total de operaciones que hay en el sistema
+	 * Da la informacion de los valores que vende un intermediario
 	 * @throws SQLException 
 	 */
-	public int darTotalOperaciones() throws SQLException{
-		return dao.darTotalOperaciones();
+	public ArrayList<String> darValoresInterVenta(String correo) throws SQLException{
+		return dao.darValoresVentaIntermediario(correo);
 	}
 
 	//---------------------------------
@@ -278,7 +279,68 @@ public class ValorAndes {
 		return dao.darInfoIntermediario(correo);
 	}
 
+	//---------------------------------------
+	//Retirar Intermediario
+	//---------------------------------------
+	
 	/**
-	 * 
+	 * Da todos los intermediarios de la bolsa de valores
+	 * @throws SQLException 
 	 */
+	public ArrayList<IntermediarioValue> darTodosIntermediarios() throws SQLException{
+		return dao.darTodosIntermediarios();
+	}
+	
+	/**
+	 * Retirar a un intermediario de la bolsa de valores, reemplazandolo por otro
+	 * @throws SQLException 
+	 */
+	public void retirarIntermediario(String intRetirado, String intAsociado) throws SQLException{
+		dao.retirarIntermediario(intRetirado, intAsociado);
+	}
+	//----------------------------------------
+	//Portafolios Intermediario
+	//----------------------------------------
+	/**
+	 * Da todos los portafolios que tiene un intermediario
+	 * @param correo
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<PortafolioValue> darPortafoliosIntermediario(String correo) throws SQLException{
+		return dao.darPortafoliosIntermediario(correo);
+	}
+	
+	/**
+	 * Crea un nuevo portafolio
+	 * @throws SQLException 
+	 */
+	public void crearPortafolio(String codIntermediario, String nombrePortafolio, String nivelRiesgo) throws SQLException{
+		dao.crearPortafolio(codIntermediario, nombrePortafolio, nivelRiesgo);
+	}
+	
+	/**
+	 * Anade un valor al portafolio dado por parametro
+	 * @param codPortafolio
+	 * @param codValor
+	 * @throws SQLException
+	 */
+	public void anadirValorAPortafolio(int codPortafolio, int codValor) throws SQLException{
+		dao.anadirValorAPortafolio(codPortafolio, codValor);
+	}
+	
+	/**
+	 * Elimina un valor del portafolio
+	 * @throws SQLException 
+	 */
+	public void eliminarValorPortafolio(int codPortafolio, int codValor) throws SQLException{
+		dao.eliminarValorDeProtafolio(codPortafolio, codValor);
+	}
+	/**
+	 * Da los valores que hay en el portafolio elegido del intermediario
+	 * @throws SQLException 
+	 */
+	public ArrayList<ValorValue> darValoresPortafolio(int idPortafolio, String corIntermediario) throws SQLException{
+		return dao.darValoresPortafolio(idPortafolio, corIntermediario);
+	}
 }

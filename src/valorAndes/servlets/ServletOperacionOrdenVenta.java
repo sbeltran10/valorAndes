@@ -86,14 +86,9 @@ public class ServletOperacionOrdenVenta extends ServletTemplate{
 					op.setCorSolicitante(ofer.getCorreo());
 
 				op.setFecha(new Date());
-				try {
-					op.setId(ValorAndes.getInstance().darTotalOperaciones() + 1);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
 
 				op.setIdValor(vals[0]);
-				op.setTipoCompraVenta("VENTA");
+				op.setTipoCompraVenta("Venta");
 
 
 				try {
@@ -185,12 +180,20 @@ public class ServletOperacionOrdenVenta extends ServletTemplate{
 	 * @param out
 	 * @param rentList
 	 */
-	public void escribirOpcionesValor(PrintWriter out, ArrayList<String> vaList){
-		for(int i =0; i< vaList.size(); i++){
-			String[] opcion = vaList.get(i).split("-");
-			String op = opcion[0] + " (" + opcion[3] + ") - Precio: $" + opcion[2] + " - Cantidad Total: " + opcion[4];		
-			out.println("					 <option value = \"" + opcion[1] + "-" + opcion[0] + "-" + opcion[3] + "-" + opcion[4] + "\">" +  op + "</option>");
+	public boolean escribirOpcionesValor(PrintWriter out, ArrayList<String> vaList){
+
+		boolean hay = false;
+		if(!vaList.isEmpty()){
+
+			for(int i =0; i< vaList.size(); i++){
+				String[] opcion = vaList.get(i).split("-");
+				String op = opcion[0] + " (" + opcion[3] + ") - Precio: $" + opcion[2] + " - Cantidad Disponible: " + opcion[4];	
+
+				out.println("					  <option value = \"" + opcion[1] + "-" + opcion[0] + "-" + opcion[3] + "-" + opcion[4] + "\">" +  op + "</option>");
+				hay = true;
+			}
 		}
+		return hay;
 	}
 
 	/**
@@ -198,11 +201,16 @@ public class ServletOperacionOrdenVenta extends ServletTemplate{
 	 * @param out
 	 * @param rentList
 	 */
-	public void escribirOpcionesIntermediario(PrintWriter out, ArrayList<String> usList){
-		for(int i =0; i< usList.size(); i++){
-			String[] opcion = usList.get(i).split("-");
-			out.println("					  <option value = \"" + opcion[1]+ "\"> " +  opcion[0] + " (" + opcion[1] + ")</option>");
+	public boolean escribirOpcionesIntermediario(PrintWriter out, ArrayList<String> usList){
+		boolean hay = false;
+		if(!usList.isEmpty()){
+			for(int i =0; i< usList.size(); i++){
+				String[] opcion = usList.get(i).split("-");
+				out.println("					  <option value = \"" + opcion[1]+ "\"> " +  opcion[0] + " (" + opcion[1] + ")</option>");
+			}
+			hay = true;
 		}
+		return hay;
 	}
 
 	/**

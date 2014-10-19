@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 
-import valorAndes.vos.InPortafolioValue;
 import valorAndes.vos.IntermediarioValue;
 import valorAndes.vos.InversionistaValue;
 import valorAndes.vos.OferenteValue;
@@ -597,22 +596,25 @@ public class ConsultaDAO {
 	}
 
 	/**
-	 * Da el numero total de operaciones en el sistema
+	 * Da todos los valores que le asigno a un intermediario para vender
+	 * @throws SQLException 
 	 */
-	public int darTotalOperaciones() throws SQLException{
-		int total = 0;
+	public ArrayList<String> darValoresVentaIntermediario(String correo) throws SQLException{
+		ArrayList<String> rta = new ArrayList<String>();
 		PreparedStatement state = null;
 		ArrayList<String>select = new ArrayList<String>();
 		ArrayList<String>where = new ArrayList<String>();
 		ArrayList<String>order = new ArrayList<String>();
-		select.add("count(*) AS total");
-		String consulta = creadorDeSentencias(select, "OPERACION", where, order);
+		select.add("VALOR.nombre, VALOR.valor_id, VALOR.precio, USUARIO.nombre, OPERACION.cantidad");
+		where.add("((OPERACIONES_INT.cod_intermediario = '" + correo + "') AND OPERACION.estado = 'Registrada') AND OPERACION.tipo_compra_venta = 'Venta'");
+		String consulta = creadorDeSentencias(select, "(((VALOR JOIN OPERACION ON OPERACION.cod_valor = VALOR.valor_id) JOIN OPERACIONES_INT ON OPERACION.operacion_id = OPERACIONES_INT.cod_operacion) "
+				+ "JOIN USUARIO ON USUARIO.correo = VALOR.cod_oferente_creador)", where, order);
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
-			if(rs.next()){
-				total = rs.getInt("total");
+			while(rs.next()){
+				rta.add(rs.getString(1)+"-"+rs.getString(2)+"-"+rs.getString(3)+"-"+rs.getString(4)+"-"+rs.getString(5));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -628,7 +630,7 @@ public class ConsultaDAO {
 			}
 			cerrarConexion(conexion);
 		}
-		return total;
+		return rta;
 	}
 
 	//-----------------------------------------------------------
@@ -639,10 +641,11 @@ public class ConsultaDAO {
 	 */
 	public boolean ordenarOperacion(OperacionValue op, String codIntermediario) throws SQLException{
 		PreparedStatement state = null;
+		int id = generarId("OPERACION");
 		String fechi = new SimpleDateFormat("dd-MM-YYYY").format(op.getFecha());
 		String consulta = "INSERT INTO OPERACION VALUES (TO_DATE('"+ fechi + "', 'DD-MM-YYYY') , '" + op.getTipoCompraVenta() + "', "
-				+  op.getIdValor() + ", '" + op.getCorSolicitante() + "', 'No Registrada', " + op.getId() + ", " + op.getCantidad() + ")";
-		String consulta2 = "INSERT INTO OPERACIONES_INT VALUES ("+ op.getId() + ", '" +  codIntermediario + "')";
+				+  op.getIdValor() + ", '" + op.getCorSolicitante() + "', 'No Registrada', " + id + ", " + op.getCantidad() + ")";
+		String consulta2 = "INSERT INTO OPERACIONES_INT VALUES ("+ id + ", '" +  codIntermediario + "')";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -1076,7 +1079,7 @@ public class ConsultaDAO {
 				rta.setTipoEntidad(rs.getString("tipo_entidad"));
 				rta.setNumRegistro(rs.getString("num_registro"));
 				rta.setValoresneg(darValoresInter(correo));
-				rta.setPortafolios(darPortafoliosIntermediarios(correo));
+				rta.setPortafolios(darPortafoliosIntermediario(correo));
 				rta.setSocios(darSociosIntermediario(correo));
 
 			}
@@ -1187,8 +1190,8 @@ public class ConsultaDAO {
 	 * @throws SQLException 
 	 */
 	@SuppressWarnings("null")
-	public ArrayList<PortafolioValue> darPortafoliosIntermediarios(String correo) throws SQLException{
-		ArrayList<PortafolioValue> rta = null;
+	public ArrayList<PortafolioValue> darPortafoliosIntermediario(String correo) throws SQLException{
+		ArrayList<PortafolioValue> rta = new ArrayList<PortafolioValue>();
 		ArrayList<String> select = new ArrayList<String>();
 		ArrayList<String> where = new ArrayList<String>();
 		ArrayList<String> order = new ArrayList<String>();
@@ -1202,8 +1205,9 @@ public class ConsultaDAO {
 			ResultSet rs = state.executeQuery();
 			while(rs.next()){
 				PortafolioValue port = new PortafolioValue();
-				port.setNombre("nombre");
-				port.setTipoRiesgo("nivelriesgo");
+				port.setId(rs.getInt("portafolio_id"));
+				port.setNombre(rs.getString("nombre_portafolio"));
+				port.setTipoRiesgo(rs.getString("nivelriesgo"));
 				rta.add(port);
 			}
 		}catch(SQLException e){
@@ -1222,7 +1226,7 @@ public class ConsultaDAO {
 		}
 		return rta;
 	}
-	
+
 	//-----------------------------
 	//AUTENTICACION
 	//------------------------------
@@ -1475,7 +1479,7 @@ public class ConsultaDAO {
 			cerrarConexion(conexion);
 		}
 	}
-	
+
 	/**
 	 * Dar valores del portafolio y sus porcentajes dado el id del portafolio.
 	 * @throws SQLException
@@ -1559,7 +1563,7 @@ public class ConsultaDAO {
 	 * Añade un valor a un portafolio de un intermediario dados el codigo del valor y el codigo del portafolio.
 	 * @throws SQLException 
 	 */
-	public void añadirValorAPortafolio(int codPortafolio, int codValor) throws SQLException{
+	public void anadirValorAPortafolio(int codPortafolio, int codValor) throws SQLException{
 		PreparedStatement state = null;
 		String consulta = 	"INSERT INTO PORTAFOLIO_VALOR VALUES ( "+codPortafolio+", "+codValor+")";	
 		try{
@@ -1609,6 +1613,52 @@ public class ConsultaDAO {
 		}
 	}
 
+	/**
+	 * Da todos los valores que hay en un portafolio de intermediario
+	 * @throws SQLException 
+	 */
+	public ArrayList<ValorValue> darValoresPortafolio(int idPortafolio, String corIntermediario) throws SQLException{
+		ArrayList<ValorValue> rta = new ArrayList<ValorValue>();
+		ArrayList<String> select = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		ArrayList<String> order = new ArrayList<String>();
+		PreparedStatement state = null;
+		select.add("*");
+		where.add("PORTAFOLIO.cod_intermediario = '" + corIntermediario + "' AND PORTAFOLIO.portafolio_id =" + idPortafolio);
+		String consulta = creadorDeSentencias(select, "(PORTAFOLIO JOIN PORTAFOLIO_VALOR ON PORTAFOLIO.portafolio_id = PORTAFOLIO_VALOR.cod_portafolio)"
+				+ " JOIN VALOR ON VALOR.valor_id = PORTAFOLIO_VALOR.cod_valor", where, order);	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				ValorValue val = new ValorValue();
+				val.setCreador(rs.getString("cod_oferente_creador"));
+				val.setDisponible((rs.getString("disponible").equals("T"))?true:false);
+				val.setFechaExpiracion(rs.getDate("fecha_expiracion"));
+				val.setMercado(rs.getString("mercado"));
+				val.setNombre(rs.getString("nombre_2"));
+				val.setPrecio(rs.getInt("precio"));
+				val.setCodigo(rs.getInt("valor_id"));
+				rta.add(val);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
 	//-----------------------------------------------------------------------
 	//RETIRAR INTERMEDIARIO
 	//-----------------------------------------------------------------------
@@ -1620,7 +1670,7 @@ public class ConsultaDAO {
 		cambiarSocios(intRetirado, intAsociado);
 		cambiarOperaciones(intRetirado, intAsociado);
 	}
-	
+
 	/**
 	 * Cambia los portafolios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
 	 * @throws SQLException 
@@ -1647,10 +1697,10 @@ public class ConsultaDAO {
 			cerrarConexion(conexion);
 		}
 	}
-	
+
 	/**
 	 * Cambia los socios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
-	  * @throws SQLException 
+	 * @throws SQLException 
 	 */
 	public void cambiarSocios(String intRetirado, String intAsociado) throws SQLException{
 		PreparedStatement state = null;
@@ -1677,7 +1727,7 @@ public class ConsultaDAO {
 
 	/**
 	 * Reasigna las operaciones de un intermediario retirado a su sucesor dados sus dos codigos.
-	  * @throws SQLException 
+	 * @throws SQLException 
 	 */
 	public void cambiarOperaciones(String intRetirado, String intAsociado) throws SQLException{
 		PreparedStatement state = null;
@@ -1702,6 +1752,55 @@ public class ConsultaDAO {
 		}
 	}
 
+	/**
+	 * Da todos los intermediarios de la bolsa de valores
+	 * @throws SQLException 
+	 */
+	public ArrayList<IntermediarioValue> darTodosIntermediarios() throws SQLException{
+		ArrayList<IntermediarioValue> rta = new ArrayList<IntermediarioValue>();
+		ArrayList<String> select = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		ArrayList<String> order = new ArrayList<String>();
+		PreparedStatement state = null;
+		select.add("*");
+		String consulta = creadorDeSentencias(select, "INTERMEDIARIO JOIN USUARIO ON USUARIO.correo = INTERMEDIARIO.cod_usuario", where, order);	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				IntermediarioValue val = new IntermediarioValue();
+				val = new IntermediarioValue();
+				val.setCiudad(rs.getString("ciudad"));
+				val.setCodPostal(rs.getInt("codigopostal"));
+				val.setCorreo(rs.getString("correo"));
+				val.setDepartamento(rs.getString("departamento"));
+				val.setDireccion(rs.getString("direccion"));
+				val.setIdRepresentante(rs.getString("idrepresentante"));
+				val.setNombreRepresentante(rs.getString("nombrerepresentante"));
+				val.setNacionalidad(rs.getString("nacionalidad"));
+				val.setNombre(rs.getString("nombre"));
+				val.setTelefono(rs.getString("telefono"));
+				val.setTipoEntidad(rs.getString("tipo_entidad"));
+				val.setNumRegistro(rs.getString("num_registro"));
+				rta.add(val);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
 	//------------------------------------------------------------------------
 	//GENERADOR DE IDS.
 	//------------------------------------------------------------------------
