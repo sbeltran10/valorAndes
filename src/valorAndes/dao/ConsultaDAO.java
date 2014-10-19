@@ -1787,147 +1787,175 @@ public class ConsultaDAO {
 	}
 
 	//-----------------------------------------------------------------------
-	//RETIRAR INTERMEDIARIO
-	//-----------------------------------------------------------------------
-	/**
-	 * RETIRAR INTERMEDIARIO, retira el intermediario completamente dado su codigo y el de su sucesor.
-	 */
-	public void retirarIntermediario(String intRetirado, String intAsociado) throws SQLException{
-		cambiarPortafolios(intRetirado, intAsociado);
-		cambiarSocios(intRetirado, intAsociado);
-		cambiarOperaciones(intRetirado, intAsociado);
-	}
-
-	/**
-	 * Cambia los portafolios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
-	 * @throws SQLException 
-	 */
-	public void cambiarPortafolios(String intRetirado, String intAsociado) throws SQLException{
-		PreparedStatement state = null;
-		String consulta = "UPDATE PORTAFOLIO SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = conexion.prepareStatement(consulta);
-			state.execute(consulta);
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta);
-			throw e;
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					throw e;
-				}
-			}
-			cerrarConexion(conexion);
+		//RETIRAR INTERMEDIARIO
+		//-----------------------------------------------------------------------
+		/**
+		 * RETIRAR INTERMEDIARIO, retira el intermediario completamente dado su codigo y el de su sucesor.
+		 */
+		public void retirarIntermediario(String intRetirado, String intAsociado) throws SQLException{
+			cambiarPortafolios(intRetirado, intAsociado);
+			cambiarSocios(intRetirado, intAsociado);
+			cambiarOperaciones(intRetirado, intAsociado);
+			eliminarIntermediario(intRetirado);
 		}
-	}
 
-	/**
-	 * Cambia los socios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
-	 * @throws SQLException 
-	 */
-	public void cambiarSocios(String intRetirado, String intAsociado) throws SQLException{
-		PreparedStatement state = null;
-		String consulta = "UPDATE SOCIOS SET correo_intermediario = '"+intAsociado+"' WHERE correo_intermediario = '"+intRetirado+"'";	
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = conexion.prepareStatement(consulta);
-			state.execute(consulta);
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta);
-			throw e;
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					throw e;
+		/**
+		 * Retira el intermediario de la base de datos.
+		 * @throws SQLException 
+		 */
+		public void eliminarIntermediario(String intRetirado) throws SQLException{
+			PreparedStatement state = null;
+			String consulta = "DELETE FROM INTERMEDIARIO WHERE cod_intermediario = '"+intRetirado+"'";	
+			try{
+				establecerConexion(cadenaConexion, usuario, clave);
+				state = conexion.prepareStatement(consulta);
+				state.execute(consulta);
+			}catch(SQLException e){
+				e.printStackTrace();
+				System.out.println(consulta);
+				throw e;
+			}finally{
+				if(state != null){
+					try{
+						state.close();
+					}catch(SQLException e){
+						throw e;
+					}
 				}
+				cerrarConexion(conexion);
 			}
-			cerrarConexion(conexion);
 		}
-	}
+		
+		/**
+		 * Cambia los portafolios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
+		 * @throws SQLException 
+		 */
+		public void cambiarPortafolios(String intRetirado, String intAsociado) throws SQLException{
+			PreparedStatement state = null;
+			String consulta = "UPDATE PORTAFOLIO SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
+			try{
+				establecerConexion(cadenaConexion, usuario, clave);
+				state = conexion.prepareStatement(consulta);
+				state.execute(consulta);
+			}catch(SQLException e){
+				e.printStackTrace();
+				System.out.println(consulta);
+				throw e;
+			}finally{
+				if(state != null){
+					try{
+						state.close();
+					}catch(SQLException e){
+						throw e;
+					}
+				}
+				cerrarConexion(conexion);
+			}
+		}
 
-	/**
-	 * Reasigna las operaciones de un intermediario retirado a su sucesor dados sus dos codigos.
-	 * @throws SQLException 
-	 */
-	public void cambiarOperaciones(String intRetirado, String intAsociado) throws SQLException{
-		PreparedStatement state = null;
-		String consulta = "UPDATE OPERACIONES_INT SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = conexion.prepareStatement(consulta);
-			state.execute(consulta);
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta);
-			throw e;
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					throw e;
+		/**
+		 * Cambia los socios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
+		 * @throws SQLException 
+		 */
+		public void cambiarSocios(String intRetirado, String intAsociado) throws SQLException{
+			PreparedStatement state = null;
+			String consulta = "UPDATE SOCIOS SET correo_intermediario = '"+intAsociado+"' WHERE correo_intermediario = '"+intRetirado+"'";	
+			try{
+				establecerConexion(cadenaConexion, usuario, clave);
+				state = conexion.prepareStatement(consulta);
+				state.execute(consulta);
+			}catch(SQLException e){
+				e.printStackTrace();
+				System.out.println(consulta);
+				throw e;
+			}finally{
+				if(state != null){
+					try{
+						state.close();
+					}catch(SQLException e){
+						throw e;
+					}
 				}
+				cerrarConexion(conexion);
 			}
-			cerrarConexion(conexion);
 		}
-	}
 
-	/**
-	 * Da todos los intermediarios de la bolsa de valores
-	 * @throws SQLException 
-	 */
-	public ArrayList<IntermediarioValue> darTodosIntermediarios() throws SQLException{
-		ArrayList<IntermediarioValue> rta = new ArrayList<IntermediarioValue>();
-		ArrayList<String> select = new ArrayList<String>();
-		ArrayList<String> where = new ArrayList<String>();
-		ArrayList<String> order = new ArrayList<String>();
-		PreparedStatement state = null;
-		select.add("*");
-		String consulta = creadorDeSentencias(select, "INTERMEDIARIO JOIN USUARIO ON USUARIO.correo = INTERMEDIARIO.cod_usuario", where, order);	
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = conexion.prepareStatement(consulta);
-			ResultSet rs = state.executeQuery();
-			while(rs.next()){
-				IntermediarioValue val = new IntermediarioValue();
-				val = new IntermediarioValue();
-				val.setCiudad(rs.getString("ciudad"));
-				val.setCodPostal(rs.getInt("codigopostal"));
-				val.setCorreo(rs.getString("correo"));
-				val.setDepartamento(rs.getString("departamento"));
-				val.setDireccion(rs.getString("direccion"));
-				val.setIdRepresentante(rs.getString("idrepresentante"));
-				val.setNombreRepresentante(rs.getString("nombrerepresentante"));
-				val.setNacionalidad(rs.getString("nacionalidad"));
-				val.setNombre(rs.getString("nombre"));
-				val.setTelefono(rs.getString("telefono"));
-				val.setTipoEntidad(rs.getString("tipo_entidad"));
-				val.setNumRegistro(rs.getString("num_registro"));
-				rta.add(val);
-			}
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta);
-			throw e;
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					throw e;
+		/**
+		 * Reasigna las operaciones de un intermediario retirado a su sucesor dados sus dos codigos.
+		 * @throws SQLException 
+		 */
+		public void cambiarOperaciones(String intRetirado, String intAsociado) throws SQLException{
+			PreparedStatement state = null;
+			String consulta = "UPDATE OPERACIONES_INT SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
+			try{
+				establecerConexion(cadenaConexion, usuario, clave);
+				state = conexion.prepareStatement(consulta);
+				state.execute(consulta);
+			}catch(SQLException e){
+				e.printStackTrace();
+				System.out.println(consulta);
+				throw e;
+			}finally{
+				if(state != null){
+					try{
+						state.close();
+					}catch(SQLException e){
+						throw e;
+					}
 				}
+				cerrarConexion(conexion);
 			}
-			cerrarConexion(conexion);
 		}
-		return rta;
-	}
+
+		/**
+		 * Da todos los intermediarios de la bolsa de valores
+		 * @throws SQLException 
+		 */
+		public ArrayList<IntermediarioValue> darTodosIntermediarios() throws SQLException{
+			ArrayList<IntermediarioValue> rta = new ArrayList<IntermediarioValue>();
+			ArrayList<String> select = new ArrayList<String>();
+			ArrayList<String> where = new ArrayList<String>();
+			ArrayList<String> order = new ArrayList<String>();
+			PreparedStatement state = null;
+			select.add("*");
+			String consulta = creadorDeSentencias(select, "INTERMEDIARIO JOIN USUARIO ON USUARIO.correo = INTERMEDIARIO.cod_usuario", where, order);	
+			try{
+				establecerConexion(cadenaConexion, usuario, clave);
+				state = conexion.prepareStatement(consulta);
+				ResultSet rs = state.executeQuery();
+				while(rs.next()){
+					IntermediarioValue val = new IntermediarioValue();
+					val = new IntermediarioValue();
+					val.setCiudad(rs.getString("ciudad"));
+					val.setCodPostal(rs.getInt("codigopostal"));
+					val.setCorreo(rs.getString("correo"));
+					val.setDepartamento(rs.getString("departamento"));
+					val.setDireccion(rs.getString("direccion"));
+					val.setIdRepresentante(rs.getString("idrepresentante"));
+					val.setNombreRepresentante(rs.getString("nombrerepresentante"));
+					val.setNacionalidad(rs.getString("nacionalidad"));
+					val.setNombre(rs.getString("nombre"));
+					val.setTelefono(rs.getString("telefono"));
+					val.setTipoEntidad(rs.getString("tipo_entidad"));
+					val.setNumRegistro(rs.getString("num_registro"));
+					rta.add(val);
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+				System.out.println(consulta);
+				throw e;
+			}finally{
+				if(state != null){
+					try{
+						state.close();
+					}catch(SQLException e){
+						throw e;
+					}
+				}
+				cerrarConexion(conexion);
+			}
+			return rta;
+		}
 	//------------------------------------------------------------------------
 	//GENERADOR DE IDS.
 	//------------------------------------------------------------------------
@@ -2006,3 +2034,4 @@ public class ConsultaDAO {
 	//	GENERIC DELETE
 	//	"DELETE FROM TABLA WHERE comp = acomp"
 }
+
