@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import valorAndes.fachada.ValorAndes;
 import valorAndes.vos.IntermediarioValue;
-import valorAndes.vos.OperacionValue;
 import valorAndes.vos.PortafolioValue;
 import valorAndes.vos.ValorValue;
 
@@ -195,9 +194,9 @@ public class ServletPortafolioIntermediario extends ServletTemplate{
 			}
 			out.println("					</tbody>");
 			out.println("				</table>");
-			out.println("			</div>");
-			out.println("		</div> ");
 		}
+		out.println("			</div>");
+		out.println("		</div> ");
 	}
 
 	/**
@@ -253,6 +252,7 @@ public class ServletPortafolioIntermediario extends ServletTemplate{
 			out.println("		</div> ");
 		}
 	}
+	
 	/**
 	 * Escribir las opciones existentes de valores y sus ids
 	 * @param out

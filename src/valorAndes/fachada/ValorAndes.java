@@ -3,11 +3,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import valorAndes.dao.ConsultaDAO;
+import valorAndes.vos.InPortafolioValue;
 import valorAndes.vos.IntermediarioValue;
 import valorAndes.vos.InversionistaValue;
 import valorAndes.vos.OferenteValue;
 import valorAndes.vos.OperacionValue;
 import valorAndes.vos.PortafolioValue;
+import valorAndes.vos.ValorPorcentajeInversionValue;
 import valorAndes.vos.ValorValue;
 
 /**
@@ -342,5 +344,56 @@ public class ValorAndes {
 	 */
 	public ArrayList<ValorValue> darValoresPortafolio(int idPortafolio, String corIntermediario) throws SQLException{
 		return dao.darValoresPortafolio(idPortafolio, corIntermediario);
+	}
+	
+	//--------------------------------
+	//Portafolios Inversionista
+	//--------------------------------
+	/**
+	 * Crea un nuevo InPortafolio
+	 * @throws SQLException 
+	 */
+	public void crearInPortafolio(String corInver, int codPorta, String nomPorta) throws SQLException{
+		dao.crearInPortafolio(corInver, codPorta, nomPorta);
+	}
+	
+	/**
+	 * Da todos los InPortafolios de un inversionista
+	 * @throws SQLException 
+	 */
+	public ArrayList<InPortafolioValue> darInPortafolios(String correoInv) throws SQLException{
+		return dao.darInPortafolios(correoInv);
+	}
+	
+	/**
+	 * Cambia el porcentaje del valor en el in portafolio
+	 * @throws SQLException 
+	 */
+	public void cambiarInPorcentaje(String codInv, int codPortafolio, int codVal, int nPor) throws SQLException{
+		dao.cambiarInPorcentaje(codInv, codPortafolio, codVal, nPor);
+	}
+	
+	/**
+	 * Elimina un valor de un inportafolio
+	 * @throws SQLException 
+	 */
+	public void eliminarValorInPortafolio(String codInv, int codPortafolio, int codVal) throws SQLException{
+		dao.eliminarValorInPortafolio(codInv, codPortafolio, codVal);
+	}
+	
+	/**
+	 * Agrega un nuevo valor al InPortafolio
+	 * @throws SQLException 
+	 */
+	public void agregarValorInPortafolio(String codInv, int codPortafolio, int codVal) throws SQLException{
+		dao.agregarValorInPortafolio(codInv, codPortafolio, codVal);
+	}
+	
+	/**
+	 * Da los valores de un inportafolio
+	 * @throws SQLException 
+	 */
+	public ArrayList<ValorPorcentajeInversionValue> darValoresInPortafolio(String codInv, int codPortafolio) throws SQLException{
+		return dao.darValoresInPortafolio(codInv, codPortafolio);
 	}
 }

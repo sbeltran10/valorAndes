@@ -24,6 +24,7 @@ public class InPortafolioValue {
 	
 	private PortafolioValue parentPortafolio;
 
+	
 	//------------------------------
 	//Metodos
 	//------------------------------

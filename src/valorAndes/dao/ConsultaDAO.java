@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 
+import valorAndes.vos.InPortafolioValue;
 import valorAndes.vos.IntermediarioValue;
 import valorAndes.vos.InversionistaValue;
 import valorAndes.vos.OferenteValue;
@@ -1189,7 +1190,6 @@ public class ConsultaDAO {
 	 * Da la informacion de los portafolios de un intermediario
 	 * @throws SQLException 
 	 */
-	@SuppressWarnings("null")
 	public ArrayList<PortafolioValue> darPortafoliosIntermediario(String correo) throws SQLException{
 		ArrayList<PortafolioValue> rta = new ArrayList<PortafolioValue>();
 		ArrayList<String> select = new ArrayList<String>();
@@ -1399,6 +1399,35 @@ public class ConsultaDAO {
 	//------------------------------------------------------------
 	//Portafolio Inversionista
 	//------------------------------------------------------------
+
+	/**
+	 * Crea un In-Portafolio a partir de un portafolio del intermediario
+	 * @throws SQLException 
+	 */
+
+	public void crearInPortafolio(String corInver, int codPorta, String nomPorta ) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "INSERT INTO IN_PORTAFOLIO VALUES ( '" + corInver + "', " + codPorta + ", " + nomPorta + ", " +  0 + ")";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+	}
+
 	/**
 	 * Cambiar el procentaje de un valor dados el codigo del portafolio, el cod del valor y el nuevo proccentaje. 	
 	 * @throws SQLException 
@@ -1457,9 +1486,9 @@ public class ConsultaDAO {
 	 * Agrega un nuevo valor a un portafolio dados el cod del portafolio el codigo del valor y el porcentaje inicial del valor. 	
 	 * @throws SQLException 
 	 */
-	public void agregarValorInPortafolio(String codInv, int codPortafolio, int codVal, int nPor) throws SQLException{
+	public void agregarValorInPortafolio(String codInv, int codPortafolio, int codVal) throws SQLException{
 		PreparedStatement state = null;
-		String consulta = "INSERT INTO TABLA VALUES ( '" + codInv + "', " + codPortafolio + ", " + nPor + ", " +  codVal + ")";
+		String consulta = "INSERT INTO VALOR_PORCENTAJE VALUES ( '" + codInv + "', " + codPortafolio + ", 0 , " +  codVal + ")";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -1528,6 +1557,53 @@ public class ConsultaDAO {
 		return rta;
 	}
 
+	/**
+	 * Da todos los portafolios de los intermediarios asociados al inversionista
+	 * @throws SQLException 
+	 */
+	public ArrayList<InPortafolioValue> darInPortafolios(String correoInv) throws SQLException{
+		ArrayList<InPortafolioValue> rta = new ArrayList<InPortafolioValue>();
+		ArrayList<String> select = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		ArrayList<String> order = new ArrayList<String>();
+		PreparedStatement state = null;
+		select.add("*");
+		where.add("IN_PORTAFOLIO.cod_inversionista = '" + correoInv + "'");
+		String consulta = creadorDeSentencias(select, "IN_PORTAFOLIO JOIN PORTAFOLIO ON IN_PORTAFOLIO.cod_portafolio = PORTAFOLIO.portafolio_id", where, order);	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				InPortafolioValue val = new InPortafolioValue();
+				PortafolioValue val2 = new PortafolioValue();
+
+				val.setCantidadGlobal(rs.getInt("cantidad_acciones"));
+				val2.setId(rs.getInt("portafolio_id"));
+				val2.setNombre(rs.getString("nombre_portafolio"));
+				val2.setTipoRiesgo(rs.getString("nivelriesgo"));
+				val2.setCorreoInter(rs.getString("cod_intermediario"));
+
+				val.setParentPortafolio(val2);
+				rta.add(val);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
 	//------------------------------------------------------------
 	//Portafolio Intermediario
 	//------------------------------------------------------------
@@ -1538,11 +1614,25 @@ public class ConsultaDAO {
 	 */
 	public void crearPortafolio(String codIntermediario, String nombrePortafolio, String nivelRiesgo) throws SQLException{
 		PreparedStatement state = null;
-		String consulta = 	"INSERT INTO PORTAFOLIO VALUES ( '"+codIntermediario+"', " + generarId("PORTAFOLIO") + ", '" +  nombrePortafolio + "', '" +  nivelRiesgo + "')";	
+		int id = generarId("PORTAFOLIO");
+		String consulta = 	"INSERT INTO PORTAFOLIO VALUES ( '"+codIntermediario+"', " + id + ", '" +  nombrePortafolio + "', '" +  nivelRiesgo + "')";
+		
+		ArrayList<String> socios = darCorreosSocios(codIntermediario);
+		ArrayList<String> consultas = new ArrayList<String>();
+		
+		for(int i = 0; i<socios.size();i++){
+			consultas.add("INSERT INTO IN_PORTAFOLIO VALUES ( '"+socios.get(i)+"', " + id + ", 0)");
+		}
+		
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			state.execute(consulta);
+			
+			for(int i = 0; i<consultas.size();i++){
+				state = conexion.prepareStatement(consultas.get(i));
+				state.execute(consultas.get(i));
+			}
 		}catch(SQLException e){
 			e.printStackTrace();
 			System.out.println(consulta);
@@ -1641,6 +1731,43 @@ public class ConsultaDAO {
 				val.setPrecio(rs.getInt("precio"));
 				val.setCodigo(rs.getInt("valor_id"));
 				rta.add(val);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
+	/**
+	 * Da todos los socios de un intermediario dado
+	 * @throws SQLException 
+	 */
+	public ArrayList<String> darCorreosSocios(String correoInter) throws SQLException{
+		ArrayList<String> rta = new ArrayList<String>();
+		ArrayList<String> select = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		ArrayList<String> order = new ArrayList<String>();
+		PreparedStatement state = null;
+		select.add("*");
+		where.add("SOCIOS.correo_intermediario = '" + correoInter + "'");
+		String consulta = creadorDeSentencias(select, "SOCIOS", where, order);	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				rta.add(rs.getString("correo_inversionista"));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();

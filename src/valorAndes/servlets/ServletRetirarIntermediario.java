@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import valorAndes.fachada.ValorAndes;
 import valorAndes.vos.IntermediarioValue;
-import valorAndes.vos.OperacionValue;
 
 public class ServletRetirarIntermediario extends ServletTemplate{
 	private static final long serialVersionUID = 1L;
@@ -24,13 +23,12 @@ public class ServletRetirarIntermediario extends ServletTemplate{
 	public void escribirContenido(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		PrintWriter out = response.getWriter();
-
-		IntermediarioValue inter = ValorAndes.getInstance().getInter();
 		
 		out.println("	<div class=\"well well-lg\">");
 		out.println("		<div class=\"container\">");
 		out.println("		<br><br><br>");
 		out.println("		<h1>Retirar Intermediario<hr></h1>");
+		
 		String correoViej = request.getParameter("correo");
 		String correoNuevo = request.getParameter("reemplazo");
 		if(correoViej!=null){
@@ -44,10 +42,10 @@ public class ServletRetirarIntermediario extends ServletTemplate{
 		}
 		
 		out.println("		");
-		out.println("		<h3>Seleccione el intermediario que desea retirar de la bolsa de valores.</h3>");
+		out.println("		<h3>Seleccione el intermediario que desea retirar de la bolsa de valores.<form></h3>");
 		out.println("		");
 		out.println("		<div class=\"container\">");
-		out.println("			<div class=\"panel panel-info\"><form>");
+		out.println("			<div class=\"panel panel-info\">");
 
 		try {
 			construirTablaInter(ValorAndes.getInstance().darTodosIntermediarios(),  out);
@@ -55,13 +53,14 @@ public class ServletRetirarIntermediario extends ServletTemplate{
 
 			e.printStackTrace();
 		}
+		out.println("					</div> ");
 		out.println("				</div>");
 		out.println("			<div class=\"row\"><hr>");
 		out.println("				<h2>Reemplazo</h2> ");
 		out.println("				Seleccione el intermediario que remplazara al que se retira<hr>");
 		out.println("						<div class=\"col-lg-3\">		");
 		out.println("							<div class=\"form-group\">");
-		out.println("								<label>Nivel de Riesgo</label>");
+		out.println("								<label>Intermediario Reemplazo</label>");
 		out.println("								<div class=\"input-group\">");
 		out.println("									<select class=\"form-control\" name=\"reemplazo\" required>");
 		out.println("										<option></option>");
@@ -78,6 +77,8 @@ public class ServletRetirarIntermediario extends ServletTemplate{
 		out.println("						<input type=\"submit\" name=\"submit\" id=\"submit\" value=\"Retirar Intermediario\" class=\"btn btn-info pull-right\">");						
 		out.println("			</form></div>");
 		out.println("		</div> ");
+		out.println("	</div> ");
+		out.println("</div> ");
 		out.println("");
 		out.println("<style> h4 {color:red} h5 {color:blue} </style> ");
 
@@ -93,6 +94,7 @@ public class ServletRetirarIntermediario extends ServletTemplate{
 
 		else{
 			out.println("				<div class=\"panel-heading\">Operaciones</div>");
+			out.println("				<div class=\"form-group\">");
 			out.println("				<table class=\"table table-striped\" name=\"tablaOp\">");
 			out.println("					<thead>");
 			out.println("						<tr>");
@@ -128,6 +130,8 @@ public class ServletRetirarIntermediario extends ServletTemplate{
 			}
 			out.println("					</tbody>");
 			out.println("				</table>");
+			out.println("				</div>");
+
 		}
 	}
 	

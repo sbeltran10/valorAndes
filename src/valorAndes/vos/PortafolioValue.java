@@ -26,6 +26,11 @@ public class PortafolioValue {
 	 * Id del portafolio
 	 */
 	private int id;
+	
+	/**
+	 * Correo del intermediario asociado al portafolio
+	 */
+	private String correoInter;
 	//--------------------------------------------
 	//Metodos Value
 	//--------------------------------------------
@@ -84,6 +89,20 @@ public class PortafolioValue {
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the correoInter
+	 */
+	public String getCorreoInter() {
+		return correoInter;
+	}
+
+	/**
+	 * @param correoInter the correoInter to set
+	 */
+	public void setCorreoInter(String correoInter) {
+		this.correoInter = correoInter;
 	}
 			
 }
