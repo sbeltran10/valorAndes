@@ -730,7 +730,7 @@ public class ConsultaDAO {
 			int cant = Integer.parseInt(cantidadDisp[0]);
 			if(cant > op.getCantidad()){
 
-				consultaUpValorPropietarios = "UPDATE VALOR_PROPIETARIOS SET cantiad_valor = (cantiad_valor - "+ op.getCantidad()  +  ")  WHERE correo_propietario = '"+op.getCorSolicitante()
+				consultaUpValorPropietarios = "UPDATE VALOR_PROPIETARIOS SET cantidad_valor = (cantidad_valor - "+ op.getCantidad()  +  ")  WHERE correo_propietario = '"+op.getCorSolicitante()
 						+ "' AND valor_id = " + op.getIdValor();
 			}
 			else{
@@ -765,7 +765,7 @@ public class ConsultaDAO {
 			if(rta.isEmpty()){
 
 				if(tieneValor(op.getCorSolicitante(), op.getIdValor())){
-					consultaUpValorPropietarios = "UPDATE VALOR_PROPIETARIOS SET cantiad_valor = (cantiad_valor + "+ op.getCantidad()  +  ")  WHERE correo_propietario = '"+op.getCorSolicitante()
+					consultaUpValorPropietarios = "UPDATE VALOR_PROPIETARIOS SET cantidad_valor = (cantidad_valor + "+ op.getCantidad()  +  ")  WHERE correo_propietario = '"+op.getCorSolicitante()
 							+ "' AND valor_id = " + op.getIdValor();
 				}
 				else{
