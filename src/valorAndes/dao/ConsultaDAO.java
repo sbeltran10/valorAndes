@@ -1083,6 +1083,7 @@ public class ConsultaDAO {
 				rta.setIdRepresentante(rs.getString("idrepresentante"));
 				rta.setNombreRepresentante(rs.getString("nombrerepresentante"));
 				rta.setNacionalidad(rs.getString("nacionalidad"));
+				rta.setTelefono(rs.getString("telefono"));
 				rta.setNombre(rs.getString("nombre"));
 				rta.setTipoEntidad(rs.getString("tipo_entidad"));
 				rta.setNumRegistro(rs.getString("num_registro"));

@@ -217,7 +217,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
 			out.println("						<h3> <u>Tipo de Entidad:</u> &nbsp" + ofer.getTipoEntidad() +  "</h3>");
-			out.println("					</div>");
+			out.println("					</div><hr>");
 			escribirValores(out, ofer.getValores(), "Ofer");
 
 		}
@@ -264,7 +264,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
 			out.println("						<h3> <u>Documento:</u> &nbsp" + inver.getDocIdentidad() +  "</h3>");
-			out.println("					</div>");
+			out.println("					</div><hr>");
 			escribirValores(out, inver.getValores(),"Inver");
 		}
 
@@ -312,7 +312,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 			out.println("					</div>");
 			out.println("					<div class=\"col-lg-6\">");
 			out.println("						<h3> <u>Numero de Registro:</u> &nbsp" + inter.getNumRegistro() +  "</h3>");
-			out.println("					</div>");
+			out.println("					</div></div></div><<hr>");
 			escribirDatosIntermediario(out, inter.getSocios(), inter.getValoresneg(), inter.getPortafolios());
 		}
 
@@ -401,7 +401,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		else{
 			out.println("			<div class=\"container\">");
 			out.println("				<div class=\"panel panel-info\">");
-			out.println("					<div class=\"panel-heading\">Valores en la bolsa</div>");
+			out.println("					<div class=\"panel-heading\">Valores Negociados</div>");
 			out.println("					<table class=\"table table-striped\">");
 			out.println("						<thead>");
 			out.println("							<tr>");
@@ -442,7 +442,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		else{
 			out.println("			<div class=\"container\">");
 			out.println("				<div class=\"panel panel-info\">");
-			out.println("					<div class=\"panel-heading\">Valores en la bolsa</div>");
+			out.println("					<div class=\"panel-heading\">Portafolios</div>");
 			out.println("					<table class=\"table table-striped\">");
 			out.println("						<thead>");
 			out.println("							<tr>");
@@ -471,7 +471,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		if(ports.isEmpty()){
 			out.println("			<div class=\"container\">");
 			out.println("				<div class=\"panel panel-info\">");
-			out.println("					<div class=\"panel-heading\">El intermediario no tiene ningun socio</div>");
+			out.println("					<div class=\"panel-heading\">El intermediario no tiene socios</div>");
 
 
 		}
@@ -479,7 +479,7 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		else{
 			out.println("			<div class=\"container\">");
 			out.println("				<div class=\"panel panel-info\">");
-			out.println("					<div class=\"panel-heading\">Valores en la bolsa</div>");
+			out.println("					<div class=\"panel-heading\">Socios</div>");
 			out.println("					<table class=\"table table-striped\">");
 			out.println("						<thead>");
 			out.println("							<tr>");
