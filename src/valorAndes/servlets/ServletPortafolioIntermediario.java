@@ -104,6 +104,8 @@ public class ServletPortafolioIntermediario extends ServletTemplate{
 					out.println("			<h5><b>Se ha anadido exitosamente el valor al portafolio</h5></b>");
 				} catch (Exception e) {
 					e.printStackTrace();
+					out.println("				<br><h4>El valor a agregar ya se encuentra en la tabla.<br></h4>");
+
 				}
 			}
 			if(valElim!=null){
@@ -131,6 +133,7 @@ public class ServletPortafolioIntermediario extends ServletTemplate{
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
+				
 			}
 			out.println("										</select> ");
 			out.println("									<span class=\"input-group-addon\"></span>");
@@ -142,11 +145,10 @@ public class ServletPortafolioIntermediario extends ServletTemplate{
 			out.println("					</form><br><hr>");
 			try {
 				construirTablaPortVals(ValorAndes.getInstance().darValoresPortafolio(Integer.parseInt(portVal[0]),  inter.getCorreo()),out,portVal[1] + " Nivel de Riesgo: " + portVal[2] , porta);
-			} catch (NumberFormatException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+				
+			} 
 		}
 
 		out.println("		");

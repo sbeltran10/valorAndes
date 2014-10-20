@@ -717,9 +717,11 @@ public class ConsultaDAO {
 		String consultaUpOperaciones_int="";
 		String consultaUpOperaciones_int2="";
 		String consultaUpValorPropietarios="";
+		String consultaUpPortafolioValor="";
+		String consultaUpValorPorcentaje="";
 
 
-		if(op.getTipoCompraVenta().equals("VENTA")){
+		if(op.getTipoCompraVenta().equals("Venta")){
 			consultaUpValor = "UPDATE VALOR SET disponible = 'T' WHERE valor_id = "+op.getIdValor();
 			consultaUpOperacion = "UPDATE OPERACION SET estado = 'Registrada' WHERE operacion_id = "+op.getId();
 
@@ -753,6 +755,8 @@ public class ConsultaDAO {
 				consultaUpOperaciones_int2 = "DELETE FROM OPERACIONES_INT WHERE cod_operacion = " + cantidadDisp[1]; 
 				consultaUpOperacion2 = "DELETE FROM OPERACION WHERE operacion_id = " + cantidadDisp[1]; 
 				consultaUpValor = "UPDATE VALOR SET disponible = 'F' WHERE valor_id = "+op.getIdValor();
+				consultaUpPortafolioValor = "DELETE FROM PORTAFOLIO_VALOR WHERE cod_valor = " + op.getIdValor(); 
+				consultaUpValorPorcentaje = "DELETE FROM VALOR_PORCENTAJE WHERE cod_valor = " + op.getIdValor(); 
 			}
 			else{
 				rta = "Ya no se encuentra disponible la cantidad deseada a comprar del valor, la operacion de compra sera cancelada"
@@ -766,7 +770,7 @@ public class ConsultaDAO {
 				}
 				else{
 					consultaUpValorPropietarios = "INSERT INTO VALOR_PROPIETARIOS VALUES ('"+ op.getCorSolicitante() + "', " +  op.getIdValor() + ", "+
-							op.getCantidad() + ", 0, 'F')";
+							op.getCantidad()+ ")";
 				}
 			}
 		}
@@ -780,7 +784,10 @@ public class ConsultaDAO {
 			if(!consultaUpValor.isEmpty()){state = conexion.prepareStatement(consultaUpValor);state.execute(consultaUpValor);consulta=consultaUpValor;}
 			if(!consultaUpOperaciones_int2.isEmpty()){state = conexion.prepareStatement(consultaUpOperaciones_int2);state.execute(consultaUpOperaciones_int2);consulta=consultaUpOperaciones_int2;}
 			if(!consultaUpOperacion2.isEmpty()){state = conexion.prepareStatement(consultaUpOperacion2);state.execute(consultaUpOperacion2);consulta=consultaUpOperacion2;}
+			if(!consultaUpPortafolioValor.isEmpty()){state = conexion.prepareStatement(consultaUpPortafolioValor);state.execute(consultaUpPortafolioValor);consulta=consultaUpPortafolioValor;}
+			if(!consultaUpValorPorcentaje.isEmpty()){state = conexion.prepareStatement(consultaUpValorPorcentaje);state.execute(consultaUpValorPorcentaje);consulta=consultaUpValorPorcentaje;}
 
+			
 		}catch(SQLException e){
 			e.printStackTrace();
 			System.out.println(consulta);
@@ -1285,8 +1292,6 @@ public class ConsultaDAO {
 					invVal.setTelefono(telefono);
 					int docIdentidad = rs1.getInt("DOCUMENTO_IDENTIDAD");
 					invVal.setDocIdentidad(docIdentidad);
-					String tipoPort = rs1.getString("TIPO_PORTAFOLIO");
-					invVal.setTipoPortafolio(tipoPort);
 
 					rta = (contrasenia1.equals(contrasenia))?invVal:null;
 				}}
@@ -1327,8 +1332,6 @@ public class ConsultaDAO {
 				invOf.setTelefono(telefono);
 				invOf.setTipoEntidad(rs2.getString("TIPO_ENTIDAD"));
 				invOf.setIdRentabilidad(rs2.getInt("COD_RENTABILIDAD"));
-				String tipoPort = rs2.getString("TIPO_PORTAFOLIO");
-				invOf.setTipoPortafolio(tipoPort);
 
 				rta = (contrasenia1.equals(contrasenia))?invOf:null;
 			}}
@@ -1405,7 +1408,7 @@ public class ConsultaDAO {
 	 * @throws SQLException 
 	 */
 
-	public void crearInPortafolio(String corInver, int codPorta, String nomPorta ) throws SQLException{
+	public void crearInPortafolio(String corInver, int codPorta, String nomPorta, int cantidad ) throws SQLException{
 		PreparedStatement state = null;
 		String consulta = "INSERT INTO IN_PORTAFOLIO VALUES ( '" + corInver + "', " + codPorta + ", " + nomPorta + ", " +  0 + ")";
 		try{
@@ -1434,7 +1437,7 @@ public class ConsultaDAO {
 	 */
 	public void cambiarInPorcentaje(String codInv, int codPortafolio, int codVal, int nPor) throws SQLException{
 		PreparedStatement state = null;
-		String consulta = "UPDATE VALOR_PORCENTAJE SET porcentaje = "+nPor+" WHERE cod_inversionista = '" + codInv + "' AND cod_portafolio = "+codPortafolio+" AND codVal = "+codVal;
+		String consulta = "UPDATE VALOR_PORCENTAJE SET porcentaje = "+nPor+" WHERE cod_inversionista = '" + codInv + "' AND cod_portafolio = "+codPortafolio+" AND cod_valor = "+codVal;
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -1488,7 +1491,7 @@ public class ConsultaDAO {
 	 */
 	public void agregarValorInPortafolio(String codInv, int codPortafolio, int codVal) throws SQLException{
 		PreparedStatement state = null;
-		String consulta = "INSERT INTO VALOR_PORCENTAJE VALUES ( '" + codInv + "', " + codPortafolio + ", 0 , " +  codVal + ")";
+		String consulta = "INSERT INTO VALOR_PORCENTAJE VALUES ( 0," + codVal + ", " + codPortafolio + ", '" +  codInv + "')";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -1519,10 +1522,8 @@ public class ConsultaDAO {
 		ArrayList<String> where = new ArrayList<String>();
 		ArrayList<String> order = new ArrayList<String>();
 		PreparedStatement state = null;
-		select.add("cod_valor");
-		select.add("porcentaje");
-		where.add("cod_inversionista = '"+codInv+"'");
-		where.add("cod_Portafolio = "+codInv);
+		select.add("*");
+		where.add("cod_inversionista = '"+codInv+"' AND cod_Portafolio = " + codPortafolio);
 		String consulta = creadorDeSentencias(select, "VALOR_PORCENTAJE JOIN VALOR ON cod_valor = valor_id", where, order);
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
@@ -1539,6 +1540,8 @@ public class ConsultaDAO {
 				valor.setNombre(rs.getString("nombre"));
 				valor.setPrecio(rs.getInt("precio"));
 				valor.setCodigo(rs.getInt("valor_id"));
+				val.setValor(valor);
+				rta.add(val);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -1621,7 +1624,9 @@ public class ConsultaDAO {
 		ArrayList<String> consultas = new ArrayList<String>();
 		
 		for(int i = 0; i<socios.size();i++){
-			consultas.add("INSERT INTO IN_PORTAFOLIO VALUES ( '"+socios.get(i)+"', " + id + ", 0)");
+			String cons = "INSERT INTO IN_PORTAFOLIO VALUES ( '"+socios.get(i)+"', " + id + ", 0)";
+			consultas.add(cons);
+			System.out.println(cons);
 		}
 		
 		try{
@@ -1720,6 +1725,7 @@ public class ConsultaDAO {
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
+			System.out.println(consulta);
 			ResultSet rs = state.executeQuery();
 			while(rs.next()){
 				ValorValue val = new ValorValue();
@@ -1727,7 +1733,7 @@ public class ConsultaDAO {
 				val.setDisponible((rs.getString("disponible").equals("T"))?true:false);
 				val.setFechaExpiracion(rs.getDate("fecha_expiracion"));
 				val.setMercado(rs.getString("mercado"));
-				val.setNombre(rs.getString("nombre_2"));
+				val.setNombre(rs.getString("nombre"));
 				val.setPrecio(rs.getInt("precio"));
 				val.setCodigo(rs.getInt("valor_id"));
 				rta.add(val);
@@ -1761,7 +1767,7 @@ public class ConsultaDAO {
 		PreparedStatement state = null;
 		select.add("*");
 		where.add("SOCIOS.correo_intermediario = '" + correoInter + "'");
-		String consulta = creadorDeSentencias(select, "SOCIOS", where, order);	
+		String consulta = creadorDeSentencias(select, "SOCIOS JOIN INVERSIONISTA ON SOCIOS.correo_inversionista = INVERSIONISTA.cod_usuario", where, order);	
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -1797,6 +1803,7 @@ public class ConsultaDAO {
 			cambiarSocios(intRetirado, intAsociado);
 			cambiarOperaciones(intRetirado, intAsociado);
 			eliminarIntermediario(intRetirado);
+			eliminarIntermediarioUs(intRetirado);
 		}
 
 		/**
@@ -1805,7 +1812,33 @@ public class ConsultaDAO {
 		 */
 		public void eliminarIntermediario(String intRetirado) throws SQLException{
 			PreparedStatement state = null;
-			String consulta = "DELETE FROM INTERMEDIARIO WHERE cod_intermediario = '"+intRetirado+"'";	
+			String consulta = "DELETE FROM INTERMEDIARIO WHERE cod_usuario = '"+intRetirado+"'";	
+			try{
+				establecerConexion(cadenaConexion, usuario, clave);
+				state = conexion.prepareStatement(consulta);
+				state.execute(consulta);
+			}catch(SQLException e){
+				e.printStackTrace();
+				System.out.println(consulta);
+				throw e;
+			}finally{
+				if(state != null){
+					try{
+						state.close();
+					}catch(SQLException e){
+						throw e;
+					}
+				}
+				cerrarConexion(conexion);
+			}
+		}
+		
+		/**
+		 * Elimina al intermediario de la tabla usuario
+		 */
+		public void eliminarIntermediarioUs(String intRetirado) throws SQLException{
+			PreparedStatement state = null;
+			String consulta = "DELETE FROM USUARIO WHERE correo = '"+intRetirado+"'";	
 			try{
 				establecerConexion(cadenaConexion, usuario, clave);
 				state = conexion.prepareStatement(consulta);

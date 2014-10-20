@@ -353,8 +353,8 @@ public class ValorAndes {
 	 * Crea un nuevo InPortafolio
 	 * @throws SQLException 
 	 */
-	public void crearInPortafolio(String corInver, int codPorta, String nomPorta) throws SQLException{
-		dao.crearInPortafolio(corInver, codPorta, nomPorta);
+	public void crearInPortafolio(String corInver, int codPorta, String nomPorta, int cantidad) throws SQLException{
+		dao.crearInPortafolio(corInver, codPorta, nomPorta, cantidad);
 	}
 	
 	/**

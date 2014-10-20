@@ -117,7 +117,7 @@ public class ServletOperacionRegistrar extends ServletTemplate{
 				out.println("							<td>"+opi.getTipoCompraVenta() +"</td>");
 				out.println("							<td>"+opi.getPrecio() +"</td>");
 				out.println("							<td>"+opi.getCorSolicitante() +"</td>");
-				out.println("							<input type=\"hidden\" name=\"op\" value=\"" + opi.getId() + "\"/>");
+				out.println("							<input type=\"hidden\" name=\"op\" value=\"" + i + "\"/>");
 				out.println("							<td><button type=\"submit\"  class=\"btn btn-default\" name=\"op\">Registrar Operracion</button></td>");
 				out.println("						</tr></form>");
 			}

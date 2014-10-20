@@ -42,7 +42,7 @@ public class ServletPortafolioInversionista extends ServletTemplate{
 			out.println("		");
 			out.println("		<h3>Seleccione los nuevos porcentajes para el portafolio o agregue nuevos valores al portafolio.</h3>");
 			out.println("		");
-			out.println("		<div class=\"container\">");
+			out.println("		<form><div class=\"container\">");
 			out.println("			<div class=\"panel panel-info\">");
 			
 			String op = request.getParameter("submit");
@@ -99,8 +99,8 @@ public class ServletPortafolioInversionista extends ServletTemplate{
 				e.printStackTrace();
 			}
 			out.println("			</div>");
-			out.println("		</div> ");
-			out.println("				<form>Agregue un nuevo valor al portafolio.<hr>");
+			out.println("		</div></form> ");
+			out.println("				Agregue un nuevo valor al portafolio.<hr>");
 			out.println("					<form role=\"form\">");
 			out.println("						<div class=\"col-lg-3\">		");
 			out.println("							<div class=\"form-group\">");
@@ -121,6 +121,7 @@ public class ServletPortafolioInversionista extends ServletTemplate{
 			out.println("								</div>");
 			out.println("							</div>");
 			out.println("						</div>");
+			out.println("							<input type=\"hidden\" name=\"inPorta\" value=\"" + inPorta + "\"/>");
 			out.println("						<input type=\"submit\" name=\"submit\" id=\"submit\" value=\"Agregar Valor\" class=\"btn btn-info pull-right\"></form>");											
 		}
 		
@@ -170,7 +171,6 @@ public class ServletPortafolioInversionista extends ServletTemplate{
 			out.println("							<th>Nombre Portafolio</th>");
 			out.println("							<th>Intermediario Asociado</th>");
 			out.println("							<th>Nivel de Riesgo</th>		");
-			out.println("							<th>Cantidad Total Valores</th>");
 			out.println("							<th>Recomponer</th>			");
 			out.println("						</tr>");
 			out.println("					</thead>");
@@ -183,7 +183,6 @@ public class ServletPortafolioInversionista extends ServletTemplate{
 				out.println("							<td>"+portval.getParentPortafolio().getNombre() +"</td>");
 				out.println("							<td>"+portval.getParentPortafolio().getCorreoInter() +"</td>");
 				out.println("							<td>"+portval.getParentPortafolio().getTipoRiesgo() +"</td>");
-				out.println("							<td>"+portval.getCantidadGlobal() +"</td>");
 				out.println("							<input type=\"hidden\" name=\"inPorta\" value=\"" + portval.getParentPortafolio().getId() + "\"/>");
 				out.println("							<input type=\"hidden\" name=\"interPorta\" value=\"" + portval.getParentPortafolio().getCorreoInter() + "\"/>");
 				out.println("							<td><button type=\"submit\"  class=\"btn btn-default\" name=\"port\">Recomponer Portafolio</button></td>");
@@ -214,7 +213,6 @@ public class ServletPortafolioInversionista extends ServletTemplate{
 			out.println("							<th>Fecha de Expiracion</th>	");
 			out.println("							<th>Mercado</th>	");
 			out.println("							<th>Precio</th>	");
-			out.println("							<th>Creador</th>	");
 			out.println("							<th>Porcentage (%)</th>	");
 			out.println("						</tr>");
 			out.println("					</thead>");
@@ -228,10 +226,9 @@ public class ServletPortafolioInversionista extends ServletTemplate{
 				out.println("							<td>"+val.getValor().getFechaExpiracion() +"</td>");
 				out.println("							<td>"+val.getValor().getMercado() +"</td>");
 				out.println("							<td>"+val.getValor().getPrecio() +"</td>");
-				out.println("							<td>"+val.getValor().getNombreCreador() +"</td>");
 				out.println("							<input type=\"hidden\" name=\"inPorta\" value=\"" + codPortafolio + "\"/>");
 				out.println("							<input type=\"hidden\" name=\"val" + i + "\" value=\"" + val.getValor().getCodigo() + "\"/>");
-				out.println("							<td><input type=\"number\" name=\"porcen" + i +  "\" value=\"" +  val.getPorcentajeInversion() + " required></td>");
+				out.println("							<td><input type=\"number\" name=\"porcen" + i +  "\" value=\"" +  val.getPorcentajeInversion() + "\" required></td>");
 				out.println("						</tr>");
 			}
 			out.println("					</tbody>");
@@ -256,7 +253,7 @@ public class ServletPortafolioInversionista extends ServletTemplate{
 			for(int i =0; i< arrayList.size(); i++){
 				ValorValue opcion = arrayList.get(i);
 				
-				String op = opcion.getNombre() + " (" + opcion.getNombreCreador() + ") - Precio: $" + opcion.getPrecio();	
+				String op = opcion.getNombre() + " - Precio: $" + opcion.getPrecio();	
 
 				out.println("					  <option value = \"" + opcion.getCodigo() + "\">" +  op + "</option>");
 			}
