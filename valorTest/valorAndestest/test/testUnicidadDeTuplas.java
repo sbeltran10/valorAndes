@@ -1,4 +1,4 @@
-package valorAndesTest;
+package valorAndestest.test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -8,7 +8,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import junit.framework.TestCase;
-public class testIntegridadDeFKs extends TestCase{
+
+public class testUnicidadDeTuplas extends TestCase{
 	private Connection con;
 	private String usuario;
 	private String clave;
@@ -68,9 +69,9 @@ public class testIntegridadDeFKs extends TestCase{
 		}
 	}
 
-	public void testFKSValor(){		
+	public void testUsuario(){
 		PreparedStatement state = null;
-		String consulta = "INSERT INTO VALOR VALUES ('aa','11-11-2011','p','aa','13','9','dummyInv','dummy','dummy','1','1')";
+		String consulta = "INSERT INTO USUARIO VALUES ('aa','11','aa','prueba','aa','aa','aa','aa','aa','aa','aa')";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = con.prepareStatement(consulta);
@@ -93,108 +94,12 @@ public class testIntegridadDeFKs extends TestCase{
 			}
 		}
 
-		String consulta2 = "INSERT INTO VALOR VALUES ('aa','11-11-2011','p','aa','14','9','aaa','dummy','dummy','1','1')";
+		String consulta2 = "INSERT INTO USUARIO VALUES ('aa','11','aa','prueba','aa','aa','aa','aa','aa','aa','aa')";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = con.prepareStatement(consulta2);
 			state.execute(consulta2);
-
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta2);
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					//Debe pasar por aca.
-				}
-			}
-			try {
-				cerrarConexion(con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		String consulta3 = "INSERT INTO VALOR VALUES ('aa','11-11-2011','p','aa','15','9','dummyInv','aaaa','dummy','1','1')";
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta3);
-			state.execute(consulta3);
-
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta3);
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					//Debe pasar por aca.
-				}
-			}
-			try {
-				cerrarConexion(con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		String consulta4 = "INSERT INTO VALOR VALUES ('aa','11-11-2011','p','aa','16','9','dummyInv','dummy','aaaaa','1','1')";
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta4);
-			state.execute(consulta4);
-
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta4);
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					//Debe pasar por aca.
-				}
-			}
-			try {
-				cerrarConexion(con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		String consulta5 = "INSERT INTO VALOR VALUES ('aa','11-11-2011','p','aa','17','9','dummyInv','dummy','dummy','0','1')";
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta2);
-			state.execute(consulta2);
-
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta2);
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					//Debe pasar por aca.
-				}
-			}
-			try {
-				cerrarConexion(con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		String consulta6 = "INSERT INTO VALOR VALUES ('aa','11-11-2011','p','aa','18','9','dummyInv','dummy','dummy','1','0')";
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta2);
-			state.execute(consulta2);
-
+			
 		}catch(SQLException e){
 			e.printStackTrace();
 			System.out.println(consulta2);
@@ -213,15 +118,13 @@ public class testIntegridadDeFKs extends TestCase{
 			}
 		}
 	}
-	
-	public void testOperacionFKs(){
+	public void testInversionista(){
 		PreparedStatement state = null;
-		String consulta = "INSERT INTO OPERACION VALUES ('1','11-11-2011','11','VENTA','6','aaa','dummyOf','1')";
+		String consulta = "INSERT INTO INVERSIONISTA VALUES ('aa','dummyInt','prueba')";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = con.prepareStatement(consulta);
 			state.execute(consulta);
-
 		}catch(SQLException e){
 			e.printStackTrace();
 			System.out.println(consulta);
@@ -230,7 +133,7 @@ public class testIntegridadDeFKs extends TestCase{
 				try{
 					state.close();
 				}catch(SQLException e){
-					//Debe pasar por aca.
+					fail("No deberia arrojar excepcion.");
 				}
 			}
 			try {
@@ -239,160 +142,13 @@ public class testIntegridadDeFKs extends TestCase{
 				e.printStackTrace();
 			}
 		}
-		
-		String consulta2 = "INSERT INTO OPERACION VALUES ('1','11-11-2011','11','VENTA','6','dummyInv','aaa','1')";
+
+		String consulta2 = "INSERT INTO INVERSIONISTA VALUES ('aa','dummyInt','prueba')";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = con.prepareStatement(consulta2);
 			state.execute(consulta2);
-
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta2);
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					//Debe pasar por aca.
-				}
-			}
-			try {
-				cerrarConexion(con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		String consulta3 = "INSERT INTO OPERACION VALUES ('1','11-11-2011','11','VENTA','6','dummyInv','dummyOf','9')";
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta3);
-			state.execute(consulta3);
-
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta3);
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					//Debe pasar por aca.
-				}
-			}
-			try {
-				cerrarConexion(con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	public void testOferenteFKs(){
-		PreparedStatement state = null;
-		String consulta1 = "INSERT INTO OFERENTE VALUES ('aa','aaaa','dummyInt','1')";
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta1);
-			state.execute(consulta1);
-
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta1);
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					//Debe pasar por aca.
-				}
-			}
-			try {
-				cerrarConexion(con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		String consulta2 = "INSERT INTO OFERENTE VALUES ('aa','prueba','aaaa','1')";
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta2);
-			state.execute(consulta2);
-
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta2);
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					//Debe pasar por aca.
-				}
-			}
-			try {
-				cerrarConexion(con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
-		String consulta3 = "INSERT INTO OFERENTE VALUES ('aa','prueba','dummyInt','0')";
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta3);
-			state.execute(consulta3);
-
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta3);
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					//Debe pasar por aca.
-				}
-			}
-			try {
-				cerrarConexion(con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	public void testInversionistaFKs(){
-		PreparedStatement state = null;
-		String consulta1 = "INSERT INTO INVERSIONISTA VALUES ('aa','aaaaaa','prueba')";
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta1);
-			state.execute(consulta1);
-
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta1);
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					//Debe pasar por aca.
-				}
-			}
-			try {
-				cerrarConexion(con);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		String consulta2 = "INSERT INTO INVERSIONISTA VALUES ('aa','dummyInt','aaaaaaa')";
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta2);
-			state.execute(consulta2);
-
+			
 		}catch(SQLException e){
 			e.printStackTrace();
 			System.out.println(consulta2);
@@ -411,17 +167,334 @@ public class testIntegridadDeFKs extends TestCase{
 			}
 		}
 	}
-	public void testIntermediarioFKs(){
+	public void testIntermediario(){
 		PreparedStatement state = null;
-		String consulta1 = "INSERT INTO INTERMEDIARIO VALUES ('aa','aa','aaa')";
+		String consulta = "INSERT INTO INTERMEDIARIO VALUES ('aa','aa','prueba')";
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
-			state = con.prepareStatement(consulta1);
-			state.execute(consulta1);
-
+			state = con.prepareStatement(consulta);
+			state.execute(consulta);
 		}catch(SQLException e){
 			e.printStackTrace();
-			System.out.println(consulta1);
+			System.out.println(consulta);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					fail("No deberia arrojar excepcion.");
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		String consulta2 = "INSERT INTO INTERMEDIARIO VALUES ('aa','11','prueba')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta2);
+			state.execute(consulta2);
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta2);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					//Debe pasar por aca.
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public void testOferente(){
+		PreparedStatement state = null;
+		String consulta = "INSERT INTO OFERENTE VALUES ('aa','prueba','dummyInt','1')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					fail("No deberia arrojar excepcion.");
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		String consulta2 = "INSERT INTO OFERENTE VALUES ('aa','prueba','dummyInt','1')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta2);
+			state.execute(consulta2);
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta2);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					//Debe pasar por aca.
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public void testOperacion(){
+		PreparedStatement state = null;
+		String consulta = "INSERT INTO OPERACION VALUES ('1','11-11-2011','11','VENTA','5','dummyInv','dummyOf','1')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					fail("No deberia arrojar excepcion.");
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		String consulta2 = "INSERT INTO OPERACION VALUES ('1','11-11-2011','11','VENTA','5','dummyInv','dummyOf','1')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta2);
+			state.execute(consulta2);
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta2);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					//Debe pasar por aca.
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public void testOperacionesInt(){
+		PreparedStatement state = null;
+		String consulta = "INSERT INTO OPERACIONES_INT VALUES ('5','prueba')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					fail("No deberia arrojar excepcion.");
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		String consulta2 = "INSERT INTO OPERACIONES_INT VALUES ('5','prueba')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta2);
+			state.execute(consulta2);
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta2);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					//Debe pasar por aca.
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public void testTipoValor(){
+		PreparedStatement state = null;
+		String consulta = "INSERT INTO TIPO_VALOR VALUES ('aa','aa','6')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					fail("No deberia arrojar excepcion.");
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		String consulta2 = "INSERT INTO TIPO_VALOR VALUES ('aa','aa','6')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta2);
+			state.execute(consulta2);
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta2);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					//Debe pasar por aca.
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public void testRentabilidad(){
+		PreparedStatement state = null;
+		String consulta = "INSERT INTO RENTABILIDAD VALUES ('aa','aa','aa','aa','aa','3')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					fail("No deberia arrojar excepcion.");
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		String consulta2 = "INSERT INTO RENTABILIDAD VALUES ('aa','aa','aa','aa','aa','3')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta2);
+			state.execute(consulta2);
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta2);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					//Debe pasar por aca.
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public void testValor(){
+		PreparedStatement state = null;
+		String consulta = "INSERT INTO VALOR VALUES ('aa','11-11-2011','p','aa','12','9','dummyInv','dummy','dummy','1','1')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					fail("No deberia arrojar excepcion.");
+				}
+			}
+			try {
+				cerrarConexion(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		String consulta2 = "INSERT INTO VALOR VALUES ('aa','11-11-2011','p','aa','12','9','dummyInv','dummy','dummy','1','1')";
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = con.prepareStatement(consulta2);
+			state.execute(consulta2);
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta2);
 		}finally{
 			if(state != null){
 				try{
