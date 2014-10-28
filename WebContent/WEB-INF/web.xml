@@ -89,6 +89,21 @@
     <servlet-name>ServletPortafolioInversionista</servlet-name>
     <servlet-class>valorAndes.servlets.ServletPortafolioInversionista</servlet-class>
   </servlet>
+  
+   <servlet>
+    <servlet-name>ServletConsultaMovimiento</servlet-name>
+    <servlet-class>valorAndes.servlets.ServletConsultaMovimiento</servlet-class>
+  </servlet>
+  
+   <servlet>
+    <servlet-name>ServletConsultaPortafolio</servlet-name>
+    <servlet-class>valorAndes.servlets.ServletConsultaPortafolio</servlet-class>
+  </servlet>
+  
+   <servlet>
+    <servlet-name>ServletConsultaValorAlt</servlet-name>
+    <servlet-class>valorAndes.servlets.ServletConsultaValorAlt</servlet-class>
+  </servlet>
 
   
   <!-- MAPPING -->
@@ -170,6 +185,21 @@
   <servlet-mapping>
     <servlet-name>ServletPortafolioInversionista</servlet-name>
     <url-pattern>/portafolioInver.htm</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>ServletConsultaOperacion</servlet-name>
+    <url-pattern>/consultaMov.htm</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>ServletConsultaOperacion</servlet-name>
+    <url-pattern>/consultaPorta.htm</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>ServletConsultaOperacion</servlet-name>
+    <url-pattern>/consultaValAlt.htm</url-pattern>
   </servlet-mapping>
   
 </web-app>

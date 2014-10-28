@@ -41,7 +41,16 @@ public class ServletPortal extends ServletTemplate{
 		out.println("		</li> <br>");
 		out.println("		<li>");
 		out.println("			<a href=\"consultaOp.htm\" class=\"btn btn-default btn-lg\"><span class=\"network-name\">Consulta de Operaciones por Usuario</span></a>");
-		out.println("		</li>");
+		out.println("		</li><br>");
+		out.println("		<li>");
+		out.println("			<a href=\"consultaMov.htm\" class=\"btn btn-default btn-lg\"><span class=\"network-name\">Consulta de Movimientos de Valores</span></a>");
+		out.println("		</li><br>");
+		out.println("		<li>");
+		out.println("			<a href=\"consultaPorta.htm\" class=\"btn btn-default btn-lg\"><span class=\"network-name\">Consulta de Portafolios</span></a>");
+		out.println("		</li><br>");
+		out.println("		<li>");
+		out.println("			<a href=\"consultaValAlt.htm\" class=\"btn btn-default btn-lg\"><span class=\"network-name\">Consulta de Valores en Portafolios</span></a>");
+		out.println("		</li><br>");
 
 		if(vaLog==1 || vaLog==4){
 			out.println("		<br><li>");
