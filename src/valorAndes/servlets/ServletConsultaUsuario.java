@@ -564,5 +564,6 @@ public class ServletConsultaUsuario  extends ServletTemplate{
 		out.println("			</div>");
 		out.println("		</div> ");
 	}
-
+	
+	
 }
