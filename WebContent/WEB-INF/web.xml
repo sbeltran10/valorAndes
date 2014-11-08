@@ -188,17 +188,17 @@
   </servlet-mapping>
   
    <servlet-mapping>
-    <servlet-name>ServletConsultaOperacion</servlet-name>
+    <servlet-name>ServletConsultaMovimiento</servlet-name>
     <url-pattern>/consultaMov.htm</url-pattern>
   </servlet-mapping>
   
    <servlet-mapping>
-    <servlet-name>ServletConsultaOperacion</servlet-name>
+    <servlet-name>ServletConsultaPortafolio</servlet-name>
     <url-pattern>/consultaPorta.htm</url-pattern>
   </servlet-mapping>
   
    <servlet-mapping>
-    <servlet-name>ServletConsultaOperacion</servlet-name>
+    <servlet-name>ServletConsultaValorAlt</servlet-name>
     <url-pattern>/consultaValAlt.htm</url-pattern>
   </servlet-mapping>
   

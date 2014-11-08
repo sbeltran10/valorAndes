@@ -53,7 +53,7 @@ public class ServletPortal extends ServletTemplate{
 		out.println("		</li><br>");
 
 		if(vaLog==1 || vaLog==4){
-			out.println("		<br><li>");
+			out.println("		<li>");
 			out.println("			<a href=\"consultaUsu.htm\" class=\"btn btn-default btn-lg\"><span class=\"network-name\">Consultar Usuarios</span></a>");
 			out.println("		</li> <br>");
 		}

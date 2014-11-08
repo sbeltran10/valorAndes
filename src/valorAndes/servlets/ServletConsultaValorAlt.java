@@ -26,12 +26,11 @@ public class ServletConsultaValorAlt extends ServletTemplate{
 		out.println("				<h2>Consulta de Valores en Portafolios</h2> ");
 		out.println("				Ingrese el identificador de un valor para averiguar en que portafolios ha estado involucrado.<hr>");
 		out.println("					<form role=\"form\">");
-
 		out.println("						<div class=\"col-lg-3\">");
 		out.println("							<div class=\"form-group\">");
 		out.println("								<label>Id Valor</label>");
 		out.println("								<div class=\"input-group\">");
-		out.println("									<input type=\"text\" class=\"form-control\" id=\"idValor\" name=\"idValor\" >");
+		out.println("									<input type=\"text\" class=\"form-control\" id=\"idValor\" name=\"idValor\" required>");
 		out.println("									<span class=\"input-group-addon\"></span>");
 		out.println("								</div>");
 		out.println("							</div>");

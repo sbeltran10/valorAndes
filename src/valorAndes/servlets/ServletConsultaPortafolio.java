@@ -45,6 +45,8 @@ public class ServletConsultaPortafolio extends ServletTemplate{
 		out.println("									<span class=\"input-group-addon\"></span>");
 		out.println("								</div>");
 		out.println("							</div>");
+		out.println("						</div>");
+		out.println("						<div class=\"col-lg-3\">		");
 		out.println("							<div class=\"form-group\">");
 		out.println("								<label>Operaciones con valor mayor a: </label>");
 		out.println("								<div class=\"input-group\">");
