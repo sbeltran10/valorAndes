@@ -1990,6 +1990,39 @@ public class ConsultaDAO {
 			}
 			return rta;
 		}
+		
+	//------------------------------------------------------------------------
+	//Consultas Iteracion 4
+	//------------------------------------------------------------------------
+		
+		//No estoy seguro de que tipo de arreglo retornan los metodos, no estoy usando los metodos en ninguna clase entonces puede
+		//cambiarlos como quiera, evidentemente los filtros siempre debe tenerlos en cuenta.
+		
+		/**
+		 * 
+		 */
+		public void consultarMovimientos(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad,
+				String tipoOperacion, String correoOferente, String correoIntermediario, String correoInversionista){
+			//Los parametros fechaInicial, fechaFinal e incluirFiltros son obligatorios, es decir siempre seran diferentes de "---"
+			//Los demas parametros pueden ser "---" si son vacios/
+			//El parametro incluirFiltros determina si se buscaran valores que cumplan con los filtros (true si cumplen, false no cumplen)
+			//Las fechas siempre seran incluidas sin importar el parametro incluirFiltros
+		}
+		
+		/**
+		 * 
+		 */
+		public void consultarPortafolios(String tipoValor, int valorMayor){
+			//Los parametros siempre son diferentes de "---"
+		}
+		
+		/**
+		 * 
+		 * @param idValor
+		 */
+		public void consultarValorAlt(String idValor){
+			//El parametro siempre es diferente de "---"
+		}
 	//------------------------------------------------------------------------
 	//GENERADOR DE IDS.
 	//------------------------------------------------------------------------
