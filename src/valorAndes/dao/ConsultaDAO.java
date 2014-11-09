@@ -2015,9 +2015,10 @@ public class ConsultaDAO {
 		if(incluirFiltros){
 			consulta = "SELECT * FROM (SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')) JOIN VALOR ON COD_VALOR = VALOR_ID";
 			//CORE: SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date(fechaInicial,'DD/MM/YYYY') AND FECHA_ORDEN < to_date(fechaFinal,'DD/MM/YYYY')
-			if(tipoOperacion != "---")consulta = consulta + " AND TIPO_COMPRA_VENTA = '"+tipoOperacion+"'";
-			if(correoOfInv != "---")consulta = consulta + " AND COD_SOLICITANTE = '"+correoOfInv+"'";
-			if(nomValor != "---")consulta = consulta + " AND VALOR.NOMBRE = '"+nomValor+"'";
+			if(tipoOperacion != "---")consulta = consulta + " WHERE TIPO_COMPRA_VENTA = '"+tipoOperacion+"'";
+			if(correoOfInv != "---" && tipoOperacion != "---")consulta = consulta + " AND COD_SOLICITANTE = '"+correoOfInv+"'";
+			if(correoOfInv != "---" && tipoOperacion == "---")consulta = consulta + " WHERE COD_SOLICITANTE = '"+correoOfInv+"'";
+			consulta = (nomValor != "---" && tipoOperacion == "---" && correoOfInv == "---")?consulta + " WHERE VALOR.NOMBRE = '"+nomValor+"'": consulta + " AND VALOR.NOMBRE = '"+nomValor+"'";
 			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO = '"+correoIntermediario+"'";
 			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = '"+nomValor+"') JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = '"+tipoValor+"'";
 			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = '"+tipoValor+"'";
@@ -2026,9 +2027,9 @@ public class ConsultaDAO {
 		}else{
 			consulta = "SELECT * FROM (SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')) JOIN VALOR ON COD_VALOR = VALOR_ID";
 			//CORE: SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date(fechaInicial,'DD/MM/YYYY') AND FECHA_ORDEN < to_date(fechaFinal,'DD/MM/YYYY')
-			if(tipoOperacion != "---")consulta = consulta + " AND TIPO_COMPRA_VENTA != '"+tipoOperacion+"'";
-			if(correoOfInv != "---")consulta = consulta + " AND COD_SOLICITANTE != '"+correoOfInv+"'";
-			if(nomValor != "---")consulta =  " AND NOMBRE != '"+nomValor+"'";
+			if(tipoOperacion != "---")consulta = consulta + " WHERE TIPO_COMPRA_VENTA != '"+tipoOperacion+"'";
+			consulta = (correoOfInv != "---" && tipoOperacion == "---")?consulta + " WHERE COD_SOLICITANTE != '"+correoOfInv+"'":consulta + " AND COD_SOLICITANTE != '"+correoOfInv+"'";
+			consulta = (nomValor != "---" && tipoOperacion == "---" && correoOfInv == "---")?consulta + " WHERE NOMBRE != '"+nomValor+"'":consulta +  " AND NOMBRE != '"+nomValor+"'";
 			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO != '"+correoIntermediario+"'";
 			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != '"+nomValor+"') JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != '"+tipoValor+"'";
 			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != '"+tipoValor+"'";
