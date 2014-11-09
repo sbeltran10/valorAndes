@@ -2015,25 +2015,25 @@ public class ConsultaDAO {
 		if(incluirFiltros){
 			consulta = "SELECT * FROM (SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')) JOIN VALOR ON COD_VALOR = VALOR_ID";
 			//CORE: SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date(fechaInicial,'DD/MM/YYYY') AND FECHA_ORDEN < to_date(fechaFinal,'DD/MM/YYYY')
-			if(tipoOperacion != "---")consulta = consulta + " AND TIPO_COMPRA_VENTA = "+tipoOperacion;
-			if(correoOfInv != "---")consulta = consulta + " AND COD_SOLICITANTE = "+correoOfInv;
-			if(nomValor != "---")consulta = consulta + " AND VALOR.NOMBRE = "+nomValor;
-			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO = "+correoIntermediario;
-			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = "+nomValor+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = "+tipoValor;
-			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = "+tipoValor;
-			if(tipoRentabilidad != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = "+nomValor+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = "+tipoRentabilidad;
-			if(tipoRentabilidad != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = "+tipoRentabilidad;
+			if(tipoOperacion != "---")consulta = consulta + " AND TIPO_COMPRA_VENTA = '"+tipoOperacion+"'";
+			if(correoOfInv != "---")consulta = consulta + " AND COD_SOLICITANTE = '"+correoOfInv+"'";
+			if(nomValor != "---")consulta = consulta + " AND VALOR.NOMBRE = '"+nomValor+"'";
+			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO = '"+correoIntermediario+"'";
+			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = '"+nomValor+"') JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = '"+tipoValor+"'";
+			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = '"+tipoValor+"'";
+			if(tipoRentabilidad != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = '"+nomValor+"') JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = '"+tipoRentabilidad+"'";
+			if(tipoRentabilidad != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = '"+tipoRentabilidad+"'";
 		}else{
 			consulta = "SELECT * FROM (SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')) JOIN VALOR ON COD_VALOR = VALOR_ID";
 			//CORE: SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date(fechaInicial,'DD/MM/YYYY') AND FECHA_ORDEN < to_date(fechaFinal,'DD/MM/YYYY')
-			if(tipoOperacion != "---")consulta = consulta + " AND TIPO_COMPRA_VENTA != "+tipoOperacion;
-			if(correoOfInv != "---")consulta = consulta + " AND COD_SOLICITANTE != "+correoOfInv;
-			if(nomValor != "---")consulta =  " AND NOMBRE != "+nomValor;
-			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO != "+correoIntermediario;
-			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != "+nomValor+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != "+tipoValor;
-			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != "+tipoValor;
-			if(tipoRentabilidad != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != "+nomValor+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE != "+tipoRentabilidad;
-			if(tipoRentabilidad != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE != "+tipoRentabilidad;
+			if(tipoOperacion != "---")consulta = consulta + " AND TIPO_COMPRA_VENTA != '"+tipoOperacion+"'";
+			if(correoOfInv != "---")consulta = consulta + " AND COD_SOLICITANTE != '"+correoOfInv+"'";
+			if(nomValor != "---")consulta =  " AND NOMBRE != '"+nomValor+"'";
+			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO != '"+correoIntermediario+"'";
+			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != '"+nomValor+"') JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != '"+tipoValor+"'";
+			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != '"+tipoValor+"'";
+			if(tipoRentabilidad != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != '"+nomValor+"') JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE != '"+tipoRentabilidad+"'";
+			if(tipoRentabilidad != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE != '"+tipoRentabilidad+"'";
 		}
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
@@ -2073,7 +2073,7 @@ public class ConsultaDAO {
 	public ArrayList<PortafolioValue> consultarPortafolios(String tipoValor, int valorMayor) throws SQLException{
 		ArrayList<PortafolioValue> rta = new ArrayList<PortafolioValue>();
 		PreparedStatement state = null;
-		String consulta = "SELECT * FROM (SELECT * FROM (SELECT * FROM PORTAFOLIO JOIN PORTAFOLIO_VALOR ON PORTAFOLIO_ID = COD_PORTAFOLIO) JOIN (SELECT VALOR_ID FROM VALOR JOIN TIPO_VALOR ON VALOR_ID = COD_VALOR WHERE TIPO_VALOR.NOMBRE = "+tipoValor+") ON COD_VALOR = VALOR_ID) JOIN OPERACION ON VALOR_ID = COD_VALOR WHERE CANTIDAD = "+valorMayor;	
+		String consulta = "SELECT * FROM (SELECT * FROM (SELECT * FROM PORTAFOLIO JOIN PORTAFOLIO_VALOR ON PORTAFOLIO_ID = COD_PORTAFOLIO) JOIN (SELECT VALOR_ID FROM VALOR JOIN TIPO_VALOR ON VALOR_ID = COD_VALOR WHERE TIPO_VALOR.NOMBRE = '"+tipoValor+"') ON COD_VALOR = VALOR_ID) JOIN OPERACION ON VALOR_ID = COD_VALOR WHERE CANTIDAD = "+valorMayor;	
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
@@ -2112,7 +2112,7 @@ public class ConsultaDAO {
 		//El parametro siempre es diferente de "---"
 		ArrayList<PortafolioValue> rta = new ArrayList<PortafolioValue>();
 		PreparedStatement state = null;
-		String consulta = "SELECT * FROM PORTAFOLIO_VALOR JOIN PORTAFOLIO ON COD_PORTAFOLIO = PORTAFOLIO_ID WHERE COD_VALOR = "+idValor;	
+		String consulta = "SELECT * FROM PORTAFOLIO_VALOR JOIN PORTAFOLIO ON COD_PORTAFOLIO = PORTAFOLIO_ID WHERE COD_VALOR = '"+idValor+"'";	
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
