@@ -2074,7 +2074,7 @@ public class ConsultaDAO {
 	public ArrayList<PortafolioValue> consultarPortafolios(String tipoValor, int valorMayor) throws SQLException{
 		ArrayList<PortafolioValue> rta = new ArrayList<PortafolioValue>();
 		PreparedStatement state = null;
-		String consulta = "SELECT * FROM (SELECT * FROM (SELECT * FROM PORTAFOLIO JOIN PORTAFOLIO_VALOR ON PORTAFOLIO_ID = COD_PORTAFOLIO) JOIN (SELECT VALOR_ID FROM VALOR JOIN TIPO_VALOR ON VALOR_ID = COD_VALOR WHERE TIPO_VALOR.NOMBRE = '"+tipoValor+"') ON COD_VALOR = VALOR_ID) JOIN OPERACION ON VALOR_ID = COD_VALOR WHERE CANTIDAD = "+valorMayor;	
+		String consulta = "SELECT * FROM (SELECT * FROM (SELECT * FROM PORTAFOLIO JOIN PORTAFOLIO_VALOR ON PORTAFOLIO_ID = COD_PORTAFOLIO) JOIN (SELECT VALOR_ID FROM VALOR JOIN TIPO_VALOR ON VALOR_ID = COD_VALOR WHERE TIPO_VALOR.NOMBRE = '"+tipoValor+"') ON COD_VALOR = VALOR_ID) JOIN OPERACION ON VALOR_ID = COD_VALOR WHERE CANTIDAD < "+valorMayor;	
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
