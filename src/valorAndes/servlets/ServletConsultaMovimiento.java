@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import valorAndes.fachada.ValorAndes;
+import valorAndes.vos.OperacionValue;
 
 public class ServletConsultaMovimiento extends ServletTemplate{
 	private static final long serialVersionUID = 1L;
@@ -108,15 +109,6 @@ public class ServletConsultaMovimiento extends ServletTemplate{
 		out.println("						</div>");
 		out.println("						<div class=\"col-lg-3\">");
 		out.println("							<div class=\"form-group\">");
-		out.println("								<label>Correo Oferente</label>");
-		out.println("								<div class=\"input-group\">");
-		out.println("									<input type=\"email\" class=\"form-control\" id=\"ofer\" name=\"ofer\" >");
-		out.println("									<span class=\"input-group-addon\"></span>");
-		out.println("								</div>");
-		out.println("							</div>");
-		out.println("						</div>");
-		out.println("						<div class=\"col-lg-3\">");
-		out.println("							<div class=\"form-group\">");
 		out.println("								<label>Correo Intermediario</label>");
 		out.println("								<div class=\"input-group\">");
 		out.println("									<input type=\"email\" class=\"form-control\" id=\"inter\" name=\"inter\" >");
@@ -126,7 +118,7 @@ public class ServletConsultaMovimiento extends ServletTemplate{
 		out.println("						</div>");
 		out.println("						<div class=\"col-lg-3\">");
 		out.println("							<div class=\"form-group\">");
-		out.println("								<label>Correo Inversionista</label>");
+		out.println("								<label>Correo Solicitante</label>");
 		out.println("								<div class=\"input-group\">");
 		out.println("									<input type=\"email\" class=\"form-control\" id=\"inver\" name=\"inver\" >");
 		out.println("									<span class=\"input-group-addon\"></span>");
@@ -142,22 +134,44 @@ public class ServletConsultaMovimiento extends ServletTemplate{
 
 		String fechaIni = request.getParameter("fechaIni");
 		
-		String fechaFin = request.getParameter("fechaFin");
-		
 		if(fechaIni!=null){
 
-			String ofer = request.getParameter("ofer");
-			if(ofer == "")
-				ofer="---";
+			String fechaFin = request.getParameter("fechaFin");
+			
+			String[] arFechas1 = fechaIni.split("-");
+			fechaIni = arFechas1[2] + "-" + arFechas1[1] +  "-" + arFechas1[0];
+			
+			String[] arFechas2 = fechaFin.split("-");
+			fechaFin = arFechas1[2] + "-" + arFechas1[1] +  "-" + arFechas1[0];
+				
+			String incluir = request.getParameter("incluirFil");
+			
+			boolean incluirFiltros = false;
+			if(incluir.equals("si")) incluirFiltros = true;
+			
+			String tipoVal = request.getParameter("tipoVal");
+			
+			String tipoRent = request.getParameter("tipoRent");
+			
+			String tipoMov = request.getParameter("tipoMov");
+			
+			String val = request.getParameter("val");
+			if(val == "")
+				val="---";
 
-			String inter = request.getParameter("inver");
+			String inter = request.getParameter("inter");
 			if(inter == "")
 				inter="---";
 
-			String inver = request.getParameter("inter");
+			String inver = request.getParameter("inver");
 			if(inver == "")
 				inver="---";
 
+			try {
+				escribirResultados(out, ValorAndes.getInstance().consultarMovimientos(fechaIni, fechaFin, incluirFiltros, val, tipoVal, tipoRent, tipoMov, inver, inter));
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 
 		}
 		out.println("	</div> ");
@@ -198,12 +212,12 @@ public class ServletConsultaMovimiento extends ServletTemplate{
 	/**
 	 * Se muestran estos resultados si el tipo de usuario a consultar es Oferente
 	 */
-	public void escribirResultados(PrintWriter out, ArrayList<String[]> usus, String tipoUs){
+	public void escribirResultados(PrintWriter out, ArrayList<OperacionValue> opers){
 
-		if(usus.isEmpty()){
+		if(opers.isEmpty()){
 			out.println("			<div class=\"container\">");
 			out.println("				<div class=\"panel panel-info\">");
-			out.println("					<div class=\"panel-heading\">No se encontraron Usuarios</div>");
+			out.println("					<div class=\"panel-heading\">No se encontraron Resultados</div>");
 		}
 
 		else{
@@ -213,29 +227,24 @@ public class ServletConsultaMovimiento extends ServletTemplate{
 			out.println("					<table class=\"table table-striped\">");
 			out.println("						<thead>");
 			out.println("							<tr>");
-			out.println("								<th>Correo</th>");
-			out.println("								<th>Nombre</th>");
-			out.println("								<th>Telefono</th>");
-			out.println("								<th>Pais</th>");
-			out.println("								<th>Ciudad</th>	");
-			out.println("								<th>Id Representante</th>	");
-			out.println("								<th>Ver informacion</th>	");
+			out.println("								<th>Fecha movimiento</th>");
+			out.println("								<th>Tipo de movimiento</th>");
+			out.println("								<th>Nombre del valor</th>");
+			out.println("								<th>Correo Solicitante</th>");
+			out.println("								<th>Cantidad de operacion</th>	");
 			out.println("							</tr>");
 			out.println("						</thead>");
 			out.println("						<tbody>");
 
-			for(int i=0; i<usus.size();i++){
-				String[] us = usus.get(i);
+			for(int i=0; i<opers.size();i++){
+				OperacionValue op = opers.get(i);
 
 				out.println("							<tr><form>");
-				out.println("								<td>" + us[0] + "</td>");
-				out.println("								<td>" + us[1] + "</td>");
-				out.println("								<td>" + us[2] + "</td>");
-				out.println("								<td>" + us[3] + "</td>");
-				out.println("								<td>" + us[4] + "</td>");
-				out.println("								<td>" + us[5] + "</td>");
-				out.println("								<input type=\"hidden\" name=\"opid\" value=\"" + us[0] + "-" + tipoUs + "\"/>");
-				out.println("								<td><button type=\"submit2\"  class=\"btn btn-default\" name=\"us\">Ver informacion</button></td>");
+				out.println("								<td>" + op.getFecha() + "</td>");
+				out.println("								<td>" + op.getTipoCompraVenta() + "</td>");
+				out.println("								<td>" + op.getNomValor() + "</td>");
+				out.println("								<td>" + op.getCorSolicitante() + "</td>");
+				out.println("								<td>" + op.getCantidad() + "</td>");
 				out.println("							</tr></form>");
 			}
 

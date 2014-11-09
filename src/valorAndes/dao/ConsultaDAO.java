@@ -1995,9 +1995,6 @@ public class ConsultaDAO {
 	//Consultas Iteracion 4
 	//------------------------------------------------------------------------
 
-	//No estoy seguro de que tipo de arreglo retornan los metodos, no estoy usando los metodos en ninguna clase entonces puede
-	//cambiarlos como quiera, evidentemente los filtros siempre debe tenerlos en cuenta.
-
 	/**
 	 * Solucion a los RFC de movimiento de valores
 	 * Los parametros fechaInicial, fechaFinal e incluirFiltros son obligatorios, es decir siempre seran diferentes de "---"
@@ -2040,6 +2037,7 @@ public class ConsultaDAO {
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
+			System.out.println(consulta);
 			while(rs.next()){
 				OperacionValue op = new OperacionValue();
 				op.setFecha(rs.getDate("FECHA_ORDEN"));
@@ -2079,6 +2077,7 @@ public class ConsultaDAO {
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
+			System.out.println(consulta);
 			while(rs.next()){
 				PortafolioValue op = new PortafolioValue();
 				op.setCorreoInter(rs.getString("COD_INTERMEDIARIO"));
@@ -2118,6 +2117,7 @@ public class ConsultaDAO {
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
+			System.out.println(consulta);
 			while(rs.next()){
 				PortafolioValue op = new PortafolioValue();
 				op.setCorreoInter(rs.getString("COD_INTERMEDIARIO"));

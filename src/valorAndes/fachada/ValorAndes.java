@@ -396,4 +396,48 @@ public class ValorAndes {
 	public ArrayList<ValorPorcentajeInversionValue> darValoresInPortafolio(String codInv, int codPortafolio) throws SQLException{
 		return dao.darValoresInPortafolio(codInv, codPortafolio);
 	}
+	
+	//---------------------------------------
+	//Iteracion 4
+	//---------------------------------------
+	
+	/**
+	 * Retorna los movimientos de un valor teniendo en cuenta unos parametros
+	 * @param fechaInicial
+	 * @param fechaFinal
+	 * @param incluirFiltros
+	 * @param nomValor
+	 * @param tipoValor
+	 * @param tipoRentabilidad
+	 * @param tipoOperacion
+	 * @param correoOfInv
+	 * @param correoIntermediario
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<OperacionValue> consultarMovimientos(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad,
+			String tipoOperacion, String correoOfInv, String correoIntermediario) throws SQLException{
+		return dao.consultarMovimientos(fechaInicial, fechaFinal, incluirFiltros, nomValor, tipoValor, tipoRentabilidad, tipoOperacion, correoOfInv, correoIntermediario);
+	}
+	
+	/**
+	 * Retorna los portafolios que cumplan con el tipo de valor y una cantidad
+	 * @param tipoValor
+	 * @param valorMayor
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<PortafolioValue> consultarPortafolios(String tipoValor, int valorMayor) throws SQLException{
+		return dao.consultarPortafolios(tipoValor, valorMayor);
+	}
+	
+	/**
+	 * Consulta los portafolios en donde a estado un valor
+	 * @param idValor
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<PortafolioValue> consultarValorAlt(String idValor) throws SQLException{
+		return dao.consultarValorAlt(idValor);
+	}
 }

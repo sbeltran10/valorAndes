@@ -63,7 +63,13 @@ public class ServletConsultaPortafolio extends ServletTemplate{
 
 		String tipoVal = request.getParameter("tipoVal");
 		if(tipoVal!=null){
-
+			int cant = Integer.parseInt(request.getParameter("valop"));
+			
+			try {
+				escribirResultados(out, ValorAndes.getInstance().consultarPortafolios(tipoVal, cant));
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		out.println("	</div> ");
 	}
@@ -97,7 +103,7 @@ public class ServletConsultaPortafolio extends ServletTemplate{
 		if(porta.isEmpty()){
 			out.println("			<div class=\"container\">");
 			out.println("				<div class=\"panel panel-info\">");
-			out.println("					<div class=\"panel-heading\">No se encontraron portafolios que cumplieran con los parametros de busqueda</div>");
+			out.println("					<div class=\"panel-heading\">No se encontraron portafolios</div>");
 		}
 
 		else{
@@ -110,7 +116,6 @@ public class ServletConsultaPortafolio extends ServletTemplate{
 			out.println("								<th>Nombre</th>");
 			out.println("								<th>Nivel de Riesgo</th>");
 			out.println("								<th>Intermediario Asociado</th>");
-			out.println("								<th>Cantidad de valores en portafolio</th>");
 			out.println("							</tr>");
 			out.println("						</thead>");
 			out.println("						<tbody>");
@@ -122,7 +127,6 @@ public class ServletConsultaPortafolio extends ServletTemplate{
 				out.println("								<td>" + port.getNombre() + "</td>");
 				out.println("								<td>" + port.getTipoRiesgo() + "</td>");
 				out.println("								<td>" + port.getCorreoInter() + "</td>");
-				out.println("								<td>" + port.getValores().size() + "</td>");
 				out.println("							</tr></form>");
 			}
 
