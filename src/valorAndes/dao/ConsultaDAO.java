@@ -2010,7 +2010,7 @@ public class ConsultaDAO {
 		PreparedStatement state = null;
 		String consulta = "";
 		if(incluirFiltros){
-			consulta = "SELECT * FROM (SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')) JOIN VALOR ON COD_VALOR = VALOR_ID";
+			consulta = "SELECT * FROM (SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date('"+fechaInicial+"','DD/MM/YYYY') AND FECHA_ORDEN < to_date('"+fechaFinal+"','DD/MM/YYYY')) JOIN VALOR ON COD_VALOR = VALOR_ID";
 			//CORE: SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date(fechaInicial,'DD/MM/YYYY') AND FECHA_ORDEN < to_date(fechaFinal,'DD/MM/YYYY')
 			if(!tipoOperacion.equals( "---" ))consulta = consulta + " WHERE TIPO_COMPRA_VENTA = '"+tipoOperacion+"'";
 			if(!correoOfInv.equals( "---" ) && !tipoOperacion.equals( "---"))consulta = consulta + " AND COD_SOLICITANTE = '"+correoOfInv+"'";
@@ -2022,7 +2022,7 @@ public class ConsultaDAO {
 			if(!tipoRentabilidad.equals( "---" ) && nomValor.equals( "---" ))consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID) JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = '"+tipoRentabilidad+"'";
 			if(!tipoRentabilidad.equals( "---" ) && !nomValor.equals( "---" ))consulta = "SELECT * FROM ("+consulta+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = '"+tipoRentabilidad+"'";
 		}else{
-			consulta = "SELECT * FROM (SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')) JOIN VALOR ON COD_VALOR = VALOR_ID";
+			consulta = "SELECT * FROM (SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date('"+fechaInicial+"','DD/MM/YYYY') AND FECHA_ORDEN < to_date('"+fechaFinal+"','DD/MM/YYYY')) JOIN VALOR ON COD_VALOR = VALOR_ID";
 			//CORE: SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date(fechaInicial,'DD/MM/YYYY') AND FECHA_ORDEN < to_date(fechaFinal,'DD/MM/YYYY')
 			if(!tipoOperacion .equals( "---" ))consulta = consulta + " WHERE TIPO_COMPRA_VENTA != '"+tipoOperacion+"'";
 			consulta = (!correoOfInv .equals( "---" ) && tipoOperacion .equals( "---"))?consulta + " WHERE COD_SOLICITANTE != '"+correoOfInv+"'":consulta + " AND COD_SOLICITANTE != '"+correoOfInv+"'";

@@ -142,7 +142,7 @@ public class ServletConsultaMovimiento extends ServletTemplate{
 			fechaIni = arFechas1[2] + "-" + arFechas1[1] +  "-" + arFechas1[0];
 			
 			String[] arFechas2 = fechaFin.split("-");
-			fechaFin = arFechas1[2] + "-" + arFechas1[1] +  "-" + arFechas1[0];
+			fechaFin = arFechas2[2] + "-" + arFechas2[1] +  "-" + arFechas2[0];
 				
 			String incluir = request.getParameter("incluirFil");
 			
