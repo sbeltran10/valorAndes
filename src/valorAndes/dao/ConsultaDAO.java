@@ -2004,30 +2004,32 @@ public class ConsultaDAO {
 	 * Los demas parametros pueden ser "---" si son vacios/
 	 * El parametro incluirFiltros determina si se buscaran valores que cumplan con los filtros (true si cumplen, false no cumplen)
 	 * Las fechas siempre seran incluidas sin importar el parametro incluirFiltros	
+	 * @return 
 	 * @throws SQLException 
 	 */
-	public void consultarMovimientos(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad,
+	public ArrayList<OperacionValue> consultarMovimientos(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad,
 			String tipoOperacion, String correoOfInv, String correoIntermediario) throws SQLException{
+		ArrayList<OperacionValue> rta = new ArrayList<OperacionValue>();
 		PreparedStatement state = null;
 		String consulta = "";
 		if(incluirFiltros){
-			consulta = "SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')";
+			consulta = "SELECT * FROM (SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')) JOIN VALOR ON COD_VALOR = VALOR_ID";
 			//CORE: SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date(fechaInicial,'DD/MM/YYYY') AND FECHA_ORDEN < to_date(fechaFinal,'DD/MM/YYYY')
 			if(tipoOperacion != "---")consulta = consulta + " AND TIPO_COMPRA_VENTA = "+tipoOperacion;
 			if(correoOfInv != "---")consulta = consulta + " AND COD_SOLICITANTE = "+correoOfInv;
+			if(nomValor != "---")consulta = consulta + " AND VALOR.NOMBRE = "+nomValor;
 			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO = "+correoIntermediario;
-			if(nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = "+nomValor;
 			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = "+nomValor+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = "+tipoValor;
 			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = "+tipoValor;
 			if(tipoRentabilidad != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = "+nomValor+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = "+tipoRentabilidad;
 			if(tipoRentabilidad != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = "+tipoRentabilidad;
 		}else{
-			consulta = "SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')";
+			consulta = "SELECT * FROM (SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')) JOIN VALOR ON COD_VALOR = VALOR_ID";
 			//CORE: SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date(fechaInicial,'DD/MM/YYYY') AND FECHA_ORDEN < to_date(fechaFinal,'DD/MM/YYYY')
 			if(tipoOperacion != "---")consulta = consulta + " AND TIPO_COMPRA_VENTA != "+tipoOperacion;
 			if(correoOfInv != "---")consulta = consulta + " AND COD_SOLICITANTE != "+correoOfInv;
+			if(nomValor != "---")consulta =  " AND NOMBRE != "+nomValor;
 			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO != "+correoIntermediario;
-			if(nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != "+nomValor;
 			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != "+nomValor+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != "+tipoValor;
 			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != "+tipoValor;
 			if(tipoRentabilidad != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != "+nomValor+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE != "+tipoRentabilidad;
@@ -2038,7 +2040,13 @@ public class ConsultaDAO {
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
 			while(rs.next()){
-				//TODO manejar el resultado del query.
+				OperacionValue op = new OperacionValue();
+				op.setFecha(rs.getDate("FECHA_ORDEN"));
+				op.setTipoCompraVenta(rs.getString("TIPO_COMPRA_VENTA"));
+				op.setNomValor(rs.getString("VALOR.NOMBRE"));
+				op.setCorSolicitante(rs.getString("COD_SOLICITANTE"));
+				op.setCantidad(rs.getInt("CANTIDAD"));
+				rta.add(op);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -2054,6 +2062,7 @@ public class ConsultaDAO {
 			}
 			cerrarConexion(conexion);
 		}
+		return rta;
 	}
 
 	/**
@@ -2093,9 +2102,6 @@ public class ConsultaDAO {
 	 */
 	public void consultarValorAlt(String idValor) throws SQLException{
 		//El parametro siempre es diferente de "---"
-		ArrayList<String> select = new ArrayList<String>();
-		ArrayList<String> where = new ArrayList<String>();
-		ArrayList<String> order = new ArrayList<String>();
 		PreparedStatement state = null;
 		String consulta = "SELECT * FROM PORTAFOLIO_VALOR JOIN PORTAFOLIO ON COD_PORTAFOLIO = PORTAFOLIO_ID WHERE COD_VALOR = "+idValor;	
 		try{
