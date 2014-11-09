@@ -2019,7 +2019,7 @@ public class ConsultaDAO {
 			if(correoOfInv != "---" && tipoOperacion != "---")consulta = consulta + " AND COD_SOLICITANTE = '"+correoOfInv+"'";
 			if(correoOfInv != "---" && tipoOperacion == "---")consulta = consulta + " WHERE COD_SOLICITANTE = '"+correoOfInv+"'";
 			consulta = (nomValor != "---" && tipoOperacion == "---" && correoOfInv == "---")?consulta + " WHERE VALOR.NOMBRE = '"+nomValor+"'": consulta + " AND VALOR.NOMBRE = '"+nomValor+"'";
-			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO = '"+correoIntermediario+"'";
+			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACIONES_INT ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO = '"+correoIntermediario+"'";
 			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = '"+nomValor+"') JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = '"+tipoValor+"'";
 			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = '"+tipoValor+"'";
 			if(tipoRentabilidad != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = '"+nomValor+"') JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = '"+tipoRentabilidad+"'";
@@ -2030,7 +2030,7 @@ public class ConsultaDAO {
 			if(tipoOperacion != "---")consulta = consulta + " WHERE TIPO_COMPRA_VENTA != '"+tipoOperacion+"'";
 			consulta = (correoOfInv != "---" && tipoOperacion == "---")?consulta + " WHERE COD_SOLICITANTE != '"+correoOfInv+"'":consulta + " AND COD_SOLICITANTE != '"+correoOfInv+"'";
 			consulta = (nomValor != "---" && tipoOperacion == "---" && correoOfInv == "---")?consulta + " WHERE NOMBRE != '"+nomValor+"'":consulta +  " AND NOMBRE != '"+nomValor+"'";
-			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO != '"+correoIntermediario+"'";
+			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACIONES_INT ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO != '"+correoIntermediario+"'";
 			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != '"+nomValor+"') JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != '"+tipoValor+"'";
 			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != '"+tipoValor+"'";
 			if(tipoRentabilidad != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != '"+nomValor+"') JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE != '"+tipoRentabilidad+"'";
