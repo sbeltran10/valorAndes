@@ -2057,19 +2057,68 @@ public class ConsultaDAO {
 	}
 
 	/**
+	 * @throws SQLException 
 	 * 
 	 */
-	public void consultarPortafolios(String tipoValor, int valorMayor){
-		//Los parametros siempre son diferentes de "---"
-
+	public void consultarPortafolios(String tipoValor, int valorMayor) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "SELECT * FROM (SELECT * FROM (SELECT * FROM PORTAFOLIO JOIN PORTAFOLIO_VALOR ON PORTAFOLIO_ID = COD_PORTAFOLIO) JOIN (SELECT VALOR_ID FROM VALOR JOIN TIPO_VALOR ON VALOR_ID = COD_VALOR WHERE TIPO_VALOR.NOMBRE = "+tipoValor+") ON COD_VALOR = VALOR_ID) JOIN OPERACION ON VALOR_ID = COD_VALOR WHERE CANTIDAD = "+valorMayor;	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				//TODO Manejo del resultado del query
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
 	}
 
 	/**
 	 * 
 	 * @param idValor
+	 * @throws SQLException 
 	 */
-	public void consultarValorAlt(String idValor){
+	public void consultarValorAlt(String idValor) throws SQLException{
 		//El parametro siempre es diferente de "---"
+		ArrayList<String> select = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		ArrayList<String> order = new ArrayList<String>();
+		PreparedStatement state = null;
+		String consulta = "SELECT * FROM PORTAFOLIO_VALOR JOIN PORTAFOLIO ON COD_PORTAFOLIO = PORTAFOLIO_ID WHERE COD_VALOR = "+idValor;	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				//TODO Manejar el result set
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
 	}
 	//------------------------------------------------------------------------
 	//GENERADOR DE IDS.
