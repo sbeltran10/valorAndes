@@ -787,7 +787,7 @@ public class ConsultaDAO {
 			if(!consultaUpPortafolioValor.isEmpty()){state = conexion.prepareStatement(consultaUpPortafolioValor);state.execute(consultaUpPortafolioValor);consulta=consultaUpPortafolioValor;}
 			if(!consultaUpValorPorcentaje.isEmpty()){state = conexion.prepareStatement(consultaUpValorPorcentaje);state.execute(consultaUpValorPorcentaje);consulta=consultaUpValorPorcentaje;}
 
-			
+
 		}catch(SQLException e){
 			e.printStackTrace();
 			System.out.println(consulta);
@@ -1620,21 +1620,21 @@ public class ConsultaDAO {
 		PreparedStatement state = null;
 		int id = generarId("PORTAFOLIO");
 		String consulta = 	"INSERT INTO PORTAFOLIO VALUES ( '"+codIntermediario+"', " + id + ", '" +  nombrePortafolio + "', '" +  nivelRiesgo + "')";
-		
+
 		ArrayList<String> socios = darCorreosSocios(codIntermediario);
 		ArrayList<String> consultas = new ArrayList<String>();
-		
+
 		for(int i = 0; i<socios.size();i++){
 			String cons = "INSERT INTO IN_PORTAFOLIO VALUES ( '"+socios.get(i)+"', " + id + ", 0)";
 			consultas.add(cons);
 			System.out.println(cons);
 		}
-		
+
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
 			state.execute(consulta);
-			
+
 			for(int i = 0; i<consultas.size();i++){
 				state = conexion.prepareStatement(consultas.get(i));
 				state.execute(consultas.get(i));
@@ -1794,235 +1794,283 @@ public class ConsultaDAO {
 	}
 
 	//-----------------------------------------------------------------------
-		//RETIRAR INTERMEDIARIO
-		//-----------------------------------------------------------------------
-		/**
-		 * RETIRAR INTERMEDIARIO, retira el intermediario completamente dado su codigo y el de su sucesor.
-		 */
-		public void retirarIntermediario(String intRetirado, String intAsociado) throws SQLException{
-			cambiarPortafolios(intRetirado, intAsociado);
-			cambiarSocios(intRetirado, intAsociado);
-			cambiarOperaciones(intRetirado, intAsociado);
-			eliminarIntermediario(intRetirado);
-			eliminarIntermediarioUs(intRetirado);
-		}
+	//RETIRAR INTERMEDIARIO
+	//-----------------------------------------------------------------------
+	/**
+	 * RETIRAR INTERMEDIARIO, retira el intermediario completamente dado su codigo y el de su sucesor.
+	 */
+	public void retirarIntermediario(String intRetirado, String intAsociado) throws SQLException{
+		cambiarPortafolios(intRetirado, intAsociado);
+		cambiarSocios(intRetirado, intAsociado);
+		cambiarOperaciones(intRetirado, intAsociado);
+		eliminarIntermediario(intRetirado);
+		eliminarIntermediarioUs(intRetirado);
+	}
 
-		/**
-		 * Retira el intermediario de la base de datos.
-		 * @throws SQLException 
-		 */
-		public void eliminarIntermediario(String intRetirado) throws SQLException{
-			PreparedStatement state = null;
-			String consulta = "DELETE FROM INTERMEDIARIO WHERE cod_usuario = '"+intRetirado+"'";	
-			try{
-				establecerConexion(cadenaConexion, usuario, clave);
-				state = conexion.prepareStatement(consulta);
-				state.execute(consulta);
-			}catch(SQLException e){
-				e.printStackTrace();
-				System.out.println(consulta);
-				throw e;
-			}finally{
-				if(state != null){
-					try{
-						state.close();
-					}catch(SQLException e){
-						throw e;
-					}
+	/**
+	 * Retira el intermediario de la base de datos.
+	 * @throws SQLException 
+	 */
+	public void eliminarIntermediario(String intRetirado) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "DELETE FROM INTERMEDIARIO WHERE cod_usuario = '"+intRetirado+"'";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
 				}
-				cerrarConexion(conexion);
 			}
+			cerrarConexion(conexion);
 		}
-		
-		/**
-		 * Elimina al intermediario de la tabla usuario
-		 */
-		public void eliminarIntermediarioUs(String intRetirado) throws SQLException{
-			PreparedStatement state = null;
-			String consulta = "DELETE FROM USUARIO WHERE correo = '"+intRetirado+"'";	
-			try{
-				establecerConexion(cadenaConexion, usuario, clave);
-				state = conexion.prepareStatement(consulta);
-				state.execute(consulta);
-			}catch(SQLException e){
-				e.printStackTrace();
-				System.out.println(consulta);
-				throw e;
-			}finally{
-				if(state != null){
-					try{
-						state.close();
-					}catch(SQLException e){
-						throw e;
-					}
-				}
-				cerrarConexion(conexion);
-			}
-		}
-		
-		/**
-		 * Cambia los portafolios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
-		 * @throws SQLException 
-		 */
-		public void cambiarPortafolios(String intRetirado, String intAsociado) throws SQLException{
-			PreparedStatement state = null;
-			String consulta = "UPDATE PORTAFOLIO SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
-			try{
-				establecerConexion(cadenaConexion, usuario, clave);
-				state = conexion.prepareStatement(consulta);
-				state.execute(consulta);
-			}catch(SQLException e){
-				e.printStackTrace();
-				System.out.println(consulta);
-				throw e;
-			}finally{
-				if(state != null){
-					try{
-						state.close();
-					}catch(SQLException e){
-						throw e;
-					}
-				}
-				cerrarConexion(conexion);
-			}
-		}
+	}
 
-		/**
-		 * Cambia los socios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
-		 * @throws SQLException 
-		 */
-		public void cambiarSocios(String intRetirado, String intAsociado) throws SQLException{
-			PreparedStatement state = null;
-			String consulta = "UPDATE SOCIOS SET correo_intermediario = '"+intAsociado+"' WHERE correo_intermediario = '"+intRetirado+"'";	
-			try{
-				establecerConexion(cadenaConexion, usuario, clave);
-				state = conexion.prepareStatement(consulta);
-				state.execute(consulta);
-			}catch(SQLException e){
-				e.printStackTrace();
-				System.out.println(consulta);
-				throw e;
-			}finally{
-				if(state != null){
-					try{
-						state.close();
-					}catch(SQLException e){
-						throw e;
-					}
+	/**
+	 * Elimina al intermediario de la tabla usuario
+	 */
+	public void eliminarIntermediarioUs(String intRetirado) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "DELETE FROM USUARIO WHERE correo = '"+intRetirado+"'";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
 				}
-				cerrarConexion(conexion);
 			}
+			cerrarConexion(conexion);
 		}
+	}
 
-		/**
-		 * Reasigna las operaciones de un intermediario retirado a su sucesor dados sus dos codigos.
-		 * @throws SQLException 
-		 */
-		public void cambiarOperaciones(String intRetirado, String intAsociado) throws SQLException{
-			PreparedStatement state = null;
-			String consulta = "UPDATE OPERACIONES_INT SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
-			try{
-				establecerConexion(cadenaConexion, usuario, clave);
-				state = conexion.prepareStatement(consulta);
-				state.execute(consulta);
-			}catch(SQLException e){
-				e.printStackTrace();
-				System.out.println(consulta);
-				throw e;
-			}finally{
-				if(state != null){
-					try{
-						state.close();
-					}catch(SQLException e){
-						throw e;
-					}
+	/**
+	 * Cambia los portafolios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
+	 * @throws SQLException 
+	 */
+	public void cambiarPortafolios(String intRetirado, String intAsociado) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "UPDATE PORTAFOLIO SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
 				}
-				cerrarConexion(conexion);
 			}
+			cerrarConexion(conexion);
 		}
+	}
 
-		/**
-		 * Da todos los intermediarios de la bolsa de valores
-		 * @throws SQLException 
-		 */
-		public ArrayList<IntermediarioValue> darTodosIntermediarios() throws SQLException{
-			ArrayList<IntermediarioValue> rta = new ArrayList<IntermediarioValue>();
-			ArrayList<String> select = new ArrayList<String>();
-			ArrayList<String> where = new ArrayList<String>();
-			ArrayList<String> order = new ArrayList<String>();
-			PreparedStatement state = null;
-			select.add("*");
-			String consulta = creadorDeSentencias(select, "INTERMEDIARIO JOIN USUARIO ON USUARIO.correo = INTERMEDIARIO.cod_usuario", where, order);	
-			try{
-				establecerConexion(cadenaConexion, usuario, clave);
-				state = conexion.prepareStatement(consulta);
-				ResultSet rs = state.executeQuery();
-				while(rs.next()){
-					IntermediarioValue val = new IntermediarioValue();
-					val = new IntermediarioValue();
-					val.setCiudad(rs.getString("ciudad"));
-					val.setCodPostal(rs.getInt("codigopostal"));
-					val.setCorreo(rs.getString("correo"));
-					val.setDepartamento(rs.getString("departamento"));
-					val.setDireccion(rs.getString("direccion"));
-					val.setIdRepresentante(rs.getString("idrepresentante"));
-					val.setNombreRepresentante(rs.getString("nombrerepresentante"));
-					val.setNacionalidad(rs.getString("nacionalidad"));
-					val.setNombre(rs.getString("nombre"));
-					val.setTelefono(rs.getString("telefono"));
-					val.setTipoEntidad(rs.getString("tipo_entidad"));
-					val.setNumRegistro(rs.getString("num_registro"));
-					rta.add(val);
+	/**
+	 * Cambia los socios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
+	 * @throws SQLException 
+	 */
+	public void cambiarSocios(String intRetirado, String intAsociado) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "UPDATE SOCIOS SET correo_intermediario = '"+intAsociado+"' WHERE correo_intermediario = '"+intRetirado+"'";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
 				}
-			}catch(SQLException e){
-				e.printStackTrace();
-				System.out.println(consulta);
-				throw e;
-			}finally{
-				if(state != null){
-					try{
-						state.close();
-					}catch(SQLException e){
-						throw e;
-					}
-				}
-				cerrarConexion(conexion);
 			}
-			return rta;
+			cerrarConexion(conexion);
 		}
-		
+	}
+
+	/**
+	 * Reasigna las operaciones de un intermediario retirado a su sucesor dados sus dos codigos.
+	 * @throws SQLException 
+	 */
+	public void cambiarOperaciones(String intRetirado, String intAsociado) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "UPDATE OPERACIONES_INT SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			state.execute(consulta);
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+	}
+
+	/**
+	 * Da todos los intermediarios de la bolsa de valores
+	 * @throws SQLException 
+	 */
+	public ArrayList<IntermediarioValue> darTodosIntermediarios() throws SQLException{
+		ArrayList<IntermediarioValue> rta = new ArrayList<IntermediarioValue>();
+		ArrayList<String> select = new ArrayList<String>();
+		ArrayList<String> where = new ArrayList<String>();
+		ArrayList<String> order = new ArrayList<String>();
+		PreparedStatement state = null;
+		select.add("*");
+		String consulta = creadorDeSentencias(select, "INTERMEDIARIO JOIN USUARIO ON USUARIO.correo = INTERMEDIARIO.cod_usuario", where, order);	
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				IntermediarioValue val = new IntermediarioValue();
+				val = new IntermediarioValue();
+				val.setCiudad(rs.getString("ciudad"));
+				val.setCodPostal(rs.getInt("codigopostal"));
+				val.setCorreo(rs.getString("correo"));
+				val.setDepartamento(rs.getString("departamento"));
+				val.setDireccion(rs.getString("direccion"));
+				val.setIdRepresentante(rs.getString("idrepresentante"));
+				val.setNombreRepresentante(rs.getString("nombrerepresentante"));
+				val.setNacionalidad(rs.getString("nacionalidad"));
+				val.setNombre(rs.getString("nombre"));
+				val.setTelefono(rs.getString("telefono"));
+				val.setTipoEntidad(rs.getString("tipo_entidad"));
+				val.setNumRegistro(rs.getString("num_registro"));
+				rta.add(val);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
+		}
+		return rta;
+	}
+
 	//------------------------------------------------------------------------
 	//Consultas Iteracion 4
 	//------------------------------------------------------------------------
-		
-		//No estoy seguro de que tipo de arreglo retornan los metodos, no estoy usando los metodos en ninguna clase entonces puede
-		//cambiarlos como quiera, evidentemente los filtros siempre debe tenerlos en cuenta.
-		
-		/**
-		 * 
-		 */
-		public void consultarMovimientos(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad,
-				String tipoOperacion, String correoOferente, String correoIntermediario, String correoInversionista){
-			//Los parametros fechaInicial, fechaFinal e incluirFiltros son obligatorios, es decir siempre seran diferentes de "---"
-			//Los demas parametros pueden ser "---" si son vacios/
-			//El parametro incluirFiltros determina si se buscaran valores que cumplan con los filtros (true si cumplen, false no cumplen)
-			//Las fechas siempre seran incluidas sin importar el parametro incluirFiltros
+
+	//No estoy seguro de que tipo de arreglo retornan los metodos, no estoy usando los metodos en ninguna clase entonces puede
+	//cambiarlos como quiera, evidentemente los filtros siempre debe tenerlos en cuenta.
+
+	/**
+	 * Solucion a los RFC de movimiento de valores
+	 * Los parametros fechaInicial, fechaFinal e incluirFiltros son obligatorios, es decir siempre seran diferentes de "---"
+	 * Los demas parametros pueden ser "---" si son vacios/
+	 * El parametro incluirFiltros determina si se buscaran valores que cumplan con los filtros (true si cumplen, false no cumplen)
+	 * Las fechas siempre seran incluidas sin importar el parametro incluirFiltros	
+	 * @throws SQLException 
+	 */
+	public void consultarMovimientos(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad,
+			String tipoOperacion, String correoOfInv, String correoIntermediario) throws SQLException{
+		PreparedStatement state = null;
+		String consulta = "";
+		if(incluirFiltros){
+			consulta = "SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')";
+			//CORE: SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date(fechaInicial,'DD/MM/YYYY') AND FECHA_ORDEN < to_date(fechaFinal,'DD/MM/YYYY')
+			if(tipoOperacion != "---")consulta = consulta + " AND TIPO_COMPRA_VENTA = "+tipoOperacion;
+			if(correoOfInv != "---")consulta = consulta + " AND COD_SOLICITANTE = "+correoOfInv;
+			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO = "+correoIntermediario;
+			if(nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = "+nomValor;
+			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = "+nomValor+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = "+tipoValor;
+			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE = "+tipoValor;
+			if(tipoRentabilidad != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE = "+nomValor+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = "+tipoRentabilidad;
+			if(tipoRentabilidad != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE = "+tipoRentabilidad;
+		}else{
+			consulta = "SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date("+fechaInicial+",'DD/MM/YYYY') AND FECHA_ORDEN < to_date("+fechaFinal+",'DD/MM/YYYY')";
+			//CORE: SELECT * FROM OPERACION WHERE FECHA_ORDEN > to_date(fechaInicial,'DD/MM/YYYY') AND FECHA_ORDEN < to_date(fechaFinal,'DD/MM/YYYY')
+			if(tipoOperacion != "---")consulta = consulta + " AND TIPO_COMPRA_VENTA != "+tipoOperacion;
+			if(correoOfInv != "---")consulta = consulta + " AND COD_SOLICITANTE != "+correoOfInv;
+			if(correoIntermediario != "---")consulta = "SELECT * FROM ("+consulta+") JOIN OPERACION ON OPERACION_ID = COD_OPERACION WHERE COD_INTERMEDIARIO != "+correoIntermediario;
+			if(nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != "+nomValor;
+			if(tipoValor != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != "+nomValor+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != "+tipoValor;
+			if(tipoValor != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN TIPO_VALOR ON COD_TIPO_VALOR = TIPO_VALOR_ID WHERE TIPO_VALOR.NOMBRE != "+tipoValor;
+			if(tipoRentabilidad != "---" && nomValor == "---")consulta = "SELECT * FROM (SELECT * FROM ("+consulta+") JOIN VALOR ON COD_VALOR = VALOR_ID WHERE NOMBRE != "+nomValor+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE != "+tipoRentabilidad;
+			if(tipoRentabilidad != "---" && nomValor != "---")consulta = "SELECT * FROM ("+consulta+") JOIN RENTABILIDAD ON COD_RENTABILIDAD = RENTABILIDAD_ID WHERE RENTABILIDAD.NOMBRE != "+tipoRentabilidad;
 		}
-		
-		/**
-		 * 
-		 */
-		public void consultarPortafolios(String tipoValor, int valorMayor){
-			//Los parametros siempre son diferentes de "---"
+		try{
+			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.prepareStatement(consulta);
+			ResultSet rs = state.executeQuery();
+			while(rs.next()){
+				//TODO manejar el resultado del query.
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.out.println(consulta);
+			throw e;
+		}finally{
+			if(state != null){
+				try{
+					state.close();
+				}catch(SQLException e){
+					throw e;
+				}
+			}
+			cerrarConexion(conexion);
 		}
-		
-		/**
-		 * 
-		 * @param idValor
-		 */
-		public void consultarValorAlt(String idValor){
-			//El parametro siempre es diferente de "---"
-		}
+	}
+
+	/**
+	 * 
+	 */
+	public void consultarPortafolios(String tipoValor, int valorMayor){
+		//Los parametros siempre son diferentes de "---"
+
+	}
+
+	/**
+	 * 
+	 * @param idValor
+	 */
+	public void consultarValorAlt(String idValor){
+		//El parametro siempre es diferente de "---"
+	}
 	//------------------------------------------------------------------------
 	//GENERADOR DE IDS.
 	//------------------------------------------------------------------------
