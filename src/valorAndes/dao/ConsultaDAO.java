@@ -2066,10 +2066,12 @@ public class ConsultaDAO {
 	}
 
 	/**
+	 * @return 
 	 * @throws SQLException 
 	 * 
 	 */
-	public void consultarPortafolios(String tipoValor, int valorMayor) throws SQLException{
+	public ArrayList<PortafolioValue> consultarPortafolios(String tipoValor, int valorMayor) throws SQLException{
+		ArrayList<PortafolioValue> rta = new ArrayList<PortafolioValue>();
 		PreparedStatement state = null;
 		String consulta = "SELECT * FROM (SELECT * FROM (SELECT * FROM PORTAFOLIO JOIN PORTAFOLIO_VALOR ON PORTAFOLIO_ID = COD_PORTAFOLIO) JOIN (SELECT VALOR_ID FROM VALOR JOIN TIPO_VALOR ON VALOR_ID = COD_VALOR WHERE TIPO_VALOR.NOMBRE = "+tipoValor+") ON COD_VALOR = VALOR_ID) JOIN OPERACION ON VALOR_ID = COD_VALOR WHERE CANTIDAD = "+valorMayor;	
 		try{
@@ -2077,7 +2079,11 @@ public class ConsultaDAO {
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
 			while(rs.next()){
-				//TODO Manejo del resultado del query
+				PortafolioValue op = new PortafolioValue();
+				op.setCorreoInter(rs.getString("COD_INTERMEDIARIO"));
+				op.setNombre(rs.getString("NOMBRE"));
+				op.setTipoRiesgo(rs.getString("TIPO_RIESGO"));
+				rta.add(op);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -2093,15 +2099,18 @@ public class ConsultaDAO {
 			}
 			cerrarConexion(conexion);
 		}
+		return rta;
 	}
 
 	/**
 	 * 
 	 * @param idValor
+	 * @return 
 	 * @throws SQLException 
 	 */
-	public void consultarValorAlt(String idValor) throws SQLException{
+	public ArrayList<PortafolioValue> consultarValorAlt(String idValor) throws SQLException{
 		//El parametro siempre es diferente de "---"
+		ArrayList<PortafolioValue> rta = new ArrayList<PortafolioValue>();
 		PreparedStatement state = null;
 		String consulta = "SELECT * FROM PORTAFOLIO_VALOR JOIN PORTAFOLIO ON COD_PORTAFOLIO = PORTAFOLIO_ID WHERE COD_VALOR = "+idValor;	
 		try{
@@ -2109,7 +2118,11 @@ public class ConsultaDAO {
 			state = conexion.prepareStatement(consulta);
 			ResultSet rs = state.executeQuery();
 			while(rs.next()){
-				//TODO Manejar el result set
+				PortafolioValue op = new PortafolioValue();
+				op.setCorreoInter(rs.getString("COD_INTERMEDIARIO"));
+				op.setNombre(rs.getString("NOMBRE"));
+				op.setTipoRiesgo(rs.getString("TIPO_RIESGO"));
+				rta.add(op);
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -2125,6 +2138,7 @@ public class ConsultaDAO {
 			}
 			cerrarConexion(conexion);
 		}
+		return rta;
 	}
 	//------------------------------------------------------------------------
 	//GENERADOR DE IDS.
