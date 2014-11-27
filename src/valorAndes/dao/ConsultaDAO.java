@@ -1,5 +1,32 @@
 package valorAndes.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Hashtable;
+
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageListener;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.naming.Binding;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.*;
@@ -20,7 +47,7 @@ import valorAndes.vos.ValorValue;
 
 public class ConsultaDAO {
 	//------------------------------------------
-	//Constantes
+	//Atributos
 	//------------------------------------------
 	/**
 	 * Ruta donde se encuentra el archivo de conexion.
@@ -30,7 +57,7 @@ public class ConsultaDAO {
 	/**
 	 * Conexion con la base de datos.
 	 */
-	public Connection conexion;
+	private java.sql.Connection conexion;
 
 	/**
 	 * Nombre de Usuario.
@@ -47,11 +74,44 @@ public class ConsultaDAO {
 	 */
 	private String cadenaConexion;
 
+	//------------------------------------------
+	//Atributos JMSSender
+	//------------------------------------------
+	/**
+	 * Conexion con el JavaMessageService.
+	 */
+	private javax.jms.Connection conexionJMS;
+	
+	/**
+	 * ConnectionFactory.
+	 */
+	private ConnectionFactory conFactory;
+	
+	/**
+	 * JMS Session.
+	 */
+	private Session session;
+	
+	/**
+	 * JSM Destination.
+	 */
+	private Destination dest;
+	
+	/**
+	 * JMS MessageProducer.
+	 */
+	private MessageProducer mProducer;
+	
+	/**
+	 * JMS MessageConsumer.
+	 */
+	private MessageConsumer mConsumer;
+	
 	/**
 	 * Constructor de la clase.
 	 */
 	public ConsultaDAO(){
-
+		
 	}
 
 	//------------------------------------------
@@ -103,7 +163,7 @@ public class ConsultaDAO {
 	 * @param con objeto de conexion a la bse de datos.
 	 * @throws SQLException Si se presentan errores cerrando la conexion a la base de datos.
 	 */
-	public void cerrarConexion(Connection con)throws SQLException{
+	public void cerrarConexion(java.sql.Connection con)throws SQLException{
 		try{
 			con.close();
 			con = null;

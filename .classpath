@@ -11,5 +11,11 @@
 	<classpathentry kind="con" path="org.jboss.ide.eclipse.as.classpath.core.ejb3.classpathContainer/jboss-4.2.3.GA"/>
 	<classpathentry kind="con" path="org.jboss.ide.eclipse.as.classpath.core.ejb3.classpathContainer/JBoss 4.2 Runtime Server"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="lib" path="lib/imq.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-common-client.jar"/>
+	<classpathentry kind="lib" path="lib/jms-ra.jar"/>
+	<classpathentry kind="lib" path="lib/jms.jar"/>
+	<classpathentry kind="lib" path="lib/jnp-client.jar"/>
+	<classpathentry kind="lib" path="lib/jta.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
