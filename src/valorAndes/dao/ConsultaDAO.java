@@ -1884,14 +1884,16 @@ public class ConsultaDAO {
 	 * RETIRAR INTERMEDIARIO, retira el intermediario completamente dado su codigo y el de su sucesor.
 	 */
 	public void retirarIntermediario(String intRetirado, String intAsociado) throws SQLException{
+		
 		String cCambiarPort = "UPDATE PORTAFOLIO SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";
 		String cCambiarSocios = "UPDATE SOCIOS SET correo_intermediario = '"+intAsociado+"' WHERE correo_intermediario = '"+intRetirado+"'";
 		String cCambiarOperaciones = "UPDATE OPERACIONES_INT SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";
 		String cEliminarIntermediario = "DELETE FROM INTERMEDIARIO WHERE cod_usuario = '"+intRetirado+"'";
 		String cEliminarIntermediarioUS = "DELETE FROM USUARIO WHERE correo = '"+intRetirado+"'";
-		Statement state = conexion.createStatement();
+		Statement state = null;
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
+			state = conexion.createStatement();
 			state.addBatch(cCambiarPort);
 			state.addBatch(cCambiarSocios);
 			state.addBatch(cCambiarOperaciones);
