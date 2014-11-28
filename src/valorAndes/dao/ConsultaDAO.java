@@ -126,23 +126,23 @@ public class ConsultaDAO {
 	 * Constructor de la clase.
 	 */
 	public ConsultaDAO(){
-		try {
-			InitialContext init = new InitialContext();
-			conFactory = (ConnectionFactory) init.lookup("RemoteConnectionFactory");
-			dest = (Destination) init.lookup("queue/testCola");
-			conexionJMS = (Connection) conFactory.createConnection("sistrans", "grupo6");
-			((javax.jms.Connection)conexionJMS).start();
-			session = ((javax.jms.Connection)conexionJMS).createSession(false, Session.AUTO_ACKNOWLEDGE);
-			consumer = this.session.createConsumer(dest);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		rfc12Result = null;
 		rfc13Result = null;
 		RF14 = null;
 		RF15 = null;
 		RFC12 = null;
 		RFC13 = null;
+//		try {
+//			InitialContext init = new InitialContext();
+//			conFactory = (ConnectionFactory) init.lookup("RemoteConnectionFactory");
+//			dest = (Destination) init.lookup("queue/testCola");
+//			conexionJMS = (Connection) conFactory.createConnection("sistrans", "grupo6");
+//			((javax.jms.Connection)conexionJMS).start();
+//			session = ((javax.jms.Connection)conexionJMS).createSession(false, Session.AUTO_ACKNOWLEDGE);
+//			consumer = this.session.createConsumer(dest);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	//------------------------------------------

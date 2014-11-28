@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import valorAndes.fachada.ValorAndes;
 import valorAndes.vos.OperacionValue;
+import valorAndes.vos.ValorValue;
 
 public class ServletConsultaValoresDinamicos extends ServletTemplate{
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public String darTituloPagina(HttpServletRequest request) {
@@ -66,12 +68,12 @@ public class ServletConsultaValoresDinamicos extends ServletTemplate{
 
 			String[] arFechas2 = fechaFin.split("-");
 			fechaFin = arFechas2[2] + "-" + arFechas2[1] +  "-" + arFechas2[0];
-		}
-
-		try {
-			//Metodo de fachada de consulta de valores dinamicos
-		} catch (Exception e) {
-			e.printStackTrace();
+			
+			try {
+				escribirResultados(out, ValorAndes.getInstance().valoresMDinamicos(fechaIni, fechaFin));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		out.println("</div> ");
@@ -84,7 +86,7 @@ public class ServletConsultaValoresDinamicos extends ServletTemplate{
 		/**
 		 * Se muestran estos resultados si el tipo de usuario a consultar es Oferente
 		 */
-		public void escribirResultados(PrintWriter out, ArrayList<OperacionValue> opers){
+		public void escribirResultados(PrintWriter out, ArrayList<ValorValue> opers){
 
 			if(opers.isEmpty()){
 				out.println("			<div class=\"container\">");
@@ -99,24 +101,24 @@ public class ServletConsultaValoresDinamicos extends ServletTemplate{
 				out.println("					<table class=\"table table-striped\" data-pagination=\"true\" data-height=\"400\" >");
 				out.println("						<thead>");
 				out.println("							<tr>");
-				out.println("								<th>Fecha movimiento</th>");
-				out.println("								<th>Tipo de movimiento</th>");
-				out.println("								<th>Nombre del valor</th>");
-				out.println("								<th>Correo Solicitante</th>");
-				out.println("								<th>Cantidad de operacion</th>	");
+				out.println("								<th>Creador del Valor</th>");
+				out.println("								<th>Fecha expiracion</th>");
+				out.println("								<th>Mercado</th>");
+				out.println("								<th>Nombre</th>");
+				out.println("								<th>Precio</th>	");
 				out.println("							</tr>");
 				out.println("						</thead>");
 				out.println("						<tbody>");
 
 				for(int i=0; i<opers.size();i++){
-					OperacionValue op = opers.get(i);
+					ValorValue op = opers.get(i);
 
 					out.println("							<tr><form>");
-					out.println("								<td>" + op.getFecha() + "</td>");
-					out.println("								<td>" + op.getTipoCompraVenta() + "</td>");
-					out.println("								<td>" + op.getNomValor() + "</td>");
-					out.println("								<td>" + op.getCorSolicitante() + "</td>");
-					out.println("								<td>" + op.getCantidad() + "</td>");
+					out.println("								<td>" + op.getCreador() + "</td>");
+					out.println("								<td>" + op.getFechaExpiracion() + "</td>");
+					out.println("								<td>" + op.getMercado() + "</td>");
+					out.println("								<td>" + op.getNombre() + "</td>");
+					out.println("								<td>" + op.getPrecio() + "</td>");
 					out.println("							</tr></form>");
 				}
 
