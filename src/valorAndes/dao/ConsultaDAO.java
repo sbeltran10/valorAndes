@@ -2229,6 +2229,34 @@ public class ConsultaDAO {
 		rfc12Result = null;
 		return rta;
 	}
+	
+	/**
+	 * Consulta de valores con mayor movimiento en la bolsa global.
+	 */
+	public ArrayList<ValorValue> valoresMDinamicosGlobal(String fechaInicial, String fechaFinal)throws Exception{
+		send("RFC13;"+fechaInicial+";"+fechaFinal);
+		Long limit = System.currentTimeMillis() + 10000;
+		Long now = System.currentTimeMillis();
+		while(RFC13 == null && now < limit){
+			now = System.currentTimeMillis();
+		}
+		if(RFC13 == null){
+			throw new Exception("Caduco el tiempo de espera para la transaccion.");
+		}else if(RFC13.equals("ERROR")){
+			throw new Exception("Error en la comunicacion con el otro servidor.");
+		}else if(rfc13Result != null){
+			System.out.println("RFC13_SUCCEDED");
+		}else{
+			throw new Exception("Fallo critico del sistema!");
+		} 
+		RFC13 = null;
+		ArrayList<ValorValue> rta = valoresMDinamicos(fechaInicial, fechaFinal);
+		for (ValorValue valorValue : rfc13Result) {
+			rta.add(valorValue);
+		}
+		rfc13Result = null;
+		return rta;
+	}
 	//------------------------------------------------------------------------
 	//GENERADOR DE IDS.
 	//------------------------------------------------------------------------
@@ -2366,6 +2394,7 @@ public class ConsultaDAO {
 				}
 			}else if(req.equals("ResultRFC12")){
 				for(String val : mensaje){
+					rfc12Result = new ArrayList<OperacionValue>();
 					String data[] = val.split("#");
 					OperacionValue op = new OperacionValue();
 					op.setCantidad(Integer.parseInt(data[1]));
@@ -2385,6 +2414,7 @@ public class ConsultaDAO {
 				}
 			}else if(req.equals("ResultRFC13")){
 				for(String val: mensaje){
+					rfc13Result = new ArrayList<ValorValue>();
 					String data[] = val.split("#");
 					ValorValue op = new ValorValue();
 					op.setNombre(data[1]);
