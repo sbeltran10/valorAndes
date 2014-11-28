@@ -440,4 +440,11 @@ public class ValorAndes {
 	public ArrayList<PortafolioValue> consultarValorAlt(String idValor) throws SQLException{
 		return dao.consultarValorAlt(idValor);
 	}
+	
+	/**
+	 * Consultar valores dinamicos
+	 */
+	public ArrayList<ValorValue> valoresMDinamicos(String fechaInicial, String fechaFinal)throws Exception{
+		return dao.valoresMDinamicos(fechaInicial, fechaFinal);
+	}
 }

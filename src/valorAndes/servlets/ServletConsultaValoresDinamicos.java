@@ -66,12 +66,12 @@ public class ServletConsultaValoresDinamicos extends ServletTemplate{
 
 			String[] arFechas2 = fechaFin.split("-");
 			fechaFin = arFechas2[2] + "-" + arFechas2[1] +  "-" + arFechas2[0];
-		}
-
-		try {
-			//Metodo de fachada de consulta de valores dinamicos
-		} catch (Exception e) {
-			e.printStackTrace();
+			
+			try {
+				ValorAndes.getInstance().valoresMDinamicos(fechaIni, fechaFin);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		out.println("</div> ");
