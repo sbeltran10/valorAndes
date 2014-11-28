@@ -178,5 +178,10 @@ public class OperacionValue {
 		this.idValor = string;
 	}
 	
-	
+	/**
+	 * ToString
+	 */
+	public String toString(){
+		return cantidad+";"+fecha.toString()+";"+precio+";"+tipoCompraVenta+";"+corSolicitante+";"+corIntermediario+";"+nomValor;
+	}
 }
