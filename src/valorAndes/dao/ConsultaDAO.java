@@ -110,17 +110,17 @@ public class ConsultaDAO {
 	 * Constructor de la clase.
 	 */
 	public ConsultaDAO(){
-		try {
-			InitialContext init = new InitialContext();
-			conFactory = (ConnectionFactory) init.lookup("RemoteConnectionFactory");
-			dest = (Destination) init.lookup("queue/testCola");
-			conexionJMS = (Connection) conFactory.createConnection("sistrans", "grupo6");
-			((javax.jms.Connection)conexionJMS).start();
-			session = ((javax.jms.Connection)conexionJMS).createSession(false, Session.AUTO_ACKNOWLEDGE);
-			consumer = this.session.createConsumer(dest);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			InitialContext init = new InitialContext();
+//			conFactory = (ConnectionFactory) init.lookup("RemoteConnectionFactory");
+//			dest = (Destination) init.lookup("queue/testCola");
+//			conexionJMS = (Connection) conFactory.createConnection("sistrans", "grupo6");
+//			((javax.jms.Connection)conexionJMS).start();
+//			session = ((javax.jms.Connection)conexionJMS).createSession(false, Session.AUTO_ACKNOWLEDGE);
+//			consumer = this.session.createConsumer(dest);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	//------------------------------------------
@@ -2224,7 +2224,7 @@ public class ConsultaDAO {
 		ArrayList<ValorValue> rta = new ArrayList<ValorValue>();
 		PreparedStatement state = null;
 		
-		String consulta = "SELECT VALOR.* FROM VALOR JOIN (SELECT COD_VALOR FROM(SELECT COUNT (COD_VALOR)CANT, COD_VALOR FROM OPERACION WHERE FECHA_ORDEN > to_date('"+fechaInicial+"','DD/MM/YYYY') AND FECHA_ORDEN < to_date('"+fechaFinal+"','DD/MM/YYYY' GROUP BY COD_VALOR)WHERE (SELECT MAX(COUNT(COD_VALOR))CANT2 FROM OPERACION GROUP BY COD_VALOR) = CANT) ON COD_VALOR = VALOR_ID";	
+		String consulta = "SELECT VALOR.* FROM VALOR JOIN (SELECT COD_VALOR FROM(SELECT COUNT (COD_VALOR)CANT, COD_VALOR FROM OPERACION WHERE FECHA_ORDEN > to_date('"+fechaInicial+"','DD/MM/YYYY') AND FECHA_ORDEN < to_date('"+fechaFinal+"','DD/MM/YYYY') GROUP BY COD_VALOR)WHERE (SELECT MAX(COUNT(COD_VALOR))CANT2 FROM OPERACION GROUP BY COD_VALOR) = CANT) ON COD_VALOR = VALOR_ID";	
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
 			state = conexion.prepareStatement(consulta);
