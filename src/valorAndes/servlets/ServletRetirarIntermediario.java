@@ -95,7 +95,7 @@ public class ServletRetirarIntermediario extends ServletTemplate{
 		else{
 			out.println("				<div class=\"panel-heading\">Operaciones</div>");
 			out.println("				<div class=\"form-group\">");
-			out.println("				<table class=\"table table-striped\" name=\"tablaOp\">");
+			out.println("				<table class=\"table table-striped\" name=\"tablaOp\" data-pagination=\"true\" data-height=\"400\">");
 			out.println("					<thead>");
 			out.println("						<tr>");
 			out.println("							<th>Correo</th>");

@@ -51,6 +51,10 @@ public class ServletPortal extends ServletTemplate{
 		out.println("		<li>");
 		out.println("			<a href=\"consultaValAlt.htm\" class=\"btn btn-default btn-lg\"><span class=\"network-name\">Consulta de Valores en Portafolios</span></a>");
 		out.println("		</li><br>");
+		out.println("		<li>");
+		out.println("			<a href=\"consultaValDin.htm\" class=\"btn btn-default btn-lg\"><span class=\"network-name\">Consulta de Valores Dinamicos</span></a>");
+		out.println("		</li><br>");
+		
 
 		if(vaLog==1 || vaLog==4){
 			out.println("		<li>");
