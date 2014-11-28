@@ -1889,8 +1889,9 @@ public class ConsultaDAO {
 	//-----------------------------------------------------------------------
 	/**
 	 * RETIRAR INTERMEDIARIO, retira el intermediario completamente dado su codigo y el de su sucesor.
+	 * @throws Exception 
 	 */
-	public void retirarIntermediario(String intRetirado, String intAsociado) throws SQLException{
+	public void retirarIntermediario(String intRetirado, String intAsociado) throws Exception{
 		String cCambiarPort = "UPDATE PORTAFOLIO SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";
 		String cCambiarSocios = "UPDATE SOCIOS SET correo_intermediario = '"+intAsociado+"' WHERE correo_intermediario = '"+intRetirado+"'";
 		String cCambiarOperaciones = "UPDATE OPERACIONES_INT SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";
@@ -1991,8 +1992,7 @@ public class ConsultaDAO {
 	 * @return 
 	 * @throws SQLException 
 	 */
-	public ArrayList<OperacionValue> consultarMovimientos(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad,
-			String tipoOperacion, String correoOfInv, String correoIntermediario) throws SQLException{
+	public ArrayList<OperacionValue> consultarMovimientos(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad, String tipoOperacion, String correoOfInv, String correoIntermediario) throws SQLException{
 		ArrayList<OperacionValue> rta = new ArrayList<OperacionValue>();
 		PreparedStatement state = null;
 		String consulta = "";
@@ -2172,6 +2172,62 @@ public class ConsultaDAO {
 			}
 			cerrarConexion(conexion);
 		}
+		return rta;
+	}
+	
+	//--------------------------------------------------------------
+	//---------------------Metodos-Globales------------------------
+	//--------------------------------------------------------------
+	/**
+	 * Retirar intermediario global.
+	 */
+	public void retirarIntermediarioGlobal(String intRetirado, String intAsociado)throws Exception{
+		send("RF15;"+intRetirado+";"+intAsociado);
+		Long limit = System.currentTimeMillis() + 10000;
+		Long now = System.currentTimeMillis();
+		while(RF15 == null && now < limit){
+			now = System.currentTimeMillis();
+		}
+		if(RF15 == null){
+			throw new Exception("Caduco el tiempo de espera para la transaccion.");
+		}else if(RF15.equals("ERROR")){
+			throw new Exception("Error en la comunicacion con el otro servidor.");
+		}else if(RF15.equals("SUCCESS")){
+			System.out.println("RF15_SUCCEDED");
+		}
+		RF15 = null;
+		try{
+			retirarIntermediario(intRetirado, intAsociado);
+		}catch(Exception e){
+			retirarIntermediario(intRetirado, intAsociado);
+		}
+	}
+	
+	/**
+	 * Consulta de movimiento de valores global.
+	 */
+	public ArrayList<OperacionValue> consultarMGlobal(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad, String tipoOperacion, String correoOfInv, String correoIntermediario)throws Exception{
+		send("RFC12;"+fechaInicial+";"+fechaFinal+";"+incluirFiltros+";"+nomValor+";"+tipoValor+";"+tipoRentabilidad+";"+tipoOperacion+";"+correoOfInv+";"+correoIntermediario);
+		Long limit = System.currentTimeMillis() + 10000;
+		Long now = System.currentTimeMillis();
+		while(RFC12 == null && now < limit){
+			now = System.currentTimeMillis();
+		}
+		if(RFC12 == null){
+			throw new Exception("Caduco el tiempo de espera para la transaccion.");
+		}else if(RFC12.equals("ERROR")){
+			throw new Exception("Error en la comunicacion con el otro servidor.");
+		}else if(rfc12Result != null){
+			System.out.println("RFC12_SUCCEDED");
+		}else{
+			throw new Exception("Fallo critico del sistema!");
+		} 
+		RFC12 = null;
+		ArrayList<OperacionValue> rta = consultarMovimientos(fechaInicial, fechaFinal, incluirFiltros, nomValor, tipoValor, tipoRentabilidad, tipoOperacion, correoOfInv, correoIntermediario);
+		for (OperacionValue operacionValue : rfc12Result) {
+			rta.add(operacionValue);
+		}
+		rfc12Result = null;
 		return rta;
 	}
 	//------------------------------------------------------------------------
