@@ -297,8 +297,8 @@ public class ValorAndes {
 	 * Retirar a un intermediario de la bolsa de valores, reemplazandolo por otro
 	 * @throws SQLException 
 	 */
-	public void retirarIntermediario(String intRetirado, String intAsociado) throws SQLException{
-		dao.retirarIntermediario(intRetirado, intAsociado);
+	public void retirarIntermediarioGlobal(String intRetirado, String intAsociado) throws Exception{
+		dao.retirarIntermediarioGlobal(intRetirado, intAsociado);
 	}
 	//----------------------------------------
 	//Portafolios Intermediario
@@ -415,9 +415,9 @@ public class ValorAndes {
 	 * @return
 	 * @throws SQLException
 	 */
-	public ArrayList<OperacionValue> consultarMovimientos(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad,
-			String tipoOperacion, String correoOfInv, String correoIntermediario) throws SQLException{
-		return dao.consultarMovimientos(fechaInicial, fechaFinal, incluirFiltros, nomValor, tipoValor, tipoRentabilidad, tipoOperacion, correoOfInv, correoIntermediario);
+	public ArrayList<OperacionValue> consultarMGlobal(String fechaInicial, String fechaFinal, boolean incluirFiltros, String nomValor, String tipoValor, String tipoRentabilidad,
+			String tipoOperacion, String correoOfInv, String correoIntermediario) throws Exception{
+		return dao.consultarMGlobal(fechaInicial, fechaFinal, incluirFiltros, nomValor, tipoValor, tipoRentabilidad, tipoOperacion, correoOfInv, correoIntermediario);
 	}
 	
 	/**
