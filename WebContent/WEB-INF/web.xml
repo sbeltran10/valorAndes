@@ -104,6 +104,11 @@
     <servlet-name>ServletConsultaValorAlt</servlet-name>
     <servlet-class>valorAndes.servlets.ServletConsultaValorAlt</servlet-class>
   </servlet>
+  
+  <servlet>
+    <servlet-name>ServletConsultaValorDin</servlet-name>
+    <servlet-class>valorAndes.servlets.ServletConsultaValoresDinamicos</servlet-class>
+  </servlet>
 
   
   <!-- MAPPING -->
@@ -200,6 +205,11 @@
    <servlet-mapping>
     <servlet-name>ServletConsultaValorAlt</servlet-name>
     <url-pattern>/consultaValAlt.htm</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>ServletConsultaValorDin</servlet-name>
+    <url-pattern>/consultaValDin.htm</url-pattern>
   </servlet-mapping>
   
 </web-app>

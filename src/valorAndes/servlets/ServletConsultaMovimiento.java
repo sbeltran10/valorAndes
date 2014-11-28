@@ -224,7 +224,7 @@ public class ServletConsultaMovimiento extends ServletTemplate{
 			out.println("			<div class=\"container\">");
 			out.println("				<div class=\"panel panel-info\">");
 			out.println("					<div class=\"panel-heading\">Resultados</div>");
-			out.println("					<table class=\"table table-striped\">");
+			out.println("					<table class=\"table table-striped\" data-pagination=\"true\" data-height=\"400\">");
 			out.println("						<thead>");
 			out.println("							<tr>");
 			out.println("								<th>Fecha movimiento</th>");
@@ -255,6 +255,5 @@ public class ServletConsultaMovimiento extends ServletTemplate{
 		out.println("			</div>");
 		out.println("		</div> ");
 	}
-
 	
 }
