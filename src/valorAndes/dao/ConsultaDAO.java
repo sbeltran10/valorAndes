@@ -2043,6 +2043,7 @@ public class ConsultaDAO {
 		ArrayList<String> order = new ArrayList<String>();
 		PreparedStatement state = null;
 		select.add("*");
+		where.add("rownum < 305");
 		String consulta = creadorDeSentencias(select, "INTERMEDIARIO JOIN USUARIO ON USUARIO.correo = INTERMEDIARIO.cod_usuario", where, order);	
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
