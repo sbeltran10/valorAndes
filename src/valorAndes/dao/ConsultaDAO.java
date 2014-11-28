@@ -1891,134 +1891,29 @@ public class ConsultaDAO {
 	 * RETIRAR INTERMEDIARIO, retira el intermediario completamente dado su codigo y el de su sucesor.
 	 */
 	public void retirarIntermediario(String intRetirado, String intAsociado) throws SQLException{
-		cambiarPortafolios(intRetirado, intAsociado);
-		cambiarSocios(intRetirado, intAsociado);
-		cambiarOperaciones(intRetirado, intAsociado);
-		eliminarIntermediario(intRetirado);
-		eliminarIntermediarioUs(intRetirado);
-	}
-
-	/**
-	 * Retira el intermediario de la base de datos.
-	 * @throws SQLException 
-	 */
-	public void eliminarIntermediario(String intRetirado) throws SQLException{
-		PreparedStatement state = null;
-		String consulta = "DELETE FROM INTERMEDIARIO WHERE cod_usuario = '"+intRetirado+"'";	
+		String cCambiarPort = "UPDATE PORTAFOLIO SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";
+		String cCambiarSocios = "UPDATE SOCIOS SET correo_intermediario = '"+intAsociado+"' WHERE correo_intermediario = '"+intRetirado+"'";
+		String cCambiarOperaciones = "UPDATE OPERACIONES_INT SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";
+		String cEliminarIntermediario = "DELETE FROM INTERMEDIARIO WHERE cod_usuario = '"+intRetirado+"'";
+		String cEliminarIntermediarioUS = "DELETE FROM USUARIO WHERE correo = '"+intRetirado+"'";
+		Statement state = null;
 		try{
 			establecerConexion(cadenaConexion, usuario, clave);
-			state = conexion.prepareStatement(consulta);
-			state.execute(consulta);
+			state = conexion.createStatement();
+			state.addBatch(cCambiarPort);
+			state.addBatch(cCambiarSocios);
+			state.addBatch(cCambiarOperaciones);
+			state.addBatch(cEliminarIntermediario);
+			state.addBatch(cEliminarIntermediarioUS);
+			state.executeBatch();
 		}catch(SQLException e){
 			e.printStackTrace();
-			System.out.println(consulta);
-			throw e;
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					throw e;
-				}
-			}
-			cerrarConexion(conexion);
-		}
-	}
-
-	/**
-	 * Elimina al intermediario de la tabla usuario
-	 */
-	public void eliminarIntermediarioUs(String intRetirado) throws SQLException{
-		PreparedStatement state = null;
-		String consulta = "DELETE FROM USUARIO WHERE correo = '"+intRetirado+"'";	
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = conexion.prepareStatement(consulta);
-			state.execute(consulta);
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta);
-			throw e;
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					throw e;
-				}
-			}
-			cerrarConexion(conexion);
-		}
-	}
-
-	/**
-	 * Cambia los portafolios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
-	 * @throws SQLException 
-	 */
-	public void cambiarPortafolios(String intRetirado, String intAsociado) throws SQLException{
-		PreparedStatement state = null;
-		String consulta = "UPDATE PORTAFOLIO SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = conexion.prepareStatement(consulta);
-			state.execute(consulta);
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta);
-			throw e;
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					throw e;
-				}
-			}
-			cerrarConexion(conexion);
-		}
-	}
-
-	/**
-	 * Cambia los socios del antiguo intermediario al nuevo intermediario dados sus dos codigos.
-	 * @throws SQLException 
-	 */
-	public void cambiarSocios(String intRetirado, String intAsociado) throws SQLException{
-		PreparedStatement state = null;
-		String consulta = "UPDATE SOCIOS SET correo_intermediario = '"+intAsociado+"' WHERE correo_intermediario = '"+intRetirado+"'";	
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = conexion.prepareStatement(consulta);
-			state.execute(consulta);
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta);
-			throw e;
-		}finally{
-			if(state != null){
-				try{
-					state.close();
-				}catch(SQLException e){
-					throw e;
-				}
-			}
-			cerrarConexion(conexion);
-		}
-	}
-
-	/**
-	 * Reasigna las operaciones de un intermediario retirado a su sucesor dados sus dos codigos.
-	 * @throws SQLException 
-	 */
-	public void cambiarOperaciones(String intRetirado, String intAsociado) throws SQLException{
-		PreparedStatement state = null;
-		String consulta = "UPDATE OPERACIONES_INT SET cod_intermediario = '"+intAsociado+"' WHERE cod_intermediario = '"+intRetirado+"'";	
-		try{
-			establecerConexion(cadenaConexion, usuario, clave);
-			state = conexion.prepareStatement(consulta);
-			state.execute(consulta);
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.out.println(consulta);
+			System.out.println("Ejecutando :");
+			System.out.println(cCambiarPort);
+			System.out.println(cCambiarSocios);
+			System.out.println(cCambiarOperaciones);
+			System.out.println(cEliminarIntermediario);
+			System.out.println(cEliminarIntermediarioUS);
 			throw e;
 		}finally{
 			if(state != null){
