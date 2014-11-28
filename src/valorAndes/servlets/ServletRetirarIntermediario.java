@@ -35,7 +35,7 @@ public class ServletRetirarIntermediario extends ServletTemplate{
 			try {
 				ValorAndes.getInstance().retirarIntermediarioGlobal(correoViej, correoNuevo);
 				out.println("				<br><h5>El intermediario fue retirado exitosamente<br></h5>");
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				out.println("				<br><h4>Ocurrio un error retirando al intermediario.<br></h4>");
 			}
