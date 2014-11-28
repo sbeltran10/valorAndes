@@ -2350,6 +2350,7 @@ public class ConsultaDAO {
 			}else if(req.equals("RF15")){
 				try{
 					retirarIntermediario(mensaje[1],mensaje[2]);
+					send("SUCCES;RF15");
 				}catch(Exception e){
 					try {
 						send("ERROR;RF15;"+e.getMessage());
@@ -2363,10 +2364,15 @@ public class ConsultaDAO {
 				try{
 					ArrayList<OperacionValue> ops = consultarMovimientos(mensaje[1], mensaje[2], (mensaje[3].equals("True"))?true:false, mensaje[4], mensaje[5], mensaje[6], mensaje[7], mensaje[8], mensaje[9]);
 					for (OperacionValue operacionValue : ops) {
-						rta = rta + ";#;" +operacionValue.toString();
+						rta = rta + ";" +operacionValue.toString();
 					}
 					send(rta);
 				}catch(Exception e){
+					try {
+						send("ERROR;RFC12;"+e.getMessage());
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					System.out.println(e.getMessage());
 				}
 			}else if(req.equals("RFC13")){
@@ -2374,14 +2380,19 @@ public class ConsultaDAO {
 				try{
 					ArrayList<ValorValue> ops = valoresMDinamicos(mensaje[1], mensaje[2]);
 					for (ValorValue valorValue : ops) {
-						rta = rta + ";#;" +valorValue.toString();
+						rta = rta + ";" +valorValue.toString();
 					}
 					send(rta);
 				}catch(Exception e){
+					try {
+						send("ERROR;RFC13;"+e.getMessage());
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					System.out.println(e.getMessage());
 				}
 			}else if(req.equals("ResultRFC12")){
-
+				
 			}else if(req.equals("ResultRFC13")){
 
 			}else if(req.equals("ERROR")){

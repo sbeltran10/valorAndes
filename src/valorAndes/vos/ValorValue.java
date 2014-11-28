@@ -222,4 +222,11 @@ public class ValorValue {
 	public void setNomTipoValor(String nomTipoValor) {
 		this.nomTipoValor = nomTipoValor;
 	}
+	
+	/**
+	 * toString()
+	 */
+	public String toString(){
+		return codigo+"#"+((disponible)?"True":"False")+"#"+fechaExpiracion+"#"+mercado+"#"+nombre+"#"+precio+"#"+creador+"#"+nombreCreador+"#"+rentabilidad+"#"+nomTipoValor;
+	}
 }
