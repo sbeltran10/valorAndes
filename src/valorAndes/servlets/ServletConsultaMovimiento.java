@@ -168,7 +168,7 @@ public class ServletConsultaMovimiento extends ServletTemplate{
 				inver="---";
 
 			try {
-				escribirResultados(out, ValorAndes.getInstance().consultarMovimientos(fechaIni, fechaFin, incluirFiltros, val, tipoVal, tipoRent, tipoMov, inver, inter));
+				escribirResultados(out, ValorAndes.getInstance().consultarMGlobal(fechaIni, fechaFin, incluirFiltros, val, tipoVal, tipoRent, tipoMov, inver, inter));
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

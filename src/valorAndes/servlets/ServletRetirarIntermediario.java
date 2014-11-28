@@ -33,7 +33,7 @@ public class ServletRetirarIntermediario extends ServletTemplate{
 		String correoNuevo = request.getParameter("reemplazo");
 		if(correoViej!=null){
 			try {
-				ValorAndes.getInstance().retirarIntermediario(correoViej, correoNuevo);
+				ValorAndes.getInstance().retirarIntermediarioGlobal(correoViej, correoNuevo);
 				out.println("				<br><h5>El intermediario fue retirado exitosamente<br></h5>");
 			} catch (SQLException e) {
 				e.printStackTrace();
