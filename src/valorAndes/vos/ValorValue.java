@@ -227,6 +227,6 @@ public class ValorValue {
 	 * toString()
 	 */
 	public String toString(){
-		return codigo+"#"+((disponible)?"True":"False")+"#"+fechaExpiracion+"#"+mercado+"#"+nombre+"#"+precio+"#"+creador+"#"+nombreCreador+"#"+rentabilidad+"#"+nomTipoValor;
+		return nombre+"#"+precio+"#"+nomTipoValor;
 	}
 }

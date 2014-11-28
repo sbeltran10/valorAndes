@@ -182,6 +182,6 @@ public class OperacionValue {
 	 * ToString
 	 */
 	public String toString(){
-		return cantidad+"#"+fecha.toString()+"#"+precio+"#"+tipoCompraVenta+"#"+corSolicitante+"#"+corIntermediario+"#"+nomValor;
+		return cantidad+"#"+fecha.toString()+"#"+tipoCompraVenta+"#"+corSolicitante+"#"+corIntermediario+"#"+nomValor;
 	}
 }

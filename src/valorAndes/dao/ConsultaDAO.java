@@ -26,10 +26,7 @@ import javax.sql.DataSource;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
-
-
-
-
+import oracle.sql.DATE;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -107,6 +104,25 @@ public class ConsultaDAO {
 	private MessageConsumer consumer;
 
 	/**
+	 * Resultado del requerimiento funcional de consulta 12 global.
+	 */
+	private ArrayList<OperacionValue> rfc12Result;
+
+	/**
+	 * Resultado del requerimiento funcional de consulta 13 global.
+	 */
+	private ArrayList<ValorValue> rfc13Result;
+	
+
+	/**
+	 * Atributos para manejar los resultados de transacciones globales.
+	 */
+	private String RF14;
+	private String RF15;
+	private String RFC12;
+	private String RFC13;
+
+	/**
 	 * Constructor de la clase.
 	 */
 	public ConsultaDAO(){
@@ -121,6 +137,12 @@ public class ConsultaDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		rfc12Result = null;
+		rfc13Result = null;
+		RF14 = null;
+		RF15 = null;
+		RFC12 = null;
+		RFC13 = null;
 	}
 
 	//------------------------------------------
@@ -2350,7 +2372,7 @@ public class ConsultaDAO {
 			}else if(req.equals("RF15")){
 				try{
 					retirarIntermediario(mensaje[1],mensaje[2]);
-					send("SUCCES;RF15");
+					send("SUCCESS;RF15");
 				}catch(Exception e){
 					try {
 						send("ERROR;RF15;"+e.getMessage());
@@ -2392,11 +2414,51 @@ public class ConsultaDAO {
 					System.out.println(e.getMessage());
 				}
 			}else if(req.equals("ResultRFC12")){
-				
+				for(String val : mensaje){
+					String data[] = val.split("#");
+					OperacionValue op = new OperacionValue();
+					op.setCantidad(Integer.parseInt(data[1]));
+					SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
+					java.util.Date fecha = null;
+					try {
+						fecha = form.parse(data[2]);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					op.setFecha(fecha);
+					op.setTipoCompraVenta(data[3]);
+					op.setCorSolicitante(data[4]);
+					op.setCorIntermediario(data[5]);
+					op.setNomValor(data[6]);
+					rfc12Result.add(op);
+				}
 			}else if(req.equals("ResultRFC13")){
-
+				for(String val: mensaje){
+					String data[] = val.split("#");
+					ValorValue op = new ValorValue();
+					op.setNombre(data[1]);
+					op.setPrecio(Integer.parseInt(data[2]));
+					op.setNomTipoValor(data[3]);
+					rfc13Result.add(op);
+				}
 			}else if(req.equals("ERROR")){
-
+				String reqFallido = mensaje[1];
+				if(reqFallido.equals("RF14")){
+					RF14 = "ERROR";
+				}else if(reqFallido.equals("RF15")){
+					RF15 = "ERROR";
+				}else if(reqFallido.equals("RFC12")){
+					RFC12 = "ERROR";
+				}else if(reqFallido.equals("RFC13")){
+					RFC13 = "ERROR";
+				}
+			}else if(req.equals("SUCCESS")){
+				String reqSucceded = mensaje[1];
+				if(reqSucceded.equals("RF14")){
+					RF14 = "SUCCES";
+				}else if(reqSucceded.equals("RF15")){
+					RF15 = "SUCCES";
+				}
 			}else{
 				System.out.println("Error en el header de un mensaje.");
 			}
