@@ -46,4 +46,11 @@ public class ValorPorcentajeInversionValue {
 	public void setPorcentajeInversion(int porcentajeInversion) {
 		this.porcentajeInversion = porcentajeInversion;
 	}
+	
+	/**
+	 * toString()
+	 */
+	public String toString(){
+		return getValor().getCodigo()+"#"+getPorcentajeInversion();
+	}
 }

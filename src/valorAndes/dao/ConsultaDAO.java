@@ -1747,6 +1747,16 @@ public class ConsultaDAO {
 	}
 
 	/**
+	 * Recompone el portafolio de un intermediario.
+	 * @param valores 
+	 * @param idInversionista
+	 * @param idPortafolio
+	 */
+	public void recomponerPortafolio(int idPortafolio, String idInversionista, ArrayList<ValorPorcentajeInversionValue> valores){
+		
+	}
+	
+	/**
 	 * Añade un valor a un portafolio de un intermediario dados el codigo del valor y el codigo del portafolio.
 	 * @throws SQLException 
 	 */
@@ -2179,6 +2189,35 @@ public class ConsultaDAO {
 	//---------------------Metodos-Globales------------------------
 	//--------------------------------------------------------------
 	/**
+	 * Recomponer portafolio global.
+	 */
+	public void recomponerPortafolioGlobal(int idPortafolio, String idInversionista, ArrayList<ValorPorcentajeInversionValue> valores)throws Exception{
+		String help = "";
+		for (ValorPorcentajeInversionValue vpValue : valores) {
+			help = help + vpValue.toString() + ";";
+		}
+		send("RF14;"+idPortafolio+";"+idInversionista+";"+help);
+		Long limit = System.currentTimeMillis() + 10000;
+		Long now = System.currentTimeMillis();
+		while(RF14 == null && now < limit){
+			now = System.currentTimeMillis();
+		}
+		if(RF14 == null){
+			throw new Exception("Caduco el tiempo de espera para la transaccion.");
+		}else if(RF14.equals("ERROR")){
+			throw new Exception("Error en la comunicacion con el otro servidor.");
+		}else if(RF14.equals("SUCCESS")){
+			System.out.println("RF15_SUCCEDED");
+		}
+		RF14 = null;
+		try{
+			recomponerPortafolio(idPortafolio, idInversionista, valores);
+		}catch(Exception e){
+			recomponerPortafolio(idPortafolio, idInversionista, valores);
+		}
+	}
+	
+	/**
 	 * Retirar intermediario global.
 	 */
 	public void retirarIntermediarioGlobal(String intRetirado, String intAsociado)throws Exception{
@@ -2258,6 +2297,7 @@ public class ConsultaDAO {
 		rfc13Result = null;
 		return rta;
 	}
+	
 	//------------------------------------------------------------------------
 	//GENERADOR DE IDS.
 	//------------------------------------------------------------------------
@@ -2348,7 +2388,27 @@ public class ConsultaDAO {
 			mensaje = ((TextMessage)m).getText().split(";");
 			String req = mensaje[0];
 			if(req.equals("RF14")){
-
+				try{
+					ArrayList<ValorPorcentajeInversionValue> valores = new ArrayList<ValorPorcentajeInversionValue>();
+					for (int i = 3; i < mensaje.length; i++) {
+						ValorPorcentajeInversionValue val = new ValorPorcentajeInversionValue();
+						String[] data = mensaje[i].split("#");
+						val.setPorcentajeInversion(Integer.parseInt(data[1]));
+						ValorValue valor = new ValorValue();
+						valor.setCodigo(Integer.parseInt(data[0]));
+						val.setValor(valor);
+						valores.add(val);
+					}
+					recomponerPortafolio(Integer.parseInt(mensaje[1]), mensaje[2], valores);
+					send("SUCCESS;RF15");
+				}catch(Exception e){
+					try {
+						send("ERROR;RF15;"+e.getMessage());
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+					System.out.println(e.getMessage());
+				}
 			}else if(req.equals("RF15")){
 				try{
 					retirarIntermediario(mensaje[1],mensaje[2]);
@@ -2366,7 +2426,7 @@ public class ConsultaDAO {
 				try{
 					ArrayList<OperacionValue> ops = consultarMovimientos(mensaje[1], mensaje[2], (mensaje[3].equals("True"))?true:false, mensaje[4], mensaje[5], mensaje[6], mensaje[7], mensaje[8], mensaje[9]);
 					for (OperacionValue operacionValue : ops) {
-						rta = rta + ";" +operacionValue.toString();
+						rta = rta + operacionValue.toString() + ";";
 					}
 					send(rta);
 				}catch(Exception e){
@@ -2382,7 +2442,7 @@ public class ConsultaDAO {
 				try{
 					ArrayList<ValorValue> ops = valoresMDinamicos(mensaje[1], mensaje[2]);
 					for (ValorValue valorValue : ops) {
-						rta = rta + ";" +valorValue.toString();
+						rta = rta + valorValue.toString() + ";";
 					}
 					send(rta);
 				}catch(Exception e){
@@ -2445,7 +2505,6 @@ public class ConsultaDAO {
 				System.out.println("Error en el header de un mensaje.");
 			}
 		} catch (JMSException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
